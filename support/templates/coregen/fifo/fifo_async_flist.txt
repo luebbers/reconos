@@ -1,0 +1,8 @@
+# Output products list for <fifo_async>
+fifo_async_xmdf.tcl
+fifo_async_fifo_generator_v3_2_xst_1.ngc
+fifo_async.vhd
+fifo_async.vho
+fifo_async_flist.txt
+fifo_async.xco
+fifo_async.edn

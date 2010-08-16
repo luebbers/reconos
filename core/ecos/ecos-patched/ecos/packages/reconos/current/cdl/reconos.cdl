@@ -1,0 +1,220 @@
+# ====================================================================
+#
+#      reconos.cdl
+#
+#      ReconOS package configuration data
+#
+# ====================================================================
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+######DESCRIPTIONBEGIN####
+#
+# Author(s):      luebbers
+# Contributors:   agne
+# Date:           2007-03-28
+#
+#####DESCRIPTIONEND####
+#
+# ====================================================================
+
+cdl_package UPBPKG_RECONOS {
+    display       "Common ReconOS support"
+    include_dir   reconos
+    description   "
+        This package contains data structures and functions,
+        such as delegate threads, interrupt handlers stc.,
+        for ReconOS. The low level, hardware dependant
+        routines can be found in the respective HAL section,
+        e.g. hal/powerpc/virtex4.
+        This package is needed for any design involving
+        hardware threads."        
+# ====================================================================
+# RECONOS OPTIONS
+
+	cdl_interface RECONOS_HW_SUPPORT {
+		display "Number of ReconOS supporting interfaces"
+	}
+
+    cdl_component UPBFUN_RECONOS_HWTHREADS {
+        display       "ReconOS HW Thread support"
+        compile       reconos.c delegate.c osif_comm.c
+        make -priority 1 {
+            src/delegate.py: <PACKAGE>/src/delegate.tmpl
+                cheetah compile --flat --odir src $<
+        }
+       make -priority 1 {
+            src/delegate.c: src/delegate.py $(RECONOS)/core/defs/*.cmddef
+               PYTHONPATH=$(PYTHONPATH):$(RECONOS)/tools/python/generator python src/delegate.py $(RECONOS)/core/defs/*.cmddef | indent > $@
+        }
+        flavor        bool
+        requires      { RECONOS_HW_SUPPORT }
+        default_value 1
+        description   "
+            You need to enable this to include ReconOS
+            hardware thread handling."
+            
+        cdl_option UPBDBG_RECONOS_HWTHREADS_STATETRACE {
+            display       "Support state tracing in hardware threads"
+            default_value 0
+            description   "
+            	If one or more hardware threads are equipped with a
+            	state trace RAM logging the transitions of the OS
+            	synchronization state machine, this option includes
+            	functions to read and analyze these state traces."
+        }
+
+        cdl_option UPBDBG_RECONOS_DEBUG {
+            display     "Enable debugging output for ReconOS events"
+            default_value 0
+            description "
+                This option enables verbose debugging output on 
+                ReconOS OS events, such as OS call requests from 
+                hardware threads."
+        }
+
+        cdl_option UPBFUN_RECONOS_POSIX {
+            display     "Enable POSIX-like ReconOS API"
+            flavor      bool
+            requires    CYGPKG_POSIX
+            default_value 0
+            description "
+                Enables the rthread_create() call and allows ReconOS
+                threads to use POSIX OS objects (e.g. pthread_mutex)."
+        }
+
+        cdl_option UPBFUN_RECONOS_CACHE_BURST_RAM {
+            display     "Enable cache-aware operations on Burst RAM"
+            flavor      bool
+            default_value 1
+            description "
+                This enables automatic cache line flushing and
+                invalidation on message queue operations. The data cache
+                needs to be enabled separately for the OSIF PLB memory
+                range in your user application."
+        }
+        
+        
+        cdl_component UPBFUN_RECONOS_PARTIAL {
+            display     "Enable support for partial reconfiguration"
+            flavor      bool
+            compile     hw_sched.c
+            requires    UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
+            active_if   UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
+            default_value 0
+            description "
+                This enables support routines and hardware thread
+                scheduling for partial reconfiguration."
+
+            cdl_option UPBFUN_RECONOS_CHECK_HWTHREAD_SIGNATURE {
+                display     "Check thread signature on reset"
+                flavor      bool
+                default_value 0
+                description "
+                    If this option is set, the delegate will check a hardware
+                    thread's signature upon reset. For this to work, you need
+                    to make sure that the hardware thread uses
+                    'reconos_reset_with_signature()' instead of
+                    'reconos_reset()' and that the circuit attributes are
+                    updated with the matching signature using the field
+                    'signature'.
+                    This option can be useful for catching reconfiguration 
+                    errors or bitstream mixups for dynamic threads."
+
+            }
+        }
+
+        cdl_component UPBFUN_RECONOS_ECAP_NET {
+            display     "Use external partial reconfiguration via TCP/IP (ECAP)"
+            flavor      bool
+            compile     ecap_net.c
+            requires    ! UPBHWR_VIRTEX4_ICAP
+            requires    UPBFUN_RECONOS_PARTIAL
+            default_value 0
+            description "
+                This option allows to use the pr_server.py script on a host
+                PC to (partially) reconfigure the FPGA by sending bitstream
+                information through TCP/IP."
+
+            cdl_option UPBFUN_RECONOS_ECAP_HOST {
+                display     "Remote ECAP host"
+                flavor      data
+                default_value { "192.168.42.1" }
+                description "
+                    The IP address or hostname of the reconfiguration host
+                    (the computer running pr_server.py in the project's
+                    sw directory)."
+            }
+
+            cdl_option UPBFUN_RECONOS_ECAP_PORT {
+                display     "Remote ECAP port"
+                flavor      data
+                default_value 42424
+                description "
+                    The TCP port of the reconfiguration host (the computer
+                    running pr_server.py in the project's sw directory)."
+            }
+
+        }
+
+    }
+
+# ====================================================================
+# BUILD OPTIONS
+    cdl_component UPBPKG_RECONOS_OPTIONS {
+        display "ReconOS package build options"
+        flavor  none
+        no_define
+        description   "
+	    Package specific build options including control over
+	    compiler flags used only in building this package,
+	    and details of which tests are built."
+
+
+        cdl_option UPBPKG_RECONOS_CFLAGS_ADD {
+            display "Additional compiler flags"
+            flavor  data
+            no_define
+            default_value { "-D__RECONOS__" }
+            description   "
+                This option modifies the set of compiler flags for
+                building the ReconOS package. These flags are used in addition
+                to the set of global flags."
+        }
+
+        cdl_option UPBPKG_RECONOS_CFLAGS_REMOVE {
+            display "Suppressed compiler flags"
+            flavor  data
+            no_define
+            default_value { "" }
+            description   "
+                This option modifies the set of compiler flags for
+                building the ReconOS package. These flags are removed from
+                the set of global flags if present."
+        }
+    }
+}
+
+# ====================================================================
+# EOF reconos.cdl

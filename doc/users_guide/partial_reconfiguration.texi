@@ -1,0 +1,2 @@
+@node Partial Reconfiguration
+@chapter Partial Reconfiguration

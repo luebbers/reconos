@@ -1,0 +1,32 @@
+# Virtex2Pro, XC2VP30
+
+device_name    XC2VP30;
+device_family  virtex2p;
+
+size 92,160;
+
+column_ressource RAMB16, MULT18x18:
+	size 8;
+	
+	columns 4,16,28,40,52,64,76,88;
+	rows    0,  8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96,104,112,120,128,136,144,152;
+	
+	exclude 1, 0  3, 0  4, 0  6, 0;
+	exclude 1,19  3,19  4,19  6,19;
+	
+	exclude 1, 8  1, 9  1,10  1,11  2,8  2,9  2,10  2,11;
+	exclude 5, 8  5, 9  5,10  5,11  6,8  6,9  6,10  6,11;
+	
+	display_color 0,0,140;
+end
+
+
+block_ressource PPC405:
+	size  16,32;
+	
+	block 62,64;
+	block 14,64;
+	
+	display_color 180,180,180;
+end
+

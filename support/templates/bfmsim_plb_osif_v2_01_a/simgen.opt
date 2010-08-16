@@ -1,0 +1,15 @@
+bfm_system.mhs
+-p
+xc2vp4fg456-6
+-lang
+vhdl
+-mixed
+yes
+-s
+mti
+-X
+/opt/Xilinx/ISE_Lib/8.2.01_EAPR_06/
+-E
+/opt/Xilinx/EDK_Lib/
+-m
+behavioral

@@ -1,0 +1,85 @@
+#
+# \file mbox_tryget.cmddef
+#
+# Command definition for mbox tryget operations
+#
+# \author Enno Luebbers <luebbers@reconos.de>
+# \date   07.05.2009
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+
+COMMAND reconos_mbox_tryget
+
+    SYMBOL      OSIF_CMD_MBOX_TRYGET
+    ENCODING    0x86
+    TYPE        TASK2OS
+    OPTIONS     BLOCKING RETVAL
+
+
+    DELEGATE ecos_ecos
+        HOST_OS             ecos
+        RESTYPE             CYG_MBOX_HANDLE_T
+        HEADER              <cyg/kernel/kapi.h>
+        HEADER              <cyg/infra/cyg_type.h>
+        CODE                "$retval = (uint32)cyg_mbox_tryget(*((cyg_handle_t *)$resources[$data].ptr));"
+    END # ecos.ecos
+
+
+    DELEGATE ecos_posix
+        HOST_OS             ecos
+        RESTYPE             PTHREAD_MQD_T
+        HEADER              <cyg/posix/types.h>
+        HEADER              <fcntl.h>
+        HEADER              <mqueue.h>
+        IFDEF               UPBFUN_RECONOS_POSIX
+        CODE '''
+            mqd_t q;
+            char * mqname;
+            struct mq_attr oldattr, newattr;
+            
+            mqname = $resources[$data].ptr;
+            q = mq_open(mqname, O_RDWR);
+            if(q == (mqd_t)(-1)){
+                    CYG_FAIL("error opening posix mq for reading");
+                    diag_printf("############## FAIL !!! ##################\\n");
+                    break;
+            }
+            // set queue to be non-blocking
+            mq_getattr(q, &oldattr);
+            newattr = oldattr;
+            newattr.mq_flags = newattr.mq_flags | O_NONBLOCK;
+            mq_setattr(q, &newattr, NULL);
+            if (mq_receive(q, (char*) &$retval, 4, 0) < 0) {
+                    diag_printf("############### failed to read from mbox\\n");
+                    perror("mq_receive");
+                    $retval = 0;     // signal error
+            }
+            
+            // restore old queue attributes
+            mq_setattr(q, &oldattr, NULL);
+        '''
+    END # ecos.posix
+
+END # reconos_mbox_tryget

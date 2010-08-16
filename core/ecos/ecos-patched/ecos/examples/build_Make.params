@@ -1,0 +1,74 @@
+#! /bin/sh
+
+# This script will set up a Makefile fragment with 
+# platform specifics.  This fragement can be used by
+# the automatically generated Makefile (via the script
+# 'build_Makefile')
+
+# Copied from 'makefile' in the "install" tree
+
+ECOS_BUILD_DIR=${1-`pwd`}
+ECOS_INSTALL_DIR=`echo ${ECOS_BUILD_DIR}/install`
+if [ ! -d ${ECOS_BUILD_DIR}/install ]; then
+  if [ ! -d ${ECOS_BUILD_DIR}/*_build ]; then
+    echo "Not an eCos install tree"
+    echo "usage: <eCos_repository>/build_Make.params [<eCos_install_dir>]"
+    echo "... where <eCos_install_dir> is the directory which contains"
+    echo "    the *.ecc configuration file used to build the kernel"
+    exit
+  else
+    ECOS_INSTALL_DIR=`echo ${ECOS_BUILD_DIR}/*_install`
+    ECOS_BUILD_DIR=`echo ${ECOS_BUILD_DIR}/*_build`
+  fi
+fi
+
+cat <<EOF >Make.params
+
+# Copied from 'makefile' in the "install" tree
+
+EOF
+
+grep export ${ECOS_BUILD_DIR}/makefile >>Make.params
+
+cat <<EOF >>Make.params
+
+#
+# Target specific flags, etc.
+#
+
+EOF
+
+cat ${ECOS_INSTALL_DIR}/include/pkgconf/ecos.mak >>Make.params
+
+#
+# Add CFLAGS manipulation - this should match <ecos>/packages/pkgconf/rules.mak
+#
+
+cat <<EOF >>Make.params
+
+#
+# Modify CFLAGS to match newer compilers
+#
+ACTUAL_CFLAGS = \$(ECOS_GLOBAL_CFLAGS)
+ACTUAL_CXXFLAGS = \$(ECOS_GLOBAL_CFLAGS)
+ACTUAL_LDFLAGS = \$(ECOS_GLOBAL_LDFLAGS)
+
+# GCC since 2.95 does -finit-priority by default so remove it from old HALs
+ACTUAL_CFLAGS := \$(subst -finit-priority,,\$(ACTUAL_CFLAGS))
+
+# -fvtable-gc is known to be broken in all recent GCC.
+ACTUAL_CFLAGS := \$(subst -fvtable-gc,,\$(ACTUAL_CFLAGS))
+
+# Expand inline functions
+ACTUAL_CFLAGS := -finline-limit=7000 \$(ACTUAL_CFLAGS)
+
+# Separate C++ flags out from C flags.
+ACTUAL_CFLAGS := \$(subst -fno-rtti,,\$(ACTUAL_CFLAGS))
+ACTUAL_CFLAGS := \$(subst -frtti,,\$(ACTUAL_CFLAGS))
+ACTUAL_CFLAGS := \$(subst -Woverloaded-virtual,,\$(ACTUAL_CFLAGS))
+ACTUAL_CFLAGS := \$(subst -fvtable-gc,,\$(ACTUAL_CFLAGS))
+
+ACTUAL_CXXFLAGS := \$(subst -Wstrict-prototypes,,\$(ACTUAL_CXXFLAGS))
+
+EOF
+

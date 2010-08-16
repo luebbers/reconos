@@ -1,0 +1,17 @@
+BEGIN bufg_logic
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION IP_GROUP = PPC:USER
+OPTION CORE_STATE = DEVELOPMENT
+
+
+## Generics for VHDL or Parameters for Verilog
+
+## Ports
+PORT I = "", DIR = I, SIGIS = CLK
+PORT O = "", DIR = O, SIGIS = CLK
+
+END

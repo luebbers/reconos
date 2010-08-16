@@ -1,0 +1,18 @@
+ The following files will be modified:
+  system.mhs
+  system.mss
+
+--------------------------------------
+ The following changes will be made:
+ Core opb_uart16550 1.00.d will be replaced by 1.00.e
+ Core opb_hwicap 1.00.b will be replaced by 1.10.a
+
+ Driver cpu_ppc405 1.00.a will be replaced by 1.10.a
+ Driver uartns550 1.01.a will be replaced by 1.11.a
+ Driver ddr 1.00.b will be replaced by 1.10.b
+ Driver intc 1.00.c will be replaced by 1.10.c
+ Driver wdttb 1.00.b will be replaced by 1.10.b
+ Driver hwicap 1.00.a will be replaced by 1.01.a
+--------------------------------------
+ The following changes need to be made manually by the user:
+ Core proc_sys_reset 1.00.a needs to be replaced by 2.00.a

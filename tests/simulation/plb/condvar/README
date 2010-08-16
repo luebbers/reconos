@@ -1,0 +1,5 @@
+Test for condvar operating system call.
+
+NOTE: when regenerating the sample.bfl from the sample.sst, remember to put
+the right number of resources into memory location 0x10000000. It has to
+equal the number of non-waiting iterations in the sst file (3 in the example).

@@ -1,0 +1,20 @@
+# Date: Mon Oct  8 19:47:47 2007
+SET flowvendor = Other
+SET vhdlsim = True
+SET verilogsim = False
+SET workingdirectory = /home/luebbers/reconos/trunk/hw/templates/coregen/fifo/tmp
+SET speedgrade = -7
+SET simulationfiles = Behavioral
+SET asysymbol = False
+SET addpads = False
+SET device = xc2vp30
+SET implementationfiletype = Edif
+SET busformat = BusFormatAngleBracketNotRipped
+SET foundationsym = False
+SET package = ff896
+SET createndf = False
+SET designentry = VHDL
+SET devicefamily = virtex2p
+SET formalverification = False
+SET removerpms = False
+

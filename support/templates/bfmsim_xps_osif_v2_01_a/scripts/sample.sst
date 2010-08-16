@@ -1,0 +1,29 @@
+# sample slot stimulus
+
+wait 1000 ns
+write_init_data 00000005
+wait 100 ns
+
+write_unlock
+wait 100 ns
+read_sem_wait 00000000
+wait 500 ns
+write_unlock
+
+wait 1000 ns
+
+read_sem_post 00000001
+
+wait 1000 ns
+
+read_sem_wait 00000000
+wait 500 ns
+write_unlock
+
+wait 1000 ns
+
+read_sem_post 00000001
+
+wait 1000 ns
+
+

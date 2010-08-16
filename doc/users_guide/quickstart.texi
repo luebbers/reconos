@@ -1,0 +1,170 @@
+@node Quick Start
+@chapter Quick Start
+
+DRAFT
+
+This guide will lead you through the steps necessary for building a static design using ReconOS. We will be using a simple example with one slot containing a static hardware thread. As application we implement a sorter. In a first step, the application generates random data. In a next step, the data is divided into chunks of 8 Kbyte. These chunks will be sorted by either the hardware thread or a software thread using the bubble sort algorithm. The chunks will then be merged, such that in the end the entire data is sorted. To ensure correctness, the application checks, if the data is sorted correctly.
+
+@c --------------------------------------------------------------------------- 
+@section Prerequisites
+
+This howto will assume that you already have checked out the ReconOS repository and build all required tools and libraries. Refer to the documentation pages that cover these topics: @ref{Installation}. Furthermore, this tutorial assumes that you have a Xilinx XUPV2P board with a compatible memory module installed.
+
+@c --------------------------------------------------------------------------- 
+@section Create Project
+First we create the structure of the project. This is easily done by using the command
+
+@example
+reconos_mkprj.py <project_name>
+@end example
+
+This creates the typical ReconOS Projekt environment with the sw and hw directory. Now we have to change the project settings. From this point, we assume that @env{$WORK} describes the path to your project folder.
+
+@example
+file: <project_name>.rprj
+@end example
+
+The line beginning with @code{STATIC-THREADS} has to be edited, because we add a hardware thread that can sort 8 KBytes of data. Name the thread sort8k by adding this to the line.
+
+Note:This tutorial creates the multicore environment on the XUP-Board. If you want to create it for the virtex4 , you have to change the reference design in the project file.
+
+Now edit the layout file:
+
+@example
+hw/<project_name>.lyt
+@end example
+
+Delete everything except the @code{TARGET} definition. The final file should look like this (for the XUP-Board):
+
+@example
+target
+    device XC2VP30
+    family xc2vp
+end
+@end example
+
+In a last step, set the environment variable @env{$HW_THREADS}
+
+@example
+source $WORK/settings.sh
+@end example
+
+After this, the project structure is ready to be worked with.
+
+@c --------------------------------------------------------------------------- 
+@section Hardware Design
+@subsection Add Static Hardware Thread
+In this tutorial, we will use an existing simple example thread that sorts 8 kbytes of data. The thread waits for a message from an incoming message queue containing the address of the data chunk and sends a message to an outgoing queue when sorting is done. The thread is composed in two VHDL files that can be found under @file{$RECONOS/demos/sort_demo/src/bubble_sorter.vhd} and @file{$RECONOS/demos/sort_demo/src/sort8k.vhd}. Copy both files to the @file{$PROJECT_NAME/hw} directory:
+
+@example
+cp $RECONOS/demos/sort_demo/src/*.vhd $WORK/hw/*.vhd
+@end example
+
+Have a look at the VHDL code - most threads will be of a similar structure. sort8k.vhd contains the synchronous state machine that is connected to the operating system interface (OSIF), i.e. waiting for messages, while @file{bubble_sorter.vhd} contains the user logic for sorting the data.
+
+@example
+cd $WORK/hw/hw_threads
+reconos_addwthread.py sort8k sort8k ../bubble_sorter.vhd ../sort8k.vhd
+@end example
+
+The arguments to the @command{reconos_addwthread.py} script are the hardware thread's entity name, the user logic entity's name (often the same as the one before), and the source files sorted after dependency such that the top file comes last. The script now creates an EDK pcore that contains the interface structures necessary to connect our hardware thread to the already instantiated OSIF.
+
+Note that you can instantiate the same hardware thread multiple times.
+
+@subsection Generate Static Hardware Design
+@subsubsection Option 1: Using XPS tool
+To generate the hardware design you first copy a reference design and insert static threads. This is done by the following command:
+
+@example
+cd $WORK/hw
+make static-threads
+@end example
+
+Now we create the software libraries and the final bitstream. This can be done using the Xilinx Platform Studio (XPS).
+
+You have to open the project which can be found in @file{$WORK/hw/edk-static/system.xmp}.
+
+Compile the software drivers and library functions into a BSP, using the @command{Software->Generate libraries and BSPs} menu item. This will generate the Xilinx headers and particularly @file{libxil.a} which we will need when compiling the eCos library. You need to regenerate this BSP whenever you change the hardware architecture (e.g. add OSIFs/slots, peripherals, change the memory map, etc.).
+
+Finally, generate the bitstream, using the @command{Hardware->Generate Bitstream} menu item.
+
+@subsubsection Option 2: Using Makefile
+Alternativly, you can also use the makefile to do these steps
+
+@example
+cd $WORK/hw
+make bits-static
+@end example
+
+@c --------------------------------------------------------------------------- 
+@section Software Design
+@subsection Code the Software Application
+Now copy the software part of the demo application into your project.
+
+@example
+cp -r $RECONOS/demos/sort_demo/src/sw $WORK/sw
+@end example
+
+@subsection Create an eCos Configuration
+ReconOS extends the embedded operating system eCos that is composed of packages. The eCos configuration file sort.ecc defines the eCos configuration. (You can modify it using the configtool.)
+
+@example
+cd $WORK/sw
+make mrproper setup
+@end example
+
+@subsection Compile SW application
+Compile the software part of the application and link them into an executable.
+
+@example
+make clean ecos
+@end example
+
+@c --------------------------------------------------------------------------- 
+@section Configure the FPGA and Upload the Application
+@subsection Start Modem
+In a new shell, start the minicom modem, such that the print-functions, which are called by the software part of application and forwarded through the serial port to your computer, is shown to you.
+
+@example
+minicom
+@end example
+
+When you have uploaded an executable, the print output will be shown here.
+
+@subsection Configure the FPGA
+To configure the FPGA with your hardware design, you have to download the bitstream to the board.
+
+@example
+cd $WORK/sw
+dow ../hw/edk-static/implementation/system.bit
+@end example
+
+@subsection Upload the Application
+We have four different executables, which you can test.
+
+@itemize
+@item The first one executes the entire application in a function that runs on the CPU.
+
+@example
+dow sort_ecos_st_sw.elf
+@end example
+
+@item The second setting instanciates several software threads for the sorting part. Each thread can sort 8 kbytes of data. The application divides the entire data into such chunks and sends the starting addresses to a message queues. Each thread waits for such a message, then sorts the corresponding cunk and sends a message to an outgoing message box when the sorting is done. Then it waits for the next chunk message, and so on. Here we use only software threads.
+
+@example
+dow sort_ecos_mt_sw.elf
+@end example
+
+@item The third setting instanciates a hardware thread instead of multiple software threads.
+
+@example
+dow sort_ecos_st_hw.elf
+@end example
+
+@item The last setting combines the second with the third setting, such that multiple software threads and a single hardware threads run concurrently. The CPU and the hardware thread can run in parallel. Note, that the threads are independent of each other.
+
+@example
+dow sort_ecos_mt_hw.elf
+@end example
+@end itemize
+

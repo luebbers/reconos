@@ -1,0 +1,618 @@
+Release 11.2 - xst L.46 (nt)
+Copyright (c) 1995-2009 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.14 secs
+ 
+--> Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.14 secs
+ 
+--> Reading design: icapCTRL.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "icapCTRL.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "icapCTRL"
+Output Format                      : NGC
+Target Device                      : xc5vfx70t-3-ff1136
+
+---- Source Options
+Top Module Name                    : icapCTRL
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : lut
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : YES
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : YES
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Use DSP Block                      : auto
+Automatic Register Balancing       : No
+
+---- Target Options
+LUT Combining                      : off
+Reduce Control Sets                : off
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 32
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Auto
+Use Synchronous Set                : Auto
+Use Synchronous Reset              : Auto
+Pack IO Registers into IOBs        : auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Power Reduction                    : NO
+Library Search Order               : icapCTRL.lso
+Keep Hierarchy                     : NO
+Netlist Hierarchy                  : as_optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+DSP48 Utilization Ratio            : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/dcr_if.vhd" in Library work.
+Architecture imp of Entity dcr_if is up to date.
+Compiling vhdl file "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/icapFIFO.vhd" in Library work.
+Architecture icapfifo_rtl of Entity icapfifo is up to date.
+Compiling vhdl file "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/icapCTRL.vhd" in Library work.
+Entity <icapctrl> compiled.
+Entity <icapctrl> (Architecture <icapctrl_rtl>) compiled.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <icapCTRL> in library <work> (architecture <icapctrl_rtl>) with generics.
+	C_BURST_SIZE = 16
+	C_COUNT_ADDR = "00000000000000000000000000010000"
+	C_DCR_BASEADDR = "1000000000"
+	C_DCR_HIGHADDR = "0000000011"
+	C_FAMILY = "virtex5"
+	C_ICAP_DWIDTH = 32
+
+Analyzing hierarchy for entity <dcr_if> in library <work> (architecture <imp>) with generics.
+	C_DCR_BASEADDR = "1000000000"
+	C_ON_INIT = "00000000000000000000000000000000"
+
+Analyzing hierarchy for entity <icapFIFO> in library <work> (architecture <icapfifo_rtl>) with generics.
+	C_DIN_WIDTH = 64
+	C_DOUT_WIDTH = 32
+	C_FIFO_DEPTH = 64
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing generic Entity <icapCTRL> in library <work> (Architecture <icapctrl_rtl>).
+	C_BURST_SIZE = 16
+	C_COUNT_ADDR = "00000000000000000000000000010000"
+	C_DCR_BASEADDR = "1000000000"
+	C_DCR_HIGHADDR = "0000000011"
+	C_FAMILY = "virtex5"
+	C_ICAP_DWIDTH = 32
+WARNING:Xst:2211 - "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/icapCTRL.vhd" line 242: Instantiating black box module <ICAP_VIRTEX5>.
+    Set user-defined property "ICAP_WIDTH =  X32" for instance <ICAP_4> in unit <icapCTRL>.
+WARNING:Xst:37 - Detected unknown constraint/property "SIGIS". This constraint/property is not supported by the current software release and will be ignored.
+WARNING:Xst:37 - Detected unknown constraint/property "SIGIS". This constraint/property is not supported by the current software release and will be ignored.
+WARNING:Xst:819 - "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/icapCTRL.vhd" line 477: One or more signals are missing in the process sensitivity list. To enable synthesis of FPGA/CPLD hardware, XST will assume that all necessary signals are present in the sensitivity list. Please note that the result of the synthesis may differ from the initial design specification. The missing signals are:
+   <base_lngth>
+INFO:Xst:2679 - Register <dcr_reg> in unit <icapCTRL> has a constant value of 00000000000000000000000000000000 during circuit operation. The register is replaced by logic.
+Entity <icapCTRL> analyzed. Unit <icapCTRL> generated.
+
+Analyzing generic Entity <dcr_if> in library <work> (Architecture <imp>).
+	C_DCR_BASEADDR = "1000000000"
+	C_ON_INIT = "00000000000000000000000000000000"
+WARNING:Xst:37 - Detected unknown constraint/property "SIGIS". This constraint/property is not supported by the current software release and will be ignored.
+WARNING:Xst:37 - Detected unknown constraint/property "SIGIS". This constraint/property is not supported by the current software release and will be ignored.
+Entity <dcr_if> analyzed. Unit <dcr_if> generated.
+
+Analyzing generic Entity <icapFIFO> in library <work> (Architecture <icapfifo_rtl>).
+	C_DIN_WIDTH = 64
+	C_DOUT_WIDTH = 32
+	C_FIFO_DEPTH = 64
+    Set user-defined property "KEEP =  true" for signal <tail_n>.
+INFO:Xst:1561 - "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/icapFIFO.vhd" line 158: Mux is complete : default of case is discarded
+Entity <icapFIFO> analyzed. Unit <icapFIFO> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <dcr_if>.
+    Related source file is "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/dcr_if.vhd".
+WARNING:Xst:647 - Input <DCR_ABus<0>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:646 - Signal <dcr_base_addr> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 32-bit register for signal <ctrl_reg_sig>.
+    Found 1-bit register for signal <dcr_read_access>.
+    Found 32-bit register for signal <read_data>.
+    Found 1-bit register for signal <Sl_dcrAck_sig>.
+    Summary:
+	inferred  66 D-type flip-flop(s).
+Unit <dcr_if> synthesized.
+
+
+Synthesizing Unit <icapFIFO>.
+    Related source file is "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/icapFIFO.vhd".
+    Found 64x64-bit dual-port RAM <Mram_fifo> for signal <fifo>.
+    Found 16x1-bit ROM for signal <full_o>.
+    Found 6-bit comparator equal for signal <empty$cmp_eq0000> created at line 113.
+    Found 1-bit register for signal <empty_p>.
+    Found 64-bit register for signal <fData>.
+    Found 6-bit up counter for signal <head>.
+    Found 7-bit register for signal <tail>.
+    Found 7-bit adder for signal <tail_n$addsub0000> created at line 86.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   1 ROM(s).
+	inferred   1 Counter(s).
+	inferred  72 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   1 Comparator(s).
+Unit <icapFIFO> synthesized.
+
+
+Synthesizing Unit <icapCTRL>.
+    Related source file is "C:/LIS/autovision_projects/MPMC/ML507_NPI/pcores/IcapCTRL_v1_00_d/ise/icap/icapCTRL.vhd".
+WARNING:Xst:647 - Input <M_wrAccept_i> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <M_wrAck_i> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <start> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <M_wrRdy_i> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <M_wrComp_i> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:1780 - Signal <debounce> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <dcr_start_r> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <dcr_reg> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <dcr_addr> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+INFO:Xst:1799 - State init is never reached in FSM <state>.
+    Found finite state machine <FSM_0> for signal <state>.
+    -----------------------------------------------------------------------
+    | States             | 5                                              |
+    | Transitions        | 10                                             |
+    | Inputs             | 5                                              |
+    | Outputs            | 5                                              |
+    | Clock              | clk                       (rising_edge)        |
+    | Reset              | reset                     (positive)           |
+    | Reset type         | synchronous                                    |
+    | Reset State        | idle                                           |
+    | Power Up State     | idle                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 15-bit register for signal <addr>.
+    Found 15-bit adder for signal <addr$addsub0000> created at line 536.
+    Found 10-bit register for signal <base_addr>.
+    Found 16-bit register for signal <base_lngth>.
+    Found 32-bit up counter for signal <count>.
+    Found 1-bit register for signal <dcr_start_w_n>.
+    Found 1-bit register for signal <done_int_i>.
+    Found 16-bit comparator not equal for signal <M_rdReq_o$cmp_ne0000> created at line 490.
+    Found 16-bit comparator equal for signal <state$cmp_eq0000> created at line 542.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 Counter(s).
+	inferred  43 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+Unit <icapCTRL> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 1
+ 64x64-bit dual-port RAM                               : 1
+# ROMs                                                 : 1
+ 16x1-bit ROM                                          : 1
+# Adders/Subtractors                                   : 2
+ 15-bit adder                                          : 1
+ 7-bit adder                                           : 1
+# Counters                                             : 2
+ 32-bit up counter                                     : 1
+ 6-bit up counter                                      : 1
+# Registers                                            : 12
+ 1-bit register                                        : 5
+ 10-bit register                                       : 1
+ 15-bit register                                       : 1
+ 16-bit register                                       : 1
+ 32-bit register                                       : 2
+ 64-bit register                                       : 1
+ 7-bit register                                        : 1
+# Comparators                                          : 3
+ 16-bit comparator equal                               : 1
+ 16-bit comparator not equal                           : 1
+ 6-bit comparator equal                                : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <state/FSM> on signal <state[1:3]> with sequential encoding.
+-------------------------
+ State       | Encoding
+-------------------------
+ idle        | 000
+ init        | unreached
+ active      | 001
+ bursting    | 010
+ write_count | 011
+ done        | 100
+-------------------------
+
+Synthesizing (advanced) Unit <icapFIFO>.
+INFO:Xst - The RAM <Mram_fifo> will be implemented as a BLOCK RAM, absorbing the following register(s): <fData>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 64-word x 64-bit                    |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <wEn_i>         | high     |
+    |     addrA          | connected to signal <head>          |          |
+    |     diA            | connected to signal <wData_i>       |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 64-word x 64-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to signal <tail_n>        |          |
+    |     doB            | connected to signal <fData>         |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:2774 - HDL ADVISOR - KEEP property attached to signal tail_n may hinder XST clustering optimizations.
+Unit <icapFIFO> synthesized (advanced).
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 1
+# RAMs                                                 : 1
+ 64x64-bit dual-port block RAM                         : 1
+# ROMs                                                 : 1
+ 16x1-bit ROM                                          : 1
+# Adders/Subtractors                                   : 2
+ 15-bit adder                                          : 1
+ 7-bit adder                                           : 1
+# Counters                                             : 2
+ 32-bit up counter                                     : 1
+ 6-bit up counter                                      : 1
+# Registers                                            : 117
+ Flip-Flops                                            : 117
+# Comparators                                          : 3
+ 16-bit comparator equal                               : 1
+ 16-bit comparator not equal                           : 1
+ 6-bit comparator equal                                : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <icapCTRL> ...
+
+Optimizing unit <dcr_if> ...
+
+Optimizing unit <icapFIFO> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block icapCTRL, actual ratio is 0.
+FlipFlop dcr_control/Sl_dcrAck_sig has been replicated 1 time(s) to handle iob=true attribute.
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 159
+ Flip-Flops                                            : 159
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : icapCTRL.ngr
+Top Level Output File Name         : icapCTRL
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : NO
+
+Design Statistics
+# IOs                              : 405
+
+Cell Usage :
+# BELS                             : 269
+#      GND                         : 1
+#      INV                         : 4
+#      LUT1                        : 45
+#      LUT2                        : 7
+#      LUT3                        : 73
+#      LUT4                        : 7
+#      LUT5                        : 5
+#      LUT6                        : 28
+#      MUXCY                       : 51
+#      VCC                         : 1
+#      XORCY                       : 47
+# FlipFlops/Latches                : 159
+#      FD                          : 6
+#      FDE                         : 32
+#      FDR                         : 26
+#      FDRE                        : 95
+# RAMS                             : 1
+#      RAMB36SDP_EXP               : 1
+# Clock Buffers                    : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 398
+#      IBUF                        : 112
+#      OBUF                        : 286
+# Others                           : 1
+#      ICAP_VIRTEX5                : 1
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 5vfx70tff1136-3 
+
+
+Slice Logic Utilization: 
+ Number of Slice Registers:             158  out of  44800     0%  
+ Number of Slice LUTs:                  169  out of  44800     0%  
+    Number used as Logic:               169  out of  44800     0%  
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:    206
+   Number with an unused Flip Flop:      48  out of    206    23%  
+   Number with an unused LUT:            37  out of    206    17%  
+   Number of fully used LUT-FF pairs:   121  out of    206    58%  
+   Number of unique control sets:         8
+
+IO Utilization: 
+ Number of IOs:                         405
+ Number of bonded IOBs:                 399  out of    640    62%  
+    IOB Flip Flops/Latches:               1
+
+Specific Feature Utilization:
+ Number of Block RAM/FIFO:                1  out of    148     0%  
+    Number using Block RAM only:          1
+ Number of BUFG/BUFGCTRLs:                1  out of     32     3%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk                                | BUFGP                  | 160   |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+-----------------------------------+---------------------------+-------+
+Control Signal                     | Buffer(FF name)           | Load  |
+-----------------------------------+---------------------------+-------+
+M_rdAddr_o_0_OBUF(XST_GND:G)       | NONE(icapFIFO_0/Mram_fifo)| 10    |
+-----------------------------------+---------------------------+-------+
+
+Timing Summary:
+---------------
+Speed Grade: -3
+
+   Minimum period: 2.412ns (Maximum Frequency: 414.619MHz)
+   Minimum input arrival time before clock: 2.810ns
+   Maximum output required time after clock: 4.979ns
+   Maximum combinational path delay: 3.599ns
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clk'
+  Clock period: 2.412ns (frequency: 414.619MHz)
+  Total number of paths / destination ports: 1660 / 323
+-------------------------------------------------------------------------
+Delay:               2.412ns (Levels of Logic = 8)
+  Source:            addr_0 (FF)
+  Destination:       state_FSM_FFd2 (FF)
+  Source Clock:      clk rising
+  Destination Clock: clk rising
+
+  Data Path: addr_0 to state_FSM_FFd2
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q              4   0.396   0.861  addr_0 (addr_0)
+     LUT6:I0->O            1   0.086   0.000  Mcompar_state_cmp_eq0000_lut<0> (Mcompar_state_cmp_eq0000_lut<0>)
+     MUXCY:S->O            1   0.305   0.000  Mcompar_state_cmp_eq0000_cy<0> (Mcompar_state_cmp_eq0000_cy<0>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_state_cmp_eq0000_cy<1> (Mcompar_state_cmp_eq0000_cy<1>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_state_cmp_eq0000_cy<2> (Mcompar_state_cmp_eq0000_cy<2>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_state_cmp_eq0000_cy<3> (Mcompar_state_cmp_eq0000_cy<3>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_state_cmp_eq0000_cy<4> (Mcompar_state_cmp_eq0000_cy<4>)
+     MUXCY:CI->O           2   0.222   0.365  Mcompar_state_cmp_eq0000_cy<5> (state_cmp_eq0000)
+     LUT5:I4->O            1   0.086   0.000  state_FSM_FFd2-In1 (state_FSM_FFd2-In)
+     FDR:D                    -0.022          state_FSM_FFd2
+    ----------------------------------------
+    Total                      2.412ns (1.186ns logic, 1.226ns route)
+                                       (49.2% logic, 50.8% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
+  Total number of paths / destination ports: 919 / 312
+-------------------------------------------------------------------------
+Offset:              2.810ns (Levels of Logic = 4)
+  Source:            DCR_ABus<4> (PAD)
+  Destination:       dcr_control/read_data_31 (FF)
+  Destination Clock: clk rising
+
+  Data Path: DCR_ABus<4> to dcr_control/read_data_31
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             2   0.694   0.615  DCR_ABus_4_IBUF (DCR_ABus_o_4_OBUF)
+     LUT4:I0->O            1   0.086   0.361  dcr_control/dcr_addr_hit_cmp_eq0000_SW0 (N5)
+     LUT6:I5->O            4   0.086   0.372  dcr_control/dcr_addr_hit_cmp_eq0000 (dcr_control/dcr_addr_hit)
+     LUT3:I2->O           32   0.086   0.324  dcr_control/read_data_and00001 (dcr_control/read_data_and0000)
+     FDE:CE                    0.185          dcr_control/read_data_0
+    ----------------------------------------
+    Total                      2.810ns (1.137ns logic, 1.673ns route)
+                                       (40.5% logic, 59.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'clk'
+  Total number of paths / destination ports: 340 / 195
+-------------------------------------------------------------------------
+Offset:              4.979ns (Levels of Logic = 9)
+  Source:            addr_0 (FF)
+  Destination:       M_rdReq_o (PAD)
+  Source Clock:      clk rising
+
+  Data Path: addr_0 to M_rdReq_o
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q              4   0.396   0.861  addr_0 (addr_0)
+     LUT6:I0->O            1   0.086   0.000  Mcompar_state_cmp_eq0000_lut<0> (Mcompar_state_cmp_eq0000_lut<0>)
+     MUXCY:S->O            1   0.305   0.000  Mcompar_state_cmp_eq0000_cy<0> (Mcompar_state_cmp_eq0000_cy<0>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_state_cmp_eq0000_cy<1> (Mcompar_state_cmp_eq0000_cy<1>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_state_cmp_eq0000_cy<2> (Mcompar_state_cmp_eq0000_cy<2>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_state_cmp_eq0000_cy<3> (Mcompar_state_cmp_eq0000_cy<3>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_state_cmp_eq0000_cy<4> (Mcompar_state_cmp_eq0000_cy<4>)
+     MUXCY:CI->O           2   0.222   0.553  Mcompar_state_cmp_eq0000_cy<5> (state_cmp_eq0000)
+     LUT4:I1->O            1   0.086   0.235  M_rdReq_o1 (M_rdReq_o_OBUF)
+     OBUF:I->O                 2.144          M_rdReq_o_OBUF (M_rdReq_o)
+    ----------------------------------------
+    Total                      4.979ns (3.330ns logic, 1.649ns route)
+                                       (66.9% logic, 33.1% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 77 / 77
+-------------------------------------------------------------------------
+Delay:               3.599ns (Levels of Logic = 3)
+  Source:            DCR_Sl_DBus<31> (PAD)
+  Destination:       Sl_dcrDBus<31> (PAD)
+
+  Data Path: DCR_Sl_DBus<31> to Sl_dcrDBus<31>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             2   0.694   0.440  DCR_Sl_DBus_31_IBUF (DCR_Sl_DBus_31_IBUF)
+     LUT3:I1->O            1   0.086   0.235  dcr_control/Sl_dcrDBus<31>1 (Sl_dcrDBus_31_OBUF)
+     OBUF:I->O                 2.144          Sl_dcrDBus_31_OBUF (Sl_dcrDBus<31>)
+    ----------------------------------------
+    Total                      3.599ns (2.924ns logic, 0.675ns route)
+                                       (81.2% logic, 18.8% route)
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 12.00 secs
+Total CPU time to Xst completion: 11.47 secs
+ 
+--> 
+
+Total memory usage is 179288 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :   17 (   0 filtered)
+Number of infos    :    5 (   0 filtered)
+

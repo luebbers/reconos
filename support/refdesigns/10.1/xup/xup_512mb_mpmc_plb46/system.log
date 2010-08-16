@@ -1,0 +1,15 @@
+rm -rf xst.srp system.srp
+rm -rf ppc405_0/
+rm -f libgen.log
+rm -f calibration/executable.elf 
+rm -rf simulation/behavioral
+rm -f simgen.log
+rm -rf virtualplatform
+rm -f vpgen.log
+rm -f _impact.cmd
+rm -f *.log
+
+
+
+Done!
+

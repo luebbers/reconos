@@ -1,0 +1,13 @@
+# sample stimulus for mutex test
+
+wait 500 ns
+write_init_data 01010101
+
+wait 500 ns
+write_busmacro 00000001
+
+wait 500 ns
+write_unlock
+
+wait 10 ns
+read_thread_exit 00000001

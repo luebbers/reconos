@@ -1,0 +1,14 @@
+# ReconOS project file (format v1.00.a)
+#EDK_BASE_DIR = $(RECONOS)/support/refdesigns/9.1/xup/xup_light
+LAYOUT = resume_demo.lyt
+HW_THREAD_DIR = hwthreads
+PAROPTS = -ol high -w
+MAPOPTS = -ol high -timing
+# add your static threads here
+STATIC_THREADS=wait_and_yield
+
+# for PR designs, uncomment the following:
+EDK_BASE_DIR = $(RECONOS)/support/refdesigns/9.2/xup/xup_light_pr
+ADDTHREAD_OPTS = -o sys_clk_s
+MAKETOP_OPTS = --no-slot-bufg
+

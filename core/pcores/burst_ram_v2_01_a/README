@@ -1,0 +1,131 @@
+burst_ram_v2_01_a
+-----------------
+
+Paramtetrizable burst RAM core for ReconOS hardware threads.
+
+enno.luebbers@upb.de
+May 9th 2007
+
+--------------------------------------------------------------------------
+%%%RECONOS_COPYRIGHT_BEGIN%%%
+
+This pcore is part of ReconOS (http://www.reconos.de).
+Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+All rights reserved.
+
+ReconOS is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option)
+any later version.
+
+ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along
+with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+
+%%%RECONOS_COPYRIGHT_END%%%
+--------------------------------------------------------------------------
+
+OVERVIEW
+========
+
+The burst_ram core is used for transferring larger chunks of data between
+system memory and a hardware thread in a ReconOS system. It can also be used
+as local storage for hardware threads.
+
+The core is quite parametrizable. By varying the port address width, an
+appropriate amount of BRAM primitives will be instantiated and connected to
+form an RAM area between 4 and 64 kBytes. Port A is connected to the hardware
+thread and has a fixed data width of 32 bits. Port B connects to the OS
+interface and is capable of 64 bit transfers, which is the usual width of
+the system's PLB.
+
+NOTE: MORE THAN ONE PORT IS NOT YET IMPLEMENTED!
+
+On the thread side (PORTA), it is possible to have two ports (PORTA and PORTAX),
+each accessing one half of the total block RAM:
+
+              ---------
+             |         |
+   PORTA ----|         |-\
+   (32 bit)  |         |  \
+              ---------    \   
+                            |---- PORTB
+              ---------    /      (64 bit)
+             |         |  /
+   PORTAX ---|         |-/
+   (32 bit)  |         |
+              ---------
+
+The OSIF side (PORTB) still sees the RAM as one block of contiguos memory.
+
+If configured for just one thread-side port (G_PORTA_PORTS = 1), the *ax signals
+(clkax, weax, doutax...) will not be used and should be connected to '0'
+or left open.
+
+The generics to parametrize the RAM are checked for consistency. Allowed
+combinations of the generics are as follows:
+
+ G_PORTA_DWIDTH = 32  (fixed)
+ G_PORTB_DWIDTH = 64  (fixed)
+
+  G_PORTA_PORTS | G_PORTA_AWIDTH | G_PORTB_AWIDTH | size
+ ---------------+----------------+----------------+-----
+       1        |       10       |       9        |  4kB
+       1        |       11       |      10        |  8kB
+*      1        |       12       |      11        | 16kB
+*      1        |       13       |      12        | 32kB
+*      1        |       14       |      13        | 64kB
+       2        |       10       |      10        |  8kB (2x4kB)
+       2        |       11       |      11        | 16kB (2x8kB)
+*      2        |       12       |      12        | 32kB (2x16kB)
+*      2        |       13       |      13        | 64kB (2x32kB)
+
+ G_PORTB_USE_BE : Use byte enables on port B. Only possible if enough BRAMs 
+                  are used so that each BRAM has a width of less or equal
+                  than 8 on port B. These cases are highlighted with an
+                  asterisk in the table above.
+
+
+
+USAGE
+=====
+
+Use burst_ram as a drop-in replacement for the old coregen-generated burst RAM
+core in the hw_task.vhd file of ReconOS hardware threads. You need to include a
+component declaration and set the generics in the instantiation appropriately.
+The byte enable signals for port B are only used if G_PORTB_USE_BE is set to 1.
+
+E.g.:
+
+	burst_ram_i : burst_ram
+		generic map (
+			G_PORTA_AWIDTH => C_TASK_BURST_AWIDTH,
+			G_PORTA_DWIDTH => C_TASK_BURST_DWIDTH,
+			G_PORTA_PORTS  => 1,
+			G_PORTB_AWIDTH => C_BUS_BURST_AWIDTH-3,	-- address 64bit words, not bytes
+			G_PORTB_DWIDTH => C_BUS_BURST_DWIDTH,
+                        G_PORTB_USE_BE => 0                     -- do not use byte enables
+		)
+		port map (
+			addra => task2burst_Addr,
+			addrb => i_burstAddr(0 to C_BUS_BURST_AWIDTH-1 -3),		-- RAM is addressing 64Bit values
+			clka => task2burst_Clk,
+			clkb => clk,
+			dina => task2burst_Data,
+			dinb => i_burstData,
+			douta => burst2task_Data,
+			doutb => o_burstData,
+			wea => task2burst_WE,
+			web => i_burstWE,
+                        beb => '0'
+		);
+
+Note that the address widths of the ports correspond to the data widths, i.e.
+the OSIF-side port B, which can transfer 64 bits of data per clock, also
+addresses 64-bit words, _not_ _bytes_! That's why we subtract 3 from the
+C_BUS_BURST_AWIDTH, which refers to byte-addressability.
+

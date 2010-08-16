@@ -1,0 +1,11 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5.4	//
+Behavioral	/Volumes/PC-TECHINF-4/home/luebbers/work/reconos/branches/reconos_plbv46/tests/simulation/plb46/mem/test_mem.vhd	/^architecture Behavioral of test_mutex is$/;"	architecture specifications	line:36
+ENTITY	/Volumes/PC-TECHINF-4/home/luebbers/work/reconos/branches/reconos_plbv46/tests/simulation/plb46/mem/Makefile	/^ENTITY := test_mem$/;"	macro	line:1
+state_proc	/Volumes/PC-TECHINF-4/home/luebbers/work/reconos/branches/reconos_plbv46/tests/simulation/plb46/mem/test_mem.vhd	/^  state_proc : process(clk, reset)$/;"	processes	line:57
+t_state	/Volumes/PC-TECHINF-4/home/luebbers/work/reconos/branches/reconos_plbv46/tests/simulation/plb46/mem/test_mem.vhd	/^  type t_state is (STATE_INIT, STATE_HALLO, STATE_LOCK, STATE_READ, STATE_WRITE, STATE_UNLOCK);$/;"	type declarations	line:40
+test_mutex	/Volumes/PC-TECHINF-4/home/luebbers/work/reconos/branches/reconos_plbv46/tests/simulation/plb46/mem/test_mem.vhd	/^entity test_mutex is$/;"	entities	line:14

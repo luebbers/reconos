@@ -1,0 +1,11 @@
+##############################################################################
+## Filename:          message_manager_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Oct  26 2007
+## Core written by Jason Agron <jagron@ittc.ku.edu>
+## Wrapper written by Enno Luebbers <enno.luebbers@upb.de>
+##############################################################################
+
+lib message_manager_v1_00_a fast_queue vhdl
+lib message_manager_v1_00_a infer_bram_dual_port vhdl
+lib message_manager_v1_00_a message_manager vhdl

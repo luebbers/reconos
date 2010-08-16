@@ -1,0 +1,46 @@
+# sample stimulus for mbox test
+
+wait 500 ns
+write_unlock
+
+######### Test 1 ############
+
+wait 500 ns
+read_mbox_get 00000000
+
+wait 500 ns
+write_unlock 00000001
+
+wait 500 ns
+read_mbox_put 00000001 FFFFFFFE
+
+wait 500 ns
+write_unlock 00000001
+
+######### Test 2 ############
+
+wait 500 ns
+read_mbox_get 00000000
+
+wait 500 ns
+write_unlock AFFEDEAD
+
+wait 500 ns
+read_mbox_put 00000001 50012152
+
+wait 500 ns
+write_unlock 00000001
+
+######### Test 3 ############
+
+wait 500 ns
+read_mbox_get 00000000
+
+wait 500 ns
+write_unlock 12345678
+
+wait 500 ns
+read_mbox_put 00000001 EDCBA987
+
+wait 500 ns
+write_unlock 00000001

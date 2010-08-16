@@ -1,0 +1,29 @@
+COMPILER=
+ARCHIVER=
+CP=cp
+COMPILER_FLAGS=
+EXTRA_COMPILER_FLAGS=
+LIB=libxil.a
+LEVEL=0
+
+RELEASEDIR=../../../lib
+INCLUDEDIR=../../../include
+INCLUDES=-I./. -I${INCLUDEDIR}
+
+L0_INCLUDEFILES=xac97_l.h 
+LIBSOURCES=xac97_l.c
+INCLUDEFILES=$(L$(LEVEL)_INCLUDEFILES)
+OUTS = *.o 
+
+
+libs:	
+	echo "Compiling ac97"
+	$(COMPILER) -g $(COMPILER_FLAGS) $(EXTRA_COMPILER_FLAGS) $(INCLUDES) $(LIBSOURCES)
+	$(ARCHIVER) -r ${RELEASEDIR}/${LIB} $(OUTS)
+	make clean
+
+include: 
+	${CP} $(INCLUDEFILES) $(INCLUDEDIR)
+
+clean:
+	rm -rf ${OUTS}

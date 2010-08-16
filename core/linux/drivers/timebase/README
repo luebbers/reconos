@@ -1,0 +1,39 @@
+ReconOS/Linux DCR timebase kernel driver
+========================================
+
+Author: Enno Luebbers <enno.luebbers@upb.de>
+Date  : 18.03.2008
+
+
+OVERVIEW AND USAGE
+
+This driver provides an interface for accessing the dcr_timebase core used
+for accurate inter-thread timing measurements in ReconOS. It supports reading
+of 32 bit values only. To retrieve the current time base value from the
+dcr_timebase core, just read() 32 bits from it. I'm not sure about endianess. :)
+
+NOTE: The timebase value is stored in the DCR register with offset 1 to the
+DCR baseaddress. The register at offset 0 is reserved as a control register.
+It has no purpose for now.
+
+MODULE OPTIONS
+
+The module takes a number of option which can be passed to the insmod command:
+
+    timebase_major  The major number to register the character device with.
+                    If not specified, a major number is dynamically allocated
+                    by the kernel. It can be read using /proc or sysfs.
+
+    timebase_baseaddr 
+                    The base addresses to be used for the dcr_timebase
+                    reads.
+                    Note: If the DCR is directly attached to the CPU, this
+                    address is a raw DCR address, with a spacing of 1
+                    between the individual registers. If a opb2dcr bridge is
+                    used, this address is an OPB address, with a spacing
+                    of 4 between the registers.
+
+    use_opb2dcr     Explicitly tell the driver to use memory mapped bus 
+                    transactions when talking to the DCR bus.
+
+

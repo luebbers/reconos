@@ -1,0 +1,12 @@
+ERROR:MDT - C_BASEADDR -
+   /home/rmeiche/Xilinx/EDK-projects/XUP_Ref_MPMC_10.1/dump.mhs line 34 - Value
+   of parameter of type std_logic_vector must start with prefix 0x or 0b
+ERROR:MDT - C_BASEADDR -
+   /home/rmeiche/Xilinx/EDK-projects/XUP_Ref_MPMC_10.1/dump.mhs line 63 - Value
+   of parameter of type std_logic_vector must start with prefix 0x or 0b
+ERROR:MDT - C_BASEADDR -
+   /home/rmeiche/Xilinx/EDK-projects/XUP_Ref_MPMC_10.1/dump.mhs line 34 - Value
+   of parameter of type std_logic_vector must start with prefix 0x or 0b
+ERROR:MDT - C_BASEADDR -
+   /home/rmeiche/Xilinx/EDK-projects/XUP_Ref_MPMC_10.1/dump.mhs line 63 - Value
+   of parameter of type std_logic_vector must start with prefix 0x or 0b

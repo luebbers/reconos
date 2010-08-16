@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# generate ACE file for compact flash
+#
+TEMPLATE="$RECONOS/tools/xmd/genace.opt.template"
+BATCH="/tmp/generated_genace.opt"
+AGE="$RECONOS/tools/age"
+
+if [ -z "$1" ]; then		# BIT provided on command line
+	echo "no BIT specified"
+	exit -1
+fi
+if [ -z "$2" ]; then		# ELF provided on command line
+	echo "no ELF specified"
+	exit -1
+fi
+if [ -z "$3" ]; then		# ACE provided on command line
+	echo "no ACE specified"
+	exit -1
+fi
+
+
+if [ ! -f $1 ]; then
+  echo "The file $1 does not exist!"
+  exit
+else
+  BIT=$1
+fi
+
+if [ ! -f $2 ]; then
+  echo "The file $2 does not exist!"
+  exit
+else
+  ELF=$2
+fi
+
+ACE=$3
+
+cat $TEMPLATE | sed "s#BIT#${BIT}#;s#ELF#${ELF}#;s#ACE#${ACE}#" > $BATCH
+
+$XILINX_EDK/bin/lin/xmd -tcl genace.tcl -opt $BATCH
+
+#DIFF=`$AGE $ELF`
+#
+#echo ""
+#echo ""
+#echo "----> This ELF is $((${DIFF}/60)) minutes and $((${DIFF}%60)) seconds old."
+#echo ""
+#if [ -z "$1" ]; then
+#	echo "Press ENTER to quit"
+#	read
+#fi
+
+echo "----------------------------"
+echo "NOTE: This ACE file is for the XUP board only."
+echo "----------------------------"
+

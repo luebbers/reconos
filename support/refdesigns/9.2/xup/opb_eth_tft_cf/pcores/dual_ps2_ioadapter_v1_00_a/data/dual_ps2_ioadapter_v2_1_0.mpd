@@ -1,0 +1,60 @@
+###################################################################
+##
+##     XILINX IS PROVIDING THIS DESIGN, CODE, OR INFORMATION "AS IS"
+##     SOLELY FOR USE IN DEVELOPING PROGRAMS AND SOLUTIONS FOR
+##     XILINX DEVICES.  BY PROVIDING THIS DESIGN, CODE, OR INFORMATION
+##     AS ONE POSSIBLE IMPLEMENTATION OF THIS FEATURE, APPLICATION
+##     OR STANDARD, XILINX IS MAKING NO REPRESENTATION THAT THIS
+##     IMPLEMENTATION IS FREE FROM ANY CLAIMS OF INFRINGEMENT,
+##     AND YOU ARE RESPONSIBLE FOR OBTAINING ANY RIGHTS YOU MAY REQUIRE
+##     FOR YOUR IMPLEMENTATION.  XILINX EXPRESSLY DISCLAIMS ANY
+##     WARRANTY WHATSOEVER WITH RESPECT TO THE ADEQUACY OF THE
+##     IMPLEMENTATION, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OR
+##     REPRESENTATIONS THAT THIS IMPLEMENTATION IS FREE FROM CLAIMS OF
+##     INFRINGEMENT, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+##     FOR A PARTICULAR PURPOSE.
+##     
+##     (c) Copyright 2004 Xilinx, Inc.
+##     All rights reserved.
+##
+###################################################################
+##
+## Microprocessor Peripheral Definition
+##
+###################################################################
+
+BEGIN dual_ps2_ioadapter
+OPTION IPTYPE=IP
+OPTION STYLE = HDL
+OPTION IMP_NETLIST=TRUE
+OPTION HDL=verilog
+
+## Peripheral Options
+OPTION SIM_MODELS = BEHAVIORAL:STRUCTURAL:TIMING
+
+## Bus Interfaces
+# None
+
+## Generics for VHDL or Parameters for Verilog
+# None
+
+# Mouse is port 1 and Keyboard is port 2 but they are identical
+
+## Ports
+PORT ps2_mouse_clk  = "", DIR = INOUT
+PORT ps2_mouse_data = "", DIR = INOUT
+PORT ps2_keyb_clk   = "", DIR = INOUT
+PORT ps2_keyb_data  = "", DIR = INOUT
+
+# PS2 #1 interface signal
+PORT ps2_clk_tx_1 = "", DIR = IN
+PORT ps2_clk_rx_1 = "", DIR = OUT
+PORT ps2_d_tx_1 = "", DIR = IN
+PORT ps2_d_rx_1 = "", DIR = OUT
+# PS2 #2 interface signal
+PORT ps2_clk_tx_2 = "", DIR = IN
+PORT ps2_clk_rx_2 = "", DIR = OUT
+PORT ps2_d_tx_2 = "", DIR = IN
+PORT ps2_d_rx_2 = "", DIR = OUT
+
+END

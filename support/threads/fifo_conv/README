@@ -1,0 +1,38 @@
+hwt_fifo_conv.vhd
+
+implements an 3x3 convolution filter which can be configured at runtime. At startup the thread
+expects init_data to point to a memory location that contains the convolution kernel. The layout
+of the memory is as follows:
+
+            addr  byte3 byte2  byte1 byte0
+------------------------------------------
+init_data + 0x00      X     X  sign0    k0
+init_data + 0x04      X     X  sign1    k1
+init_data + 0x08      X     X  sign2    k2
+init_data + 0x0C      X     X  sign3    k3
+init_data + 0x10      X     X  sign4    k4
+init_data + 0x14      X     X  sign5    k5
+init_data + 0x18      X     X  sign6    k6
+init_data + 0x1C      X     X  sign7    k7
+init_data + 0x20      X     X  sign8    k8
+
+where byte3 is the most significant byte. The least significant bit of byte1 determines the sign 'si' of
+the matrix element ('0' -> 1, '1' -> -1). X = don't care.
+
+The kernel used by the filter:
+
+s0*k0 | s1*k1 | s2*k2
+---------------------
+s3*k3 | s4*k4 | s5*k5
+---------------------
+s6*k6 | s7*k7 | s8*k8
+
+k0 to k8 are interpreted as 4.4 bit fixed point numbers.
+
+
+The thread expects to receive the input pixel data from mailbox 0x00000000 and writes out pixel data to
+mailbox 0x00000001. The pixel format should be X"00" & channel2 & channel1 & channel0 (1 pixel = 32 bits, msb
+is ignored).
+
+The thread needs to be reset after each frame. This is a feature.
+

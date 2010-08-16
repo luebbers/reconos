@@ -1,0 +1,20 @@
+# Date: Tue Oct 17 10:58:04 2006
+SET flowvendor = Other
+SET vhdlsim = True
+SET verilogsim = False
+SET workingdirectory = /home/luebbers/work/xilinx/xup/edk.reconos/pcores/hw_task_vdec2mem_v1_00_a/cores/coregen/tmp
+SET speedgrade = -7
+SET simulationfiles = Behavioral
+SET asysymbol = False
+SET addpads = False
+SET device = xc2vp30
+SET implementationfiletype = Edif
+SET busformat = BusFormatAngleBracketNotRipped
+SET foundationsym = False
+SET package = ff896
+SET createndf = False
+SET designentry = VHDL
+SET devicefamily = virtex2p
+SET formalverification = False
+SET removerpms = False
+

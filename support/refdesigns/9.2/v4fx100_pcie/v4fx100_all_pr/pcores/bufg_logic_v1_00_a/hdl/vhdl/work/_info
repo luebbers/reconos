@@ -1,0 +1,27 @@
+m255
+13
+cModel Technology
+d/home/luebbers/work/reconos/trunk/hw/refdesigns/9.2/xup/xup_light_pr/pcores/bufg_v1_00_a/hdl/vhdl
+Ebufg_logic
+w1233647125
+DP unisim vcomponents U@hJ=4MAKMd>1YNI=gWhf3
+DP ieee std_logic_1164 GH1=`jDDBJ=`LM;:Ak`kf2
+Fbufg.vhd
+l0
+L25
+VC<>;6kmdWYIRfk1mNk6m?0
+OE;C;6.1f;31
+32
+tExplicit 1
+Astructural
+DP unisim vcomponents U@hJ=4MAKMd>1YNI=gWhf3
+DP ieee std_logic_1164 GH1=`jDDBJ=`LM;:Ak`kf2
+DE work bufg_logic C<>;6kmdWYIRfk1mNk6m?0
+l44
+L35
+V_T8z3QGHPb]n7O?ESAC:>1
+OE;C;6.1f;31
+32
+M2 ieee std_logic_1164
+M1 unisim vcomponents
+tExplicit 1

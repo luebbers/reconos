@@ -1,0 +1,3 @@
+vhdl work "icapFIFO.vhd"
+vhdl work "dcr_if.vhd"
+vhdl work "icapCTRL.vhd"

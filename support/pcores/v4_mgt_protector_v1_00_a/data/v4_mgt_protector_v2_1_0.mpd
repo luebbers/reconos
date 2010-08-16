@@ -1,0 +1,31 @@
+###################################################################
+##
+## Name     : v4_mgt_protector
+## Desc     : Microprocessor Peripheral Description
+##
+###################################################################
+
+BEGIN v4_mgt_protector
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION STYLE = MIX
+OPTION IP_GROUP = PPC:USER
+OPTION CORE_STATE = DEVELOPMENT
+
+
+## Bus Interfaces
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER G_NUM_MGTS = 10, DT = INTEGER
+
+## Ports
+PORT clk = "", DIR= I, SIGIS = Clk
+PORT rx1n = "", DIR = I, VEC = [2*G_NUM_MGTS-1:0]
+PORT rx1p = "", DIR = I, VEC = [2*G_NUM_MGTS-1:0]
+PORT tx1n = "", DIR = O, VEC = [2*G_NUM_MGTS-1:0]
+PORT tx1p = "", DIR = O, VEC = [2*G_NUM_MGTS-1:0]
+
+END

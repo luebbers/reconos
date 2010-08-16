@@ -1,0 +1,18 @@
+This is the User's Guide for the ReconOS project (http://www.reconos.de). It
+contains information about setting up and using ReconOS to build a
+reconfigurable System-on-Chip, including step-by-step guides and tutorials.
+
+TODO: add license here
+
+Build instructions
+------------------
+
+Building the user documentation is handled by a Makefile process -- you will
+need (GNU) make and TeXinfo for it.
+
+To get a list of the available make targets (single-file HTML, PDF, etc.),
+issue
+
+    make help
+
+ 

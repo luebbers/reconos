@@ -1,0 +1,9 @@
+close.o
+kill.o
+open.o
+read.o
+sleep.o
+unlink.o
+usleep.o
+write.o
+abort.o

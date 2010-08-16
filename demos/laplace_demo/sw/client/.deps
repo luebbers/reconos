@@ -1,0 +1,6 @@
+buffers.o: buffers.c buffers.h
+transmit_rgb24.o: transmit_rgb24.c
+udp_connection.o: udp_connection.c udp_connection.h utils.h global.h
+utils.o: utils.c utils.h
+ipclient.o: ipclient.cpp v4lsource.h video_source.h ccvt.h global.h \
+  udp_connection.h utils.h

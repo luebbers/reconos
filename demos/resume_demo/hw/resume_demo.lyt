@@ -1,0 +1,283 @@
+# Reconos FPGA layout file (version 3.1.0a)
+
+target
+	device XC2VP30
+	family xc2vp
+end
+
+slot hw_task_0
+	slice_range SLICE_X12Y112:SLICE_X33Y145
+	range MULT18x18 MULT18x18_X1Y14:MULT18x18_X2Y17
+	range RAMB16 RAMB16_X1Y14:RAMB16_X2Y17
+
+# input
+        busmacro
+                type r2l_sync_wide
+                loc X30Y112
+        end
+        busmacro
+                type r2l_sync_wide
+                loc X30Y114
+        end
+        busmacro
+                type r2l_sync_wide
+                loc X30Y116
+        end
+        busmacro
+                type r2l_sync_wide
+                loc X30Y118
+        end
+        busmacro
+                type r2l_sync_wide
+                loc X30Y120
+        end
+        busmacro
+                type r2l_sync_wide
+                loc X30Y122
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y124
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y126
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y128
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y130
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y132
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y134
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y136
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y138
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y140
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y142
+        end
+        busmacro
+                type r2l_async_wide
+                loc X30Y144
+        end
+
+# output
+        busmacro
+                type l2r_sync_enable_narrow
+                loc X32Y112
+        end
+        busmacro
+                type l2r_sync_enable_narrow
+                loc X32Y114
+        end
+        busmacro
+                type l2r_sync_enable_narrow
+                loc X32Y116
+        end
+        busmacro
+                type l2r_sync_enable_narrow
+                loc X32Y118
+        end
+        busmacro
+                type l2r_sync_enable_narrow
+                loc X32Y120
+        end
+        busmacro
+                type l2r_sync_enable_narrow
+                loc X32Y122
+        end
+        busmacro
+                type l2r_sync_enable_narrow
+                loc X32Y124
+        end
+        busmacro
+                type l2r_async_enable_narrow
+                loc X32Y126
+        end
+        busmacro
+                type l2r_async_enable_narrow
+                loc X32Y128
+        end
+        busmacro
+                type l2r_async_enable_narrow
+                loc X32Y130
+        end
+        busmacro
+                type l2r_async_enable_narrow
+                loc X32Y132
+        end
+        busmacro
+                type l2r_async_enable_narrow
+                loc X32Y134
+        end
+        busmacro
+                type l2r_async_enable_narrow
+                loc X32Y136
+        end
+        busmacro
+                type l2r_async_enable_narrow
+                loc X32Y138
+        end
+        busmacro
+                type l2r_async_enable_narrow
+                loc X32Y140
+        end
+end
+
+
+#slot hw_task_1
+#	slice_range SLICE_X60Y112:SLICE_X81Y145
+#	range MULT18x18 MULT18x18_X5Y14:MULT18x18_X6Y17
+#	range RAMB16 RAMB16_X5Y14:RAMB16_X6Y17
+#
+## input
+#        busmacro
+#                type l2r_sync_wide
+#                loc X56Y112
+#        end
+#        busmacro
+#                type l2r_sync_wide
+#                loc X56Y114
+#        end
+#        busmacro
+#                type l2r_sync_wide
+#                loc X56Y116
+#        end
+#        busmacro
+#                type l2r_sync_wide
+#                loc X56Y118
+#        end
+#        busmacro
+#                type l2r_sync_wide
+#                loc X56Y120
+#        end
+#        busmacro
+#                type l2r_sync_wide
+#                loc X56Y122
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y124
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y126
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y128
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y130
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y132
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y134
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y136
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y138
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y140
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y142
+#        end
+#        busmacro
+#                type l2r_async_wide
+#                loc X56Y144
+#        end
+#
+## output
+#        busmacro
+#                type r2l_sync_enable_narrow
+#                loc X58Y112
+#        end
+#        busmacro
+#                type r2l_sync_enable_narrow
+#                loc X58Y114
+#        end
+#        busmacro
+#                type r2l_sync_enable_narrow
+#                loc X58Y116
+#        end
+#        busmacro
+#                type r2l_sync_enable_narrow
+#                loc X58Y118
+#        end
+#        busmacro
+#                type r2l_sync_enable_narrow
+#                loc X58Y120
+#        end
+#        busmacro
+#                type r2l_sync_enable_narrow
+#                loc X58Y122
+#        end
+#        busmacro
+#                type r2l_sync_enable_narrow
+#                loc X58Y124
+#        end
+#        busmacro
+#                type r2l_async_enable_narrow
+#                loc X58Y126
+#        end
+#        busmacro
+#                type r2l_async_enable_narrow
+#                loc X58Y128
+#        end
+#        busmacro
+#                type r2l_async_enable_narrow
+#                loc X58Y130
+#        end
+#        busmacro
+#                type r2l_async_enable_narrow
+#                loc X58Y132
+#        end
+#        busmacro
+#                type r2l_async_enable_narrow
+#                loc X58Y134
+#        end
+#        busmacro
+#                type r2l_async_enable_narrow
+#                loc X58Y136
+#        end
+#        busmacro
+#                type r2l_async_enable_narrow
+#                loc X58Y138
+#        end
+#        busmacro
+#                type r2l_async_enable_narrow
+#                loc X58Y140
+#        end
+#end

@@ -1,0 +1,11 @@
+#
+# Usage: generate.exe ila_example -f=<arg_file_name>
+#
+-devicefamily=Virtex2P
+-tool=xst
+-language=VHDL
+-outputdirectory=/home/luebbers/work/reconos/trunk/sandbox/dcr_test/hw/pcores/dcr_test_v1_00_a/netlist
+-compname=dcr_ila
+-numtrigports=1
+-trigportwidth0=3
+-datawidth=77

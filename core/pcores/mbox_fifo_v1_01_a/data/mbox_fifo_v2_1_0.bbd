@@ -1,0 +1,6 @@
+
+#####
+# Black-Box Description file.
+#####
+FILES
+fifo_async.edn, fifo_async_fifo_generator_v3_2_xst_1.ngc

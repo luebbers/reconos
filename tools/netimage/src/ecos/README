@@ -1,0 +1,14 @@
+netimage_ecos.c implements the receiving part of the netimage tools
+for the eCos operating system. It requires an ecos configuration with
+tcp/ip networking and a vga output device.
+
+Installation:
+
+1. Point the HW_DESIGN environment variable to your EDK design.
+
+2. Run 'make setup' to build the eCos library.
+
+3. Run 'make' to build the ELF executable
+
+4. Download the executable to the target.
+

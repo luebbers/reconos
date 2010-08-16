@@ -1,0 +1,82 @@
+enabling data cache for external ram
+begin mq_benchmark
+creating hw thread...
+msgsize = 4, 100 iterations
+SW -> HW (mq): avg 25857, min 15615, max 28080 (cycles)
+HW -> SW (mq): avg 18036, min 17864, max 19970 (cycles)
+HW send  (mq): avg 13843, min 13563, max 15714 (cycles)
+SW send  (mq): avg 3864, min 3750, max 5678 (cycles)
+
+msgsize = 8, 100 iterations
+SW -> HW (mq): avg 25862, min 14931, max 27800 (cycles)
+HW -> SW (mq): avg 18033, min 17835, max 19911 (cycles)
+HW send  (mq): avg 13838, min 13579, max 15570 (cycles)
+SW send  (mq): avg 3862, min 3748, max 5588 (cycles)
+
+msgsize = 16, 100 iterations
+SW -> HW (mq): avg 25867, min 14970, max 27876 (cycles)
+HW -> SW (mq): avg 18076, min 17837, max 19943 (cycles)
+HW send  (mq): avg 13834, min 13516, max 15565 (cycles)
+SW send  (mq): avg 3848, min 3752, max 5694 (cycles)
+
+msgsize = 32, 100 iterations
+SW -> HW (mq): avg 25934, min 22273, max 27834 (cycles)
+HW -> SW (mq): avg 18060, min 17791, max 20052 (cycles)
+HW send  (mq): avg 13829, min 13476, max 15740 (cycles)
+SW send  (mq): avg 3844, min 3745, max 5545 (cycles)
+
+msgsize = 64, 100 iterations
+SW -> HW (mq): avg 26002, min 22377, max 27985 (cycles)
+HW -> SW (mq): avg 18186, min 17996, max 20011 (cycles)
+HW send  (mq): avg 13894, min 13693, max 15738 (cycles)
+SW send  (mq): avg 3887, min 3804, max 4399 (cycles)
+
+msgsize = 128, 100 iterations
+SW -> HW (mq): avg 26142, min 22780, max 28028 (cycles)
+HW -> SW (mq): avg 18345, min 18049, max 20897 (cycles)
+HW send  (mq): avg 13938, min 13648, max 14478 (cycles)
+SW send  (mq): avg 3996, min 3914, max 4593 (cycles)
+
+msgsize = 256, 100 iterations
+SW -> HW (mq): avg 26358, min 15875, max 28482 (cycles)
+HW -> SW (mq): avg 18651, min 18397, max 20259 (cycles)
+HW send  (mq): avg 14188, min 13913, max 15840 (cycles)
+SW send  (mq): avg 4111, min 4003, max 5980 (cycles)
+
+msgsize = 512, 100 iterations
+SW -> HW (mq): avg 26735, min 16844, max 28752 (cycles)
+HW -> SW (mq): avg 19376, min 19177, max 21348 (cycles)
+HW send  (mq): avg 14596, min 14316, max 16462 (cycles)
+SW send  (mq): avg 4300, min 4192, max 6385 (cycles)
+
+msgsize = 1024, 100 iterations
+SW -> HW (mq): avg 27573, min 18172, max 29436 (cycles)
+HW -> SW (mq): avg 20559, min 20294, max 22732 (cycles)
+HW send  (mq): avg 15357, min 15087, max 17444 (cycles)
+SW send  (mq): avg 4878, min 4711, max 7071 (cycles)
+
+msgsize = 2048, 100 iterations
+SW -> HW (mq): avg 29286, min 28350, max 31559 (cycles)
+HW -> SW (mq): avg 23714, min 23440, max 28706 (cycles)
+HW send  (mq): avg 17043, min 16705, max 18566 (cycles)
+SW send  (mq): avg 5401, min 5227, max 7237 (cycles)
+
+msgsize = 4096, 100 iterations
+SW -> HW (mq): avg 35674, min 35025, max 37522 (cycles)
+HW -> SW (mq): avg 33860, min 33264, max 35876 (cycles)
+HW send  (mq): avg 21244, min 20848, max 23089 (cycles)
+SW send  (mq): avg 8531, min 8176, max 12977 (cycles)
+
+msgsize = 8192, 100 iterations
+SW -> HW (mq): avg 47200, min 40940, max 49729 (cycles)
+HW -> SW (mq): avg 48231, min 47655, max 50693 (cycles)
+HW send  (mq): avg 28778, min 28096, max 31273 (cycles)
+SW send  (mq): avg 17690, min 17138, max 20043 (cycles)
+
+msgsize = 16384, 100 iterations
+SW -> HW (mq): avg 77445, min 74820, max 80684 (cycles)
+HW -> SW (mq): avg 75288, min 74758, max 77601 (cycles)
+HW send  (mq): avg 38437, min 37868, max 41028 (cycles)
+SW send  (mq): avg 33058, min 29302, max 34786 (cycles)
+
+mq_benchmark done.

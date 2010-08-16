@@ -1,0 +1,11 @@
+OPTION psf_version = 2.1.0 ; 
+
+BEGIN LIBRARY kapi_cpuhwt
+
+ OPTION drc = kapi_cpuhwt_drc ; 
+ OPTION copyfiles = all;
+ OPTION DESC = "Provides read/write routines for the PPC to access the OSIF_ADAPTER";
+
+ PARAM name = CPU_TYPE, desc = "which type of CPU (PPC405, MICROBLAZE)", type = string, default="PPC405";
+ 
+END LIBRARY 

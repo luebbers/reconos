@@ -1,0 +1,3 @@
+This makefile creates a reconos base design from an existing edk project.
+It adds reconos OSIFs and dummy hw threads to the msh-file and adds dummy cores
+to the pcores directory

@@ -1,0 +1,77 @@
+RECONOS: v2_00_a;
+CS: state;
+NS: next_state;
+
+GENERICS:
+
+PORTS:
+
+CONNECTIONS:
+
+MEMS:
+
+CHANNELS:
+
+SIGS:
+input_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+current_input_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+output_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+current_output_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+information_struct, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1); 
+local_ram_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+number_of_bursts, integer; 
+counter, integer;
+
+VARIABLES:
+message, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+
+INITIAL: init;
+
+TRANS:
+
+init -> wait_for_message {
+        {information_struct <= get_init_data();}
+        {input_address <= read(information_struct);}
+        {output_address <= read(information_struct + 4);}
+}
+
+wait_for_message -> read_burst {
+       {message := mbox_get(C_MB_START);
+       number_of_bursts <= TO_INTEGER(SIGNED(message));}
+       {current_input_address  <= input_address;
+       current_output_address <= output_address;
+       local_ram_address      <= ALL_ZEROS;
+       counter                <= 0;}
+}
+
+read_burst |(counter < number_of_bursts) -> read_burst {
+       {local_ram_address    <= read_burst(current_input_address);}
+       {counter <= counter + 1;
+       current_input_address <= current_input_address + 128;
+       local_ram_address     <= local_ram_address     + 128;}
+}
+
+read_burst -> write_burst {
+       {counter            <= 0;
+       local_ram_address  <= ALL_ZEROS;}
+}
+
+write_burst |(counter < number_of_bursts) -> write_burst {
+       {local_ram_address      <= write_burst(current_output_address);}
+       {counter <= counter + 1;
+       current_output_address <= current_output_address + 128;
+       local_ram_address      <= local_ram_address      + 128;}
+}
+
+write_burst -> send_message
+
+send_message -> wait_for_message {
+        {mbox_put(C_MB_DONE, message);}
+}
+
+
+-- Generic VHDL Definitions to insert
+VHDL:
+
+constant C_MB_START : std_logic_vector(0 to 31) := X"00000000";
+constant C_MB_DONE  : std_logic_vector(0 to 31) := X"00000001";

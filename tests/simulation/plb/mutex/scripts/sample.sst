@@ -1,0 +1,66 @@
+# sample stimulus for mutex test
+
+wait 500 ns
+write_init_data 10000007
+
+wait 500 ns
+write_busmacro 00000041
+
+wait 500 ns
+write_unlock
+
+wait 500 ns
+read_mutex_lock 00000000
+
+wait 500 ns
+write_unlock 00000001
+
+wait 1000 ns
+read_mutex_unlock 00000000
+
+wait 500 ns
+write_busmacro 00000000
+
+wait 500 ns
+write_busmacro 00000001
+
+wait 500 ns
+read_mutex_lock 00000000
+
+wait 500 ns
+write_unlock 00000001
+
+wait 1000 ns
+read_mutex_unlock 00000000
+
+# reset, and again
+wait 1000 ns
+
+reset
+
+wait 500 ns
+write_init_data 10000007
+
+wait 500 ns
+write_busmacro 00000001
+
+wait 500 ns
+write_unlock
+
+wait 500 ns
+read_mutex_lock 00000000
+
+wait 500 ns
+write_unlock 00000001
+
+wait 1000 ns
+read_mutex_unlock 00000000
+
+wait 500 ns
+read_mutex_lock 00000000
+
+wait 500 ns
+write_unlock 00000001
+
+wait 1000 ns
+read_mutex_unlock 00000000

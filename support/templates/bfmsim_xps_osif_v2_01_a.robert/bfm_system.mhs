@@ -1,0 +1,77 @@
+
+# ##############################################################################
+# BFM simulation system
+# Automatically created by Create and Import Peripheral Wizard
+# Tue Aug  1 12:52:05 2006
+# ##############################################################################
+ PARAMETER VERSION = 2.1.0
+
+
+ PORT sys_reset = sys_reset, DIR = I, SIGIS = RST
+ PORT sys_clk = sys_clk, DIR = I, SIGIS = CLK
+
+
+BEGIN bfm_synch
+ PARAMETER INSTANCE = synch_bus
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_NUM_SYNCH = 4
+ PORT FROM_SYNCH_OUT = synch0 & synch1 & synch2 & synch3
+ PORT TO_SYNCH_IN = synch
+END
+
+BEGIN plb_v46
+ PARAMETER INSTANCE = plb_v46_0
+ PARAMETER HW_VER = 1.03.a
+ PARAMETER C_EXT_RESET_HIGH = 0
+ PARAMETER C_PLBV46_DWIDTH = 64
+ PORT SYS_Rst = sys_reset
+ PORT PLB_Clk = sys_clk
+END
+
+BEGIN plbv46_slave_bfm
+ PARAMETER INSTANCE = bfm_memory
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER PLB_SLAVE_ADDR_LO_0 = 0x10000000
+ PARAMETER PLB_SLAVE_ADDR_HI_0 = 0x1000ffff
+ PARAMETER PLB_SLAVE_ADDR_LO_1 = 0x20000000
+ PARAMETER PLB_SLAVE_ADDR_HI_1 = 0x2000ffff
+ PARAMETER C_SPLB_NATIVE_DWIDTH = 64
+ PARAMETER C_SPLB_DWIDTH = 64
+ PARAMETER PLB_SLAVE_SIZE = 0b01
+ BUS_INTERFACE SPLB = plb_v46_0
+ PORT SYNCH_IN = synch
+ PORT SYNCH_OUT = synch1
+END
+
+BEGIN plbv46_monitor_bfm
+ PARAMETER INSTANCE = bfm_monitor
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_MON_PLB_DWIDTH = 64
+ BUS_INTERFACE MON_PLB = plb_v46_0
+ PORT PLB_Clk = sys_clk
+ PORT SYNCH_IN = synch
+ PORT SYNCH_OUT = synch2
+END
+
+BEGIN plbv46_master_bfm
+ PARAMETER INSTANCE = bfm_processor
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_MPLB_NATIVE_DWIDTH = 64
+ PARAMETER C_MPLB_DWIDTH = 64
+ PARAMETER PLB_DATA_BUS_WIDTH = 64
+ PARAMETER PLB_MASTER_SIZE = 0b01
+ BUS_INTERFACE MPLB = plb_v46_0
+ PORT SYNCH_IN = synch
+ PORT SYNCH_OUT = synch0
+END
+
+BEGIN osif_tb
+ PARAMETER INSTANCE = my_core
+ PARAMETER HW_VER = 1.00.c
+ PARAMETER C_BASEADDR = 0x30000000
+ PARAMETER C_HIGHADDR = 0x3000ffff
+ BUS_INTERFACE MPLB = plb_v46_0
+ PORT SYNCH_IN = synch
+ PORT SYNCH_OUT = synch3
+END
+

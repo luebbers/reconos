@@ -1,0 +1,11 @@
+#!/bin/sh
+FILE=$1
+if [ "$FILE" == "" ]; then
+  echo "No file specified."
+  exit
+fi
+
+NOW=`date "+%s"`
+THEN=`stat -c "%Y" $FILE`
+DIFFERENCE=$(($NOW - $THEN))
+echo "$DIFFERENCE"

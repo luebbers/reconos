@@ -1,0 +1,21 @@
+ReconOS "mbox" example/case study
+Hardware part
+
+(c) 2007 Enno Luebbers <luebbers@reconos.de>
+This file is part of the ReconOS project <http://www.reconos.de>.
+University of Paderborn, Computer Engineering Group 
+
+----------------------
+
+This directory contains all necessary files to generate the static EDK design
+for the "mbox" example application. 
+
+    - Run 'setup.sh' to set up and build the design in the 'edk-static'
+      directory, as well as the libraries. The resulting bitstream
+      'system.bit'will be located in the edk-static/implementation directory.
+    - Use iMPACT to download the bitstream to the FPGA, and continue with the
+      software part (see ../sw/README).
+
+Make sure that your environment for ReconOS is set correctly, especially
+the HW_DESIGN variable. 
+See http://www.reconos.de/twiki/bin/view/ReconOS/SetupEnvironment for details.

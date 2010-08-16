@@ -1,0 +1,14 @@
+ReconOS "mbox" example/case study
+
+(c) 2007 Enno Luebbers <luebbers@reconos.de>
+This file is part of the ReconOS project <http://www.reconos.de>.
+University of Paderborn, Computer Engineering Group 
+
+----------------------
+
+The directory 'hw' contains the hardware part, which needs to be built first.
+See hw/README for details.
+
+The directory 'sw' contains the software part, which needs to be built after
+the hardware.
+See sw/README for details.

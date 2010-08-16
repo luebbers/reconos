@@ -1,0 +1,542 @@
+<HTML xmlns:exsl="http://exslt.org/common" xmlns:xlink="http://www.w3.org/1999/xlink">
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>Block Diagram</TITLE>
+</HEAD>
+<BODY class="main_body">
+<IMG SRC="system.png" alt="BlockDiagram" width="2366" height="1829" border="0" vspace="0" hspace="0"><BR><BR><TABLE BGCOLOR="#000000" WIDTH="850" COLS="8" cellspacing="1" cellpadding="1" border="0">
+<TD COLSPAN="8" ALIGN="middle" BGCOLOR="#810017"><SPAN style="color:#FFFFFF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">EXTERNAL PORTS</SPAN></TD>
+<TR></TR>
+<TD COLSPAN="8" ALIGN="middle" bgcolor="#FFFFFF"><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">
+				These are the external ports defined in the MHS file.
+			</SPAN></TD>
+<TR></TR>
+<TD COLSPAN="8" ALIGN="left" bgcolor="#FFFFFF">
+<SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">Attributes Key</SPAN><BR><SPAN style="color:#000000; font: italic 9px Verdana,Arial,Helvetica,sans-serif">The attributes are obtained from the SIGIS and IOB_STATE parameters set on the PORT in the MHS file </SPAN><BR><SPAN style="color:#55FF55; font: bold 12px Verdana,Arial,Helvetica,sans-serif">CLK</SPAN><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">  indicates Clock ports, (SIGIS = CLK) </SPAN><BR><SPAN style="color:#5555FF; font: bold 12px Verdana,Arial,Helvetica,sans-serif">INTR</SPAN><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">  indicates Interrupt ports,(SIGIS = INTR) </SPAN><BR><SPAN style="color:#FFCC00; font: bold 12px Verdana,Arial,Helvetica,sans-serif">RESET</SPAN><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">  indicates Reset ports, (SIGIS = RST) </SPAN><BR><SPAN style="color:#FF5555; font: bold 12px Verdana,Arial,Helvetica,sans-serif">BUF or REG</SPAN><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">  Indicates ports that instantiate or infer IOB primitives, (IOB_STATE = BUF or REG) </SPAN>
+</TD>
+<TR></TR>
+<TD COLSPAN="3" WIDTH="49%"><TABLE BGCOLOR="#000000" WIDTH="100%" COLS="9" cellspacing="1" cellpadding="0" border="0">
+<TD COLSPAN="1" width="5" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">#</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">NAME</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">DIR</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">[LSB:MSB]</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">SIG</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">ATTRIBUTES</SPAN></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">0</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">GLB</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_Mii_int_n_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_Mii_int_n</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#5555FF; font: bold 10px Verdana,Arial,Helvetica,sans-serif"> INTR </SPAN></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">1</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">GLB</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_byte_dummy_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">net_vcc</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">2</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">GLB</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_clk_dummy_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">net_vcc</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">3</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">GLB</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_rpn_dummy_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">net_vcc</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">4</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_DQS_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">IO</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:3</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_DQS</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">5</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_DQ_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">IO</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:31</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_DQ</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">6</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_Addr_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:12</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_Addr</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">7</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_BankAddr_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_BankAddr</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">8</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_CASn_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_CASn</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">9</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_CKE_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_CKE</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">10</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_CSn_1_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_CSn</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">11</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_CSn_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_CSn</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">12</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_Clk_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:2</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_Clk</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">13</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_DM_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:3</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_DM</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">14</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_RASn_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_RASn</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">15</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_WEn_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_WEn</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">16</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">B</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_Clkn_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_SDRAM_1_DDR_Clkn</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">17</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">C</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DIP_Switches_8Bit_GPIO_in_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:7</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DIP_Switches_8Bit_GPIO_in</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">18</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_col_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_col</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">19</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_crs_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_crs</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">20</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_dv_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_dv</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">21</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_rx_clk_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_rx_clk</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">22</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_rx_data_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">3:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_rx_data</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">23</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_rx_er_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_rx_er</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">24</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_tx_clk_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_tx_clk</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">25</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_Mii_clk_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">IO</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_Mii_clk</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">26</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_Mii_data_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">IO</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_Mii_data</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">27</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_rst_n_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_rst_n</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+</TABLE></TD>
+<TD COLSPAN="1" WIDTH="2%" BGCOLOR="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif"> </SPAN></TD>
+<TD COLSPAN="3" WIDTH="49%"><TABLE BGCOLOR="#000000" WIDTH="100%" COLS="9" cellspacing="1" cellpadding="0" border="0">
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">#</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">NAME</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">DIR</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">[LSB:MSB]</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">SIG</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">ATTRIBUTES</SPAN></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">28</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_tx_data_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">3:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_tx_data</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">29</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">D</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_tx_en_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_PHY_tx_en</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">30</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">E</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_DQ_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">IO</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:15</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_DQ</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">31</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">E</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_CEN_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_CEN</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">32</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">E</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_OEN_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_OEN</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">33</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">E</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_WEN_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_WEN</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">34</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">F</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_A_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">8:31</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_Mem_A</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">35</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">G</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_LEDs_8Bit_GPIO_d_out_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:7</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_LEDs_8Bit_GPIO_d_out</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">36</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">H</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Push_Buttons_3Bit_GPIO_in_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">0:2</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Push_Buttons_3Bit_GPIO_in</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">37</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">I</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_RS232_sin_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_RS232_sin</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">38</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">I</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_RS232_sout_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_RS232_sout</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">39</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">J</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_CLK_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_CLK</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">40</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">J</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_MPIRQ_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_MPIRQ</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">41</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">J</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_MPD_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">IO</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">15:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_MPD</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">42</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">J</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_CEN_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_CEN</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">43</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">J</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_MPA_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">6:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_MPA</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">44</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">J</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_OEN_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_OEN</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">45</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">J</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_WEN_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SysACE_CompactFlash_SysACE_WEN</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">46</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">K</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">sys_clk_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">dcm_clk_s</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#33CC33; font: bold 10px Verdana,Arial,Helvetica,sans-serif"> CLK </SPAN></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">47</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">K</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_Ethernet_MAC_DUMMY_ETH_TXER_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">net_gnd</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">48</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">K</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_adv_dummy_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">net_gnd</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">49</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">K</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_FLASH_8Mx16_wait_dummy_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">net_gnd</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">50</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">L</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_DDR_CLK_FB</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">ddr_feedback_s</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#33CC33; font: bold 10px Verdana,Arial,Helvetica,sans-serif"> CLK </SPAN></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">51</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">M</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">sys_rst_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">sys_rst_s</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#FFCC00; font: bold 10px Verdana,Arial,Helvetica,sans-serif"> RESET </SPAN></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">52</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">N</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SATA_SMA_rxn_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">v4_mgt_protector_0_rx1n</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">53</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">N</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SATA_SMA_rxp_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">v4_mgt_protector_0_rx1p</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">54</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">N</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SATA_SMA_txn_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">v4_mgt_protector_0_tx1n</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">55</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">N</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">fpga_0_SATA_SMA_txp_pin</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">O</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1:0</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">v4_mgt_protector_0_tx1p</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"></TD>
+</TABLE></TD>
+</TABLE>
+<BR>
+</BODY>
+</HTML>

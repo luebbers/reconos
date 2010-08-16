@@ -1,0 +1,8 @@
+Files:
+
+	xparameters_translation.h	Defines macros to access Xilinx BSP
+					constants (e.g. addresses)
+
+	xparameters_reconos.h		Additional translation macros
+					specific to ReconOS
+

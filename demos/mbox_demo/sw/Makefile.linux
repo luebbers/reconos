@@ -1,0 +1,28 @@
+#
+# Makefile for building ReconOS/Linux applications
+#
+
+# set target and source files
+TARGET = mbox_demo_linux.elf
+OBJECTS = mbox_demo_linux.o
+
+# set cross compiler
+CROSS_COMPILE = powerpc-405-linux-gnu-
+CC = $(CROSS_COMPILE)gcc
+
+# set flags
+CFLAGS = -I$(RECONOS)/core/linux/libreconos/include
+LDFLAGS = -L$(RECONOS)/core/linux/libreconos/lib -lrt -lpthread -lreconos
+
+
+
+default: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS) $(LDFLAGS)
+
+clean:
+	rm -f $(TARGET) *.o
+
+.PHONY: clean
+

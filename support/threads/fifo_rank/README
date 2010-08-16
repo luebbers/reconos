@@ -1,0 +1,25 @@
+hwt_fifo_rank.vhd
+
+implements an 3x3 rank filter which can be configured at runtime. init_data can be used to configure the
+behaviour of the thread:
+
+     #bit: 31  30 29 28 27 26 25 24 23 22 21 ...  4   3  2  1  0
+init_data:  i  m6 m5 m4 m3 m2 m1 m0  X  X  X ...  X  r3 r2 r1 r0
+
+      i : invert bit
+m0 to m6: mode ( 0x02   -> median
+                 0x04   -> red to grayscale
+                 0x08   -> green to grayscale
+                 0x10   -> blue to grayscale
+                 others -> passthrough (output = input) )
+r3 to r0: rank of the output pixel (0 to 8)
+      X : don't care
+
+where bit31 is the most significant bit.
+
+The thread expects to receive the input pixel data from mailbox 0x00000000 and writes out pixel data to
+mailbox 0x00000001. The pixel format should be X"00" & channel2 & channel1 & channel0 (1 pixel = 32 bits, msb
+is ignored).
+
+The thread needs to be reset after each frame. This is a feature.
+

@@ -1,0 +1,9 @@
+##############################################################################
+## Filename:          D:\IpLibraries\MyProcessorIPLib\pcores/IcapCTRL/data/IcapCTRL_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Mon Jul 24 10:30:34 2006 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib IcapCTRL_v1_00_d icapFIFO vhdl
+lib IcapCTRL_v1_00_d icapCTRL vhdl
+lib IcapCTRL_v1_00_d dcr_if vhdl

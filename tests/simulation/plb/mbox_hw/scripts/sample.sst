@@ -1,0 +1,13 @@
+# sample stimulus for mbox test
+
+wait 500 ns
+
+# read FIFO in hardware
+write_fifo_read_handle 00000000
+wait 500 ns
+# write FIFO in software
+write_fifo_write_handle 00000001
+wait 500 ns
+
+write_unlock
+

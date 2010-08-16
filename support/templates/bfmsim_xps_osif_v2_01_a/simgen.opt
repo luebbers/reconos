@@ -1,0 +1,15 @@
+bfm_system.mhs
+-p
+virtex5
+-lang
+vhdl
+-lp
+../../../../../
+-s
+mti
+-X
+/home/luebbers/work/simlibs/ISE_Lib
+-E
+/home/luebbers/work/simlibs/EDK_Lib
+-m
+behavioral

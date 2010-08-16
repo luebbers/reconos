@@ -1,0 +1,7 @@
+
+#####
+# Black-Box Description file.
+# generated at 2008-01-29 13:02:52.513801 by 'mkhwtask.py hwt_memcopy 1 hwt_memcopy.vhd'
+#####
+Files
+burst_ram.edn

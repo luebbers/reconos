@@ -1,0 +1,17 @@
+TARGETS=$template:target$
+ELFS=$template:elf$
+OPTARGS=$template:optargs$
+
+all:
+	for t in $(TARGETS); do\
+	make -f $$t all; \
+	done
+
+clean: 
+	for t in $(TARGETS); do\
+	make -f $$t clean; \
+	done
+
+modifyecos:
+	mkCPUhwthread_SW.py $(OPTARGS); 
+

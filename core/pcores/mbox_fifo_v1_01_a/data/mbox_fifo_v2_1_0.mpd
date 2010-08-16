@@ -1,0 +1,41 @@
+###################################################################
+##
+## Name     : mbox_fifo
+## Desc     : Microprocessor Peripheral Description
+##
+###################################################################
+
+BEGIN mbox_fifo
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION STYLE = MIX
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION DESC = MBOX_FIFO
+
+## Bus Interfaces
+BUS_INTERFACE BUS = FIFO_READ, BUS_TYPE = TARGET, BUS_STD = FIFO_READ_STD
+BUS_INTERFACE BUS = FIFO_WRITE, BUS_TYPE = TARGET, BUS_STD = FIFO_WRITE_STD
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER DATA_WIDTH = 32, DT = INTEGER, BUS = FIFO_WRITE 
+PARAMETER ADDRESS_WIDTH = 9, DT = INTEGER, BUS = FIFO_WRITE 
+#PARAMETER C_FAMILY = virtex2p, DT = STRING
+
+## Ports
+PORT readClk      = "readClk",       DIR = I, SIGIS = Clk, BUS = FIFO_READ
+PORT readRst      = "readRst",           DIR = I, SIGIS = Rst, BUS = FIFO_READ
+PORT writeClk      = "writeClk",       DIR = I, SIGIS = Clk, BUS = FIFO_WRITE
+PORT writeRst      = "writeRst",           DIR = I, SIGIS = Rst, BUS = FIFO_WRITE
+
+PORT write        = "write",         DIR = I, BUS = FIFO_WRITE
+PORT dataIn       = "dataIn",        DIR = I, VEC = [0:(DATA_WIDTH-1)], BUS = FIFO_WRITE
+PORT clearToWrite = "clearToWrite",  DIR = O, BUS = FIFO_WRITE
+
+PORT read         = "read",          DIR = I, BUS = FIFO_READ
+PORT dataOut      = "dataOut",       DIR = O, VEC = [0:(DATA_WIDTH-1)], BUS = FIFO_READ
+PORT clearToRead  = "clearToRead",   DIR = O, BUS = FIFO_READ
+
+END

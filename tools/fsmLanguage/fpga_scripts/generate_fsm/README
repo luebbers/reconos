@@ -1,0 +1,34 @@
+**************
+README FILE
+**************
+
+The FSM Generator is a useful tool for automatically generating an FPGA
+implementation of FSMs from clear, easy-to-read descriptions.  The description
+of an FSM is self-documenting, and the language also ensures proper
+initial-state startup, FSM reset, inference of flip-flops (no latches), etc.
+
+The FSM Generator uses a "Description File" (*.des or *.desc) that describes an
+FSM and generates either:
+
+* (gen_cfg) A CFG in DOT format
+* (gen_fsm) An implementation in VHDL
+
+The FSM Generator can be executed within GHCi by first opening GHCi and loading LangParser.hs with the following command:
+
+> :load LangParser.hs
+
+Once, the FSM Generator is loaded, the tool can be used to generate VHDL and CFGs for a description file by using the following example commands:
+
+Take a description file called "my_description.des" and generate a VHDL file called "abc.vhd" with an entity name of "abc"
+> gen_fsm "abc" "my_description.des" "abc.vhd"
+
+Take a description file called "my_description.des" and generate a CFG in DOT format called "my_cfg.dot"
+> gen_cfg "my_description.des" "my_cfg.dot"
+
+The following coding guidelines exist:
+
+* Internal memories have 2 ports, External memories only have 1 port.
+* A given internal memory can be accessed a maximum of 2 times per state (uses dual-port BRAMs)
+* A given external memory can be accessed only once per state
+* Channel accesses have non-deterministic access times (b/c they depend on external full/valid signals).
+    * Therefore it is often "better" to put them in their own state w/o other logic (esp. BRAM accesses)

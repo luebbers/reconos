@@ -1,0 +1,16 @@
+all: sample.do sample.sst
+	#
+	# Updating testbench
+	#
+	./update_tb.sh
+
+sample.do: sample.bfl
+	#
+	# Compiling stimulus
+	#
+	xilbfc sample.bfl > /dev/null
+
+clean:
+	rm -rf sample.do xilbfc.log
+
+.PHONY: all clean

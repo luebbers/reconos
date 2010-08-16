@@ -1,0 +1,11 @@
+@node Introduction
+@chapter Introduction
+
+The vision behind this project is to raise design productivity and flexibility for dynamically reconfigurable (FPGA-based) systems to a level currently achieved only for processor-based systems. To this end, we are developing ReconOS, an operating system designed to alleviate the difficulty of programming reconfigurable hardware by offering common service abstractions for both hardware and software tasks. ReconOS provides application programmers with an RTOS-like programming model that abstracts away from the device details and an execution model that performs hardware multitasking on current FPGA technology.
+
+The importance of the ReconOS project stems from the fact that hardware reconfigurability will become an essential feature of future architectures and applications, especially networked embedded systems. While the underlying hardware technology already evolves, there is a lack of appropriate design tools. ReconOS intends to address this problem and to build the necessary foundation for these future applications.
+
+Furthermore, an extension to the basic ReconOS system aims to take the usability of dynamically reconfigurable hardware to the next level while maintaining efficiency. We think this can be reached by looking into the areas of higher-level front ends and system monitoring, both of which have not been sufficiently investigated yet in the context of reconfigurable hardware, as well as into the novel idea of adaptive run-time systems.
+
+
+

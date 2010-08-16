@@ -1,0 +1,56 @@
+################################################################################
+##
+## Copyright (c) 1995-2002 Xilinx, Inc.  All rights reserved.
+##
+## opb_ac97_v2_1_0.mpd
+##
+## Microprocessor Peripheral Definition
+##
+################################################################################
+
+BEGIN opb_ac97
+
+ OPTION IPTYPE = PERIPHERAL
+ OPTION HDL = VHDL
+ OPTION IMP_NETLIST = TRUE
+ OPTION SIM_MODELS = BEHAVIORAL : STRUCTURAL
+ OPTION USAGE_LEVEL = BASE_USER
+ OPTION CORE_STATE = ACTIVE
+
+# Define bus interface
+IO_INTERFACE IO_IF = ac97, IO_TYPE = XIL_AC97_V2
+BUS_INTERFACE BUS=SOPB, BUS_STD=OPB, BUS_TYPE=SLAVE
+
+# Generics for vhdl or parameters for verilog
+PARAMETER C_OPB_DWIDTH = 32, DT=INTEGER, BUS=SOPB
+PARAMETER C_OPB_AWIDTH = 32, DT=INTEGER, BUS=SOPB
+PARAMETER C_BASEADDR = 0xffff8000, DT=STD_LOGIC_VECTOR, MIN_SIZE=0, BUS=SOPB
+PARAMETER C_HIGHADDR = 0xffff80ff, DT=STD_LOGIC_VECTOR, BUS=SOPB
+
+PARAMETER C_PLAYBACK = 1, DT=INTEGER
+PARAMETER C_RECORD = 1, DT=INTEGER
+PARAMETER C_INTR_LEVEL = 1, DT=INTEGER
+PARAMETER C_USE_BRAM = 1, DT=INTEGER
+
+# Signals
+PORT OPB_Clk = "", DIR=IN, SIGIS=CLK, BUS=SOPB
+PORT OPB_Rst = OPB_Rst, DIR=IN, BUS=SOPB
+PORT OPB_ABus = OPB_ABus, DIR=IN, VEC=[0:31], BUS=SOPB
+PORT OPB_BE = OPB_BE, DIR=IN, VEC=[0:3], BUS=SOPB
+PORT OPB_RNW = OPB_RNW, DIR=IN, BUS=SOPB
+PORT OPB_select = OPB_select, DIR=IN, BUS=SOPB
+PORT OPB_seqAddr = OPB_seqAddr, DIR=IN, BUS=SOPB
+PORT OPB_DBus = OPB_DBus, DIR=IN, VEC=[0:31], BUS=SOPB
+PORT Sln_DBus = Sl_DBus, DIR=OUT, VEC=[0:31], BUS=SOPB
+PORT Sln_errAck = Sl_errAck, DIR=OUT, BUS=SOPB
+PORT Sln_retry = Sl_retry, DIR=OUT, BUS=SOPB
+PORT Sln_toutSup = Sl_toutSup, DIR=OUT, BUS=SOPB
+PORT Sln_xferAck = Sl_xferAck, DIR=OUT, BUS=SOPB
+
+PORT Interrupt = "", DIR=OUT, SIGIS=INTERRUPT, SENSITIVITY=LEVEL_HIGH
+PORT AC97Reset_n = AC97Reset_n, DIR=OUT, IO_IF = ac97, IO_IS=AC97_AUDIO_RESET_Z
+PORT Bit_Clk = Bit_Clk, DIR=IN, SIGIS=CLK, IO_IF = ac97, IO_IS = AC97_BIT_CLOCK
+PORT Sync = Sync, DIR=OUT, IO_IF = ac97, IO_IS = AC97_SYNCH
+PORT SData_Out = SData_Out, DIR=OUT, IO_IF = ac97, IO_IS = AC97_SDATA_OUT
+PORT SData_In = SData_In, DIR=IN, IO_IF = ac97, IO_IS = AC97_SDATA_IN
+END

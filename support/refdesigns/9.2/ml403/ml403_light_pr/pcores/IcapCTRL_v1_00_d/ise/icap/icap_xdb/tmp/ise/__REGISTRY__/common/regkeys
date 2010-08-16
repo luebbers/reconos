@@ -1,0 +1,9 @@
+MessageCaptureEnabled
+true
+s
+MessageFilterFile
+filter.filter
+s
+RunOnce
+#/PnAutoRun/Scripts/RunOnce_tcl
+s

@@ -1,0 +1,32 @@
+@node Installation
+@chapter Installation
+
+These instructions will guide you step-by-step through the process of setting up a development box including all the tools you need. 
+
+@section Prerequisites
+
+The ReconOS tool chain depends on quite a few other tools, both commercial and open-source. While we try to rely on as much free software as possible, some of the tools (most notably the FPGA synthesis and implementation tools) are not, and will probably never be, available for free. In some cases, we will provide links to free evaluation versions or alternatives to our preferred choices.
+
+@subsection FPGA synthesis, implementation, and simulation tools
+ReconOS requires that the following commercial FPGA tools be installed. 
+
+@itemize
+@item Xilinx ISE version 9.2.04i (@uref{http://www.xilinx.com/, Xilinx Website}). Note that version 9.2 is no longer available for download but continues to be the only supported version for the early-access partial reconfiguration tool flow. There is also a free, limited version of ISE, the WebPack. 
+@item Xilinx EDK version 9.2.02 (@uref{http://www.xilinx.com/, Xilinx Website}). The EDK version should match the ISE version for the least hassle. 
+@item ModelSim SE version 6.1f or higher (@uref{http://www.modeltech.com/, Modeltech Website}). This tool is not necessary, but greatly recommended for hardware thread and system simulation as well as automated regression testing. 
+Please note that several @ref{Environment Variables, environment variables} related to the commercial tools need to be set for the ReconOS tool chain. Also, setting up the drivers for the Xilinx Platform USB cable, which is used for programming most of the target platforms, is often tedious (instructions are @uref{http://www.rmdir.de/~michael/xilinx/, here} and @uref{https://wiki.kip.uni-heidelberg.de/KIPwiki/index.php/EDV:Xilinx-USB-Treiber, here (German)}).
+@end itemize
+
+@subsection Scripting languages and parsers
+ReconOS heavily relies on Python for the automated parts of its tool chain. It requires the following software:
+
+@itemize
+@item Python version 2.5.1 (@uref{http://www.python.org/download/, Download}). Newer versions may work, but have not been tested. 
+@item pyparsing 1.5.1 (@uref{http://sourceforge.net/projects/pyparsing/files/, Download}). Newer versions may work, but have not been tested. 
+@item Cheetah 2.0.1 (@uref{http://downloads.sourceforge.net/cheetahtemplate/Cheetah-2.0.1.tar.gz?download, Download}). Newer versions may work, but have not been tested. 
+@item Cross-compilers, binutils and libraries
+@end itemize
+
+TODO: crostool (for Linux), ecos 2.0 (for eCos)
+
+

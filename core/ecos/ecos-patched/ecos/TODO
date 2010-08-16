@@ -1,0 +1,4 @@
+ - GDB stubs
+ - fix interrupt-driven keyboard driver
+ - better char lcd API
+

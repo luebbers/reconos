@@ -1,0 +1,12 @@
+#####
+# Peripheral Analyze Order file.
+#####
+lib reconos_v2_01_a reconos_pkg vhdl
+lib proc_common_v1_00_b or_muxcy
+lib proc_common_v1_00_b or_gate
+lib dcr_v29_v1_00_a dcr_v29
+lib cpu_osif_adapter_v1_04_a osif_cmd_decoder vhdl
+lib cpu_osif_adapter_v1_04_a reset_logic vhdl 
+lib cpu_osif_adapter_v1_04_a cpu_osif_adapter vhdl
+lib ppc405_v2_00_c ppc405_top vhdl
+lib ppc405_v2_00_d ppc405_top vhdl

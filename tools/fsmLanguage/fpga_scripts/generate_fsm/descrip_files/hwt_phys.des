@@ -1,0 +1,43 @@
+RECONOS: v2_00_a;
+CS: state;
+NS: next_state;
+
+GENERICS:
+
+PORTS:
+
+CONNECTIONS:
+
+MEMS:
+
+CHANNELS:
+
+SIGS:
+addr, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+value, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+
+VARIABLES:
+
+INITIAL: wait_for_message;
+
+TRANS:
+
+wait_for_message -> read {
+      {addr <= mbox_get(C_MBOX_ADDR);}
+}
+
+read -> send_message {
+      {value <= read(addr);}
+}
+
+
+send_message -> wait_for_message {
+      {mbox_put(C_MBOX_VALUE, value);}
+}
+
+
+-- Generic VHDL Definitions to insert
+VHDL:
+
+constant C_MBOX_ADDR  : std_logic_vector(0 to 31) := X"00000000";
+constant C_MBOX_VALUE : std_logic_vector(0 to 31) := X"00000001";

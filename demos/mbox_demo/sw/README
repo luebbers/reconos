@@ -1,0 +1,25 @@
+ReconOS "mbox" example/case study
+Software part
+
+(c) 2007 Enno Luebbers <luebbers@reconos.de>
+This file is part of the ReconOS project <http://www.reconos.de>.
+University of Paderborn, Computer Engineering Group 
+
+----------------------
+
+This directory contains all necessary files to generate the software libraries
+and executables for the "mbox" example application. Be sure to build the
+hardware part first. See ../hw/README for details on how to do that.
+
+When the hardware part is built, make sure your environment is set correctly,
+especially the HW_DESIGN variable (it needs to be set to the absolute path
+to the ../hw/edk-static directory).
+See http://www.reconos.de/twiki/bin/view/ReconOS/SetupEnvironment for details.
+
+    - Run 'make setup' to build the eCos library.
+    - Run 'make ecos' to build the executables for the ReconOS system.
+    - Use the XMD to upload the executables to the XUP board.
+    
+The application executable is named 'mbox_demo.elf'. The application can be 
+configured through #defines at the top of 'mbox_demo.c' to enable/disable
+cache, and use hardware or software FIFOs.

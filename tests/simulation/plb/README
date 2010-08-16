@@ -1,0 +1,15 @@
+To run all simulation tests, invoke
+
+    ./tests_modelsim.sh
+
+You can specify the PLB bus version and corresponding OSIF (plb_osif or
+xps_osif) to simulate by setting the PLB_VER environment variable, e.g.:
+
+    PLB_VER=34 ./tests_modelsim.sh
+
+or
+    PLB_VER=46 ./tests_modelsim.sh
+
+If you don't set the PLB_VER variable, the most recent PLB bus version that
+ReconOS supports is used.
+

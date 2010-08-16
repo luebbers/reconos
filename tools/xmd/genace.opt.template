@@ -1,0 +1,8 @@
+-configdevice devicenr 1 idcode 0x1127e093 irlength 14 partname xc2vp30
+-jtag_fpga_position 1
+-jprog 
+-board user 
+-hw BIT
+-elf ELF
+-ace ACE
+

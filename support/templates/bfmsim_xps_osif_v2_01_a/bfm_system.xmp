@@ -1,0 +1,33 @@
+#Please do not modify this file by hand
+XmpVersion: 9.2.02
+VerMgmt: 
+IntStyle: default
+ModuleSearchPath: ../../../../../
+MHS File: bfm_system.mhs
+MSS File: bfm_system.mss
+NPL File: projnav/bfm_system.ise
+Architecture: virtex5
+Device: xc5vlx30t
+Package: ff665
+SpeedGrade: -3
+UseProjNav: 0
+PNImportBitFile: 
+PNImportBmmFile: 
+UserCmd1: make -f bfm_sim_xps.make sim
+UserCmd1Type: 1
+UserCmd2: 
+UserCmd2Type: 0
+TopInst: bfm_system
+GenSimTB: 0
+InsertNoPads: 0
+WarnForEAArch: 1
+HdlLang: VHDL
+Simulator: mti
+SimModel: BEHAVIORAL
+MixLangSim: 1
+UserMakeFile: bfm_sim_xps.make
+UcfFile: data/bfm_system.ucf
+FpgaImpMode: 0
+EnableParTimingError: 1
+EnableResetOptimization: 0
+ShowLicenseDialog: 1

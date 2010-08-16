@@ -1,0 +1,20 @@
+################################################################################
+##
+## Copyright (c) 1995-2002 Xilinx, Inc.  All rights reserved.
+##
+## Peripheral Analyze Order file
+##
+################################################################################
+
+# I am not sure if I have the order correct
+lib common_v1_00_a pselect
+lib opb_onewire_v1_00_a clk_div
+lib opb_onewire_v1_00_a shreg
+lib opb_onewire_v1_00_a bitreg
+lib opb_onewire_v1_00_a bytereg
+lib opb_onewire_v1_00_a crcreg
+lib opb_onewire_v1_00_a jcounter
+lib opb_onewire_v1_00_a onewire_master
+lib opb_onewire_v1_00_a onewire_iface
+lib opb_onewire_v1_00_a opb_onewire
+

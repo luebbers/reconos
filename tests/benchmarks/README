@@ -1,0 +1,8 @@
+This directory containts benchmarks for various ReconOS characteristics.
+
+semaphore   measures semaphore performance with multiple threads
+mutex       measures mutex lock/unlock times with several threads
+data        measures data transfer performance using bus transfer
+            and hardware FIFOs
+mq          measures POSIX message queue performance between SW and HW
+

@@ -1,0 +1,75 @@
+###################################################################
+##
+##     XILINX IS PROVIDING THIS DESIGN, CODE, OR INFORMATION "AS IS"
+##     SOLELY FOR USE IN DEVELOPING PROGRAMS AND SOLUTIONS FOR
+##     XILINX DEVICES.  BY PROVIDING THIS DESIGN, CODE, OR INFORMATION
+##     AS ONE POSSIBLE IMPLEMENTATION OF THIS FEATURE, APPLICATION
+##     OR STANDARD, XILINX IS MAKING NO REPRESENTATION THAT THIS
+##     IMPLEMENTATION IS FREE FROM ANY CLAIMS OF INFRINGEMENT,
+##     AND YOU ARE RESPONSIBLE FOR OBTAINING ANY RIGHTS YOU MAY REQUIRE
+##     FOR YOUR IMPLEMENTATION.  XILINX EXPRESSLY DISCLAIMS ANY
+##     WARRANTY WHATSOEVER WITH RESPECT TO THE ADEQUACY OF THE
+##     IMPLEMENTATION, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OR
+##     REPRESENTATIONS THAT THIS IMPLEMENTATION IS FREE FROM CLAIMS OF
+##     INFRINGEMENT, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+##     FOR A PARTICULAR PURPOSE.
+##     
+##     (c) Copyright 2004 Xilinx, Inc.
+##     All rights reserved.
+##
+###################################################################
+##
+## Microprocessor Peripheral Definition
+##
+###################################################################
+
+
+
+BEGIN opb_ps2_dual_ref
+OPTION IPTYPE=PERIPHERAL
+OPTION  IMP_NETLIST=TRUE
+OPTION STYLE = HDL
+OPTION  HDL=verilog
+OPTION USAGE_LEVEL = BASE_USER
+
+## Peripheral Options
+OPTION SIM_MODELS = BEHAVIORAL:STRUCTURAL:TIMING
+
+IO_INTERFACE IO_IF = dual_ps2, IO_TYPE = XIL_DUAL_PS2_V1
+
+## Bus Interfaces
+BUS_INTERFACE BUS = SOPB, BUS_STD = OPB, BUS_TYPE = SLAVE
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER C_BASEADDR = 0xa9000000, MIN_SIZE=0x2000, BUS=SOPB
+PARAMETER C_HIGHADDR = 0xa9001FFF, BUS=SOPB
+
+## Ports
+PORT OPB_BE = OPB_BE, DIR = IN, VEC = [0:3], BUS = SOPB
+PORT IPIF_Rst = OPB_Rst, DIR = IN, BUS = SOPB
+PORT OPB_Select = OPB_select, DIR = IN, BUS = SOPB
+PORT OPB_DBus = OPB_DBus, DIR = IN, VEC = [0:31], BUS = SOPB
+PORT OPB_Clk = "", DIR = IN, BUS = SOPB, SIGIS = CLK
+PORT OPB_ABus = OPB_ABus, DIR = IN, VEC = [0:31], BUS = SOPB
+PORT OPB_RNW = OPB_RNW, DIR = IN, BUS = SOPB
+PORT OPB_seqAddr = OPB_seqAddr, DIR = IN, BUS = SOPB
+PORT Sys_Intr1 = "", DIR = OUT, SIGIS=INTERRUPT, LEVEL=HIGH
+PORT Sys_Intr2 = "", DIR = OUT, SIGIS=INTERRUPT, LEVEL=HIGH
+PORT Sln_XferAck = Sl_xferAck, DIR = OUT, BUS = SOPB
+PORT Sln_DBus = Sl_DBus, DIR = OUT, VEC = [0:31], BUS = SOPB
+PORT Sln_DBusEn = "", DIR = OUT
+PORT Sln_errAck = Sl_errAck, DIR = OUT, BUS = SOPB
+PORT Sln_retry = Sl_retry, DIR = OUT, BUS = SOPB
+PORT Sln_toutSup = Sl_toutSup, DIR = OUT, BUS = SOPB
+# PS2 #1 interface signal
+PORT Clkin1 = Clkin1, DIR = IN, IO_IF = dual_ps2, IO_IS = Clkin1
+PORT Clkpd1 = Clkpd1, DIR = OUT, IO_IF = dual_ps2, IO_IS = Clkpd1
+PORT Rx1 = Rx1, DIR = IN, IO_IF = dual_ps2, IO_IS = Rx1
+PORT Txpd1 = Txpd1, DIR = OUT, IO_IF = dual_ps2, IO_IS = Txpd1
+# PS2 #2 interface signal
+PORT Clkin2 = Clkin2, DIR = IN, IO_IF = dual_ps2, IO_IS = Clkin2
+PORT Clkpd2 = Clkpd2, DIR = OUT, IO_IF = dual_ps2, IO_IS = Clkpd2
+PORT Rx2 = Rx2, DIR = IN, IO_IF = dual_ps2, IO_IS = Rx2
+PORT Txpd2 = Txpd2, DIR = OUT, IO_IF = dual_ps2, IO_IS = Txpd2
+
+END

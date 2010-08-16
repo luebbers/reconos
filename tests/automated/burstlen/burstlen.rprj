@@ -1,0 +1,7 @@
+# ReconOS project file (format v1.00.a)
+EDK_BASE_DIR ?= $(RECONOS)/support/refdesigns/9.2/ml403/ml403_light
+HW_THREAD_DIR = hwthreads
+PAROPTS = -ol high -w
+MAPOPTS = -ol high -timing
+STATIC_THREADS=burstlen
+

@@ -1,0 +1,2 @@
+resume.o: resume.c \
+  /home/luebbers/work/reconos/trunk/demos/resume_demo/hw/edk-static/ppc405_0/include/xcache_l.h

@@ -1,0 +1,6 @@
+# Output products list for <burst_ram>
+burst_ram.xco
+burst_ram.edn
+burst_ram.vhd
+burst_ram.vho
+burst_ram_flist.txt

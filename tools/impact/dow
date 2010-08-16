@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+# Downloads bitstreams or ELF files to XUP FPGA
+#
+
+DOW_BIT=$RECONOS/tools/impact/download_bitstream.sh
+DOW_ELF=$RECONOS/tools/xmd/download_executable.sh
+
+if [ -z $1 ]; then
+	echo "USAGE: dow bitstream.bit [jtag_chain_position]"
+	echo "             OR"
+	echo "       dow executable.elf"
+	echo ""
+	echo "Standard jtag chain position is 3 (XUP)"
+	exit -1
+fi
+
+if [ -z $2 ]; then
+	echo "Assuming XUP board."
+	echo "Using standard JTAG chain position 3."
+	JTAG_POS=3
+else
+	JTAG_POS=$2
+fi
+
+echo $1 | grep -e "\.bit" > /dev/null
+if [ $? == 0 ]; then
+	echo "it's a bitfile!"
+	$DOW_BIT $1 $JTAG_POS
+	echo
+	exit 0;
+fi
+
+echo $1 | grep -e "\.elf" > /dev/null
+if [ $? == 0 ]; then
+	echo "it's an executable!"
+	$DOW_ELF $1
+	echo
+	exit 0;
+fi
+	
+echo "Not an executable or bitfile!"
+

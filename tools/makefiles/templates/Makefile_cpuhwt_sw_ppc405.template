@@ -1,0 +1,20 @@
+#Makefile for a sw application of a CPU-HW-Thread
+
+Targets = $template:sourcefiles$
+Linkerscript = $template:linkerscript$
+Libpath = $template:libpath$
+Output = $template:output$
+Include = $template:include$
+
+CC = $(XILINX_EDK)/gnu/powerpc-eabi/lin/bin/powerpc-eabi-gcc
+CC_SIZE = $(XILINX_EDK)/gnu/powerpc-eabi/lin/bin/powerpc-eabi-size
+CFLAGS = -O2 -g -msdata=eabi
+LDFLAGS = -g
+
+all: 
+	$(CC) $(CFLAGS) $(Targets) -o $(Output) -Wl,-T -Wl,$(Linkerscript) $(Include) -L$(Libpath) $(LDFLAGS)
+	$(CC_SIZE) $(Output)
+     
+     
+clean:
+	rm -f $(Output)

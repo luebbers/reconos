@@ -1,0 +1,32 @@
+JDF G
+// Created by Project Navigator ver 1.0
+PROJECT standalone
+DESIGN standalone
+DEVFAM virtex2p
+DEVFAMTIME 0
+DEVICE xc2vp30
+DEVICETIME 0
+DEVPKG ff896
+DEVPKGTIME 0
+DEVSPEED -7
+DEVSPEEDTIME 0
+DEVTOPLEVELMODULETYPE HDL
+TOPLEVELMODULETYPETIME 0
+DEVSYNTHESISTOOL XST (VHDL/Verilog)
+SYNTHESISTOOLTIME 0
+DEVSIMULATOR Modelsim
+SIMULATORTIME 0
+DEVGENERATEDSIMULATIONMODEL VHDL
+GENERATEDSIMULATIONMODELTIME 0
+SOURCE standalone.vhd
+SUBLIB opb_ac97_v2_00_a VhdlLibrary vhdl
+LIBFILE ..\ac97_core.vhd opb_ac97_v2_00_a vhdl
+LIBFILE ..\ac97_if.vhd opb_ac97_v2_00_a vhdl
+LIBFILE ..\ac97_timing.vhd opb_ac97_v2_00_a vhdl
+LIBFILE ..\ac97_command_rom.vhd opb_ac97_v2_00_a vhdl
+LIBFILE ..\ac97_if_pkg.vhd opb_ac97_v2_00_a vhdl
+DEPASSOC standalone standalone.ucf
+[STATUS-ALL]
+standalone.bitgenGroup=OK,1108484761
+[STRATEGY-LIST]
+Normal=True

@@ -1,0 +1,47 @@
+<HTML xmlns:exsl="http://exslt.org/common" xmlns:xlink="http://www.w3.org/1999/xlink">
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>Block Diagram</TITLE>
+</HEAD>
+<BODY class="main_body">
+<IMG SRC="bfm_system.png" alt="BlockDiagram" width="1330" height="1091" border="0" vspace="0" hspace="0"><BR><BR><TABLE BGCOLOR="#000000" WIDTH="850" COLS="8" cellspacing="1" cellpadding="1" border="0">
+<TD COLSPAN="8" ALIGN="middle" BGCOLOR="#810017"><SPAN style="color:#FFFFFF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">EXTERNAL PORTS</SPAN></TD>
+<TR></TR>
+<TD COLSPAN="8" ALIGN="middle" bgcolor="#FFFFFF"><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">
+				These are the external ports defined in the MHS file.
+			</SPAN></TD>
+<TR></TR>
+<TD COLSPAN="8" ALIGN="left" bgcolor="#FFFFFF">
+<SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">Attributes Key</SPAN><BR><SPAN style="color:#000000; font: italic 9px Verdana,Arial,Helvetica,sans-serif">The attributes are obtained from the SIGIS and IOB_STATE parameters set on the PORT in the MHS file </SPAN><BR><SPAN style="color:#55FF55; font: bold 12px Verdana,Arial,Helvetica,sans-serif">CLK</SPAN><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">  indicates Clock ports, (SIGIS = CLK) </SPAN><BR><SPAN style="color:#5555FF; font: bold 12px Verdana,Arial,Helvetica,sans-serif">INTR</SPAN><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">  indicates Interrupt ports,(SIGIS = INTR) </SPAN><BR><SPAN style="color:#FFCC00; font: bold 12px Verdana,Arial,Helvetica,sans-serif">RESET</SPAN><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">  indicates Reset ports, (SIGIS = RST) </SPAN><BR><SPAN style="color:#FF5555; font: bold 12px Verdana,Arial,Helvetica,sans-serif">BUF or REG</SPAN><SPAN style="color:#2233FF; font: bold 9px Verdana,Arial,Helvetica,sans-serif">  Indicates ports that instantiate or infer IOB primitives, (IOB_STATE = BUF or REG) </SPAN>
+</TD>
+<TR></TR>
+<TD COLSPAN="7" ALIGN="left" bgcolor="#FFFFFF"><TABLE BGCOLOR="#000000" WIDTH="100%" COLS="9" cellspacing="1" cellpadding="0" border="0">
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">#</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">NAME</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">DIR</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">[LSB:MSB]</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">SIG</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#BBBBBB"><SPAN style="color:#810017; font: bold 10px Verdana,Arial,Helvetica,sans-serif">ATTRIBUTES</SPAN></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#FFFFFF">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">0</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">GLB</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">sys_clk</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">sys_clk</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#FFFFFF"><SPAN style="color:#55FF55; font: bold 10px Verdana,Arial,Helvetica,sans-serif"> CLK </SPAN></TD>
+<TR></TR>
+<TD COLSPAN="1" width="5%" align="left" bgcolor="#DEDEDE">
+<SPAN style="color:#000000; font: bold 14px Verdana,Arial,Helvetica,sans-serif">1</SPAN><SPAN style="color:#000000; vertical-align: super; font: bold 10px Arial,Helvetica,sans-serif">A</SPAN>
+</TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">sys_reset</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold   10px Verdana,Arial,Helvetica,sans-serif">I</SPAN></TD>
+<TD COLSPAN="1" width="5%" align="middle" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: bold 10px Verdana,Arial,Helvetica,sans-serif">1</SPAN></TD>
+<TD COLSPAN="2" width="30%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#000000; font: normal 12px Verdana,Arial,Helvetica,sans-serif">sys_reset</SPAN></TD>
+<TD COLSPAN="2" width="25%" align="left" bgcolor="#DEDEDE"><SPAN style="color:#FFCC00; font: bold 10px Verdana,Arial,Helvetica,sans-serif"> RESET </SPAN></TD>
+</TABLE></TD>
+</TABLE>
+<BR>
+</BODY>
+</HTML>

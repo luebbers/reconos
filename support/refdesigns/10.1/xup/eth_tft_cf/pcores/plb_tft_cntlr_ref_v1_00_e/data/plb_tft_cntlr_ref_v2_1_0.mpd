@@ -1,0 +1,110 @@
+###################################################################
+##
+##     XILINX IS PROVIDING THIS DESIGN, CODE, OR INFORMATION "AS IS"
+##     SOLELY FOR USE IN DEVELOPING PROGRAMS AND SOLUTIONS FOR
+##     XILINX DEVICES.  BY PROVIDING THIS DESIGN, CODE, OR INFORMATION
+##     AS ONE POSSIBLE IMPLEMENTATION OF THIS FEATURE, APPLICATION
+##     OR STANDARD, XILINX IS MAKING NO REPRESENTATION THAT THIS
+##     IMPLEMENTATION IS FREE FROM ANY CLAIMS OF INFRINGEMENT,
+##     AND YOU ARE RESPONSIBLE FOR OBTAINING ANY RIGHTS YOU MAY REQUIRE
+##     FOR YOUR IMPLEMENTATION.  XILINX EXPRESSLY DISCLAIMS ANY
+##     WARRANTY WHATSOEVER WITH RESPECT TO THE ADEQUACY OF THE
+##     IMPLEMENTATION, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OR
+##     REPRESENTATIONS THAT THIS IMPLEMENTATION IS FREE FROM CLAIMS OF
+##     INFRINGEMENT, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+##     FOR A PARTICULAR PURPOSE.
+##     
+##     (c) Copyright 2004 Xilinx, Inc.
+##     All rights reserved.
+##
+###################################################################
+##
+## Microprocessor Peripheral Definition
+##
+###################################################################
+
+
+
+BEGIN plb_tft_cntlr_ref
+OPTION IPTYPE=PERIPHERAL
+OPTION IMP_NETLIST=TRUE
+OPTION HDL=verilog
+OPTION USAGE_LEVEL = BASE_USER
+
+## Peripheral Options
+
+OPTION SIM_MODELS = BEHAVIORAL:STRUCTURAL:TIMING
+
+IO_INTERFACE IO_IF = vga, IO_TYPE = XIL_TFT_V1
+
+## Bus Interfaces
+BUS_INTERFACE BUS = MPLB, BUS_STD = PLB, BUS_TYPE = MASTER
+BUS_INTERFACE BUS = SDCR, BUS_STD = DCR, BUS_TYPE = SLAVE
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER C_DCR_BASEADDR          = 0b0010000000, MIN_SIZE=2, BUS=SDCR
+PARAMETER C_DCR_HIGHADDR          = 0b0010000001, BUS=SDCR
+#PARAMETER C_DEFAULT_TFT_BASE_ADDR = 0b00001111111, ADDRESS=NONE
+PARAMETER C_DEFAULT_TFT_BASE_ADDR = 0x0F700000, ADDRESS=NONE
+PARAMETER C_DPS_INIT              = 0b1, ADDRESS=NONE
+PARAMETER C_ON_INIT               = 0b1, ADDRESS=NONE
+PARAMETER C_PIXCLK_IS_BUSCLK_DIVBY4  = 0b1, ADDRESS=NONE
+## Ports
+
+## PLB Master interface
+PORT SYS_plbClk        = "",               DIR = INPUT,  SIGIS = CLK,               BUS = MPLB
+PORT SYS_plbReset      = PLB_Rst,          DIR = INPUT,                             BUS = MPLB
+PORT Mn_request        = M_request,        DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_ABus           = M_ABus,           DIR = OUTPUT, VEC = [0:31],              BUS = MPLB
+PORT Mn_RNW            = M_RNW,            DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_BE             = M_BE,             DIR = OUTPUT, VEC = [0:7],               BUS = MPLB
+PORT Mn_size           = M_size,           DIR = OUTPUT, VEC = [0:3],               BUS = MPLB
+PORT Mn_type           = M_type,           DIR = OUTPUT, VEC = [0:2],               BUS = MPLB
+PORT Mn_priority       = M_priority,       DIR = OUTPUT, VEC = [0:1],               BUS = MPLB
+PORT Mn_rdBurst        = M_rdBurst,        DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_wrBurst        = M_wrBurst,        DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_busLock        = M_busLock,        DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_abort          = M_abort,          DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_lockErr        = M_lockErr,        DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_msize          = M_MSize,          DIR = OUTPUT, VEC = [0:1],               BUS = MPLB
+PORT Mn_ordered        = M_ordered,        DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_compress       = M_compress,       DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_guarded        = M_guarded,        DIR = OUTPUT,                            BUS = MPLB
+PORT Mn_wrDBus         = M_wrDBus,         DIR = OUTPUT, VEC = [0:63],              BUS = MPLB
+PORT PLB_MnRdWdAddr    = PLB_MRdWdAddr,    DIR = INPUT, VEC = [0:3],                BUS = MPLB
+PORT PLB_MnRdDBus      = PLB_MRdDBus,      DIR = INPUT, VEC = [0:63],               BUS = MPLB
+PORT PLB_MnAddrAck     = PLB_MAddrAck,     DIR = INPUT,                             BUS = MPLB
+PORT PLB_MnRdDAck      = PLB_MRdDAck,      DIR = INPUT,                             BUS = MPLB
+PORT PLB_MnWrDAck      = PLB_MWrDAck,      DIR = INPUT,                             BUS = MPLB
+PORT PLB_MnRearbitrate = PLB_MRearbitrate, DIR = INPUT,                             BUS = MPLB
+PORT PLB_MnBusy        = PLB_MBusy,        DIR = INPUT,                             BUS = MPLB
+PORT PLB_MnErr         = PLB_MErr,         DIR = INPUT,                             BUS = MPLB
+PORT PLB_MnRdBTerm     = PLB_MRdBTerm,     DIR = INPUT,                             BUS = MPLB
+PORT PLB_MnWrBTerm     = PLB_MWrBTerm,     DIR = INPUT,                             BUS = MPLB
+PORT PLB_Mnssize       = PLB_MSSize,       DIR = INPUT, VEC = [0:1],                BUS = MPLB
+PORT PLB_pendReq       = PLB_MpendReq,     DIR = INPUT,                             BUS = MPLB
+PORT PLB_pendPri       = PLB_MpendPri,     DIR = INPUT, VEC = [0:1],                BUS = MPLB
+PORT PLB_reqPri        = PLB_MreqPri,      DIR = INPUT, VEC = [0:1],                BUS = MPLB
+
+# DCR Interface
+PORT SYS_dcrClk  = "",          DIR = INPUT,  SIGIS = CLK, BUS=SDCR
+PORT DCR_Ack     = Sl_dcrAck,   DIR = OUTPUT,              BUS=SDCR
+PORT DCR_DBusOut = Sl_dcrDBus,  DIR = OUTPUT, VEC=[0:31],  BUS=SDCR
+PORT DCR_ABus    = DCR_ABus,    DIR = INPUT,  VEC=[0:9],   BUS=SDCR
+PORT DCR_DBusIn  = DCR_Sl_DBus, DIR = INPUT,  VEC=[0:31],  BUS=SDCR
+PORT DCR_Read    = DCR_Read,    DIR = INPUT,               BUS=SDCR
+PORT DCR_Write   = DCR_Write,   DIR = INPUT,               BUS=SDCR
+
+# TFT Signals
+PORT SYS_tftClk = "", DIR = IN
+PORT TFT_LCD_HSYNC = "", DIR = OUT, IO_IF = vga, IO_IS = horiz_sync
+PORT TFT_LCD_VSYNC = "", DIR = OUT, IO_IF = vga, IO_IS = vert_sync
+PORT TFT_LCD_DE = "", DIR = OUT
+PORT TFT_LCD_CLK = "", DIR = OUT, IO_IF = vga, IO_IS = pixel_clk, IOB_STATE=BUF  
+PORT TFT_LCD_DPS = "", DIR = OUT
+PORT TFT_LCD_R = "", DIR = OUT, VEC = [5:0], IO_IF = vga, IO_IS = red
+PORT TFT_LCD_G = "", DIR = OUT, VEC = [5:0], IO_IF = vga, IO_IS = green
+PORT TFT_LCD_B = "", DIR = OUT, VEC = [5:0], IO_IF = vga, IO_IS = blue
+PORT TFT_LCD_BLNK = "", DIR = OUT, IO_IF = vga, IO_IS = blnk_n
+
+END

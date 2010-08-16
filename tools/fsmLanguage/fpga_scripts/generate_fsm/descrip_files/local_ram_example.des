@@ -1,0 +1,78 @@
+RECONOS: v2_00_a;
+CS: state;
+NS: next_state;
+
+GENERICS:
+
+PORTS:
+
+CONNECTIONS:
+
+MEMS:
+
+CHANNELS:
+
+SIGS:
+input_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+current_input_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+output_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+current_output_address, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+information_struct, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+number, integer;
+counter, integer;
+i, std_logic_vector(0 to C_TASK_BURST_AWIDTH-1);
+
+VARIABLES:
+message, std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+
+INITIAL: init;
+
+TRANS:
+
+init -> wait_for_message {
+        {information_struct <= get_init_data();}
+        {input_address <= read(information_struct);}
+        {output_address <= read(information_struct + 4);}
+}
+
+wait_for_message -> read {
+       {message := mbox_get(C_MB_START);}
+       {number <= TO_INTEGER(SIGNED(message));
+       current_input_address  <= input_address;
+       current_output_address <= output_address;
+       i                      <= ALL_ZEROS;
+       counter                <= 0;}
+}
+
+read |(counter < number) -> read {
+       {local_ram[i] <= read(current_input_address);}
+       {i <= i + 1;
+       counter <= counter + 1;
+       current_input_address <= current_input_address + 4;}
+}
+
+read -> write {
+       {counter <= 0;
+        i <= i - 1;
+        }
+}
+
+write |(counter < number) -> write {
+    {write(current_output_address, local_ram[i]);}
+    {current_output_address <= current_output_address + 4;
+     i <= i - 1;
+     counter <= counter + 1; }
+}
+
+write -> send_message
+
+send_message -> wait_for_message {
+        {mbox_put(C_MB_DONE, message);}
+}
+
+
+-- Generic VHDL Definitions to insert
+VHDL:
+
+constant C_MB_START : std_logic_vector(0 to 31) := X"00000000";
+constant C_MB_DONE  : std_logic_vector(0 to 31) := X"00000001";

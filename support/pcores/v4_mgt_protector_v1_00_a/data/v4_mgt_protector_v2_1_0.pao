@@ -1,0 +1,7 @@
+##############################################################################
+## Filename:          v4_mgt_protector_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Wed Nov 28 18:13:57 2007 
+##############################################################################
+
+lib v4_mgt_protector_v1_00_a v4_mgt_protector vhdl

@@ -1,0 +1,132 @@
+# sample slot stimulus
+
+wait 1000 ns
+
+# FIRST RUN:
+# test all functions without yield request
+
+write_unlock
+wait 100 ns
+
+# thread yield = NOOP when no yield requested
+wait 100 ns
+read_sem_post 00000000
+wait 1000 ns
+
+read_thread_delay 0000007F
+wait 1000 ns
+write_unlock
+wait 100 ns
+read_sem_post 00000001
+wait 1000 ns
+
+read_mutex_lock 00000003
+wait 1000 ns
+write_unlock 00000001
+wait 100 ns
+read_sem_post 00000002
+wait 1000 ns
+
+read_thread_exit 00000000
+wait 100 ns
+
+reset
+
+wait 1000 ns
+
+# SECOND RUN:
+# test all functions with yield request
+
+request_yield
+write_unlock
+
+wait 300 ns
+read_thread_yield
+wait 100 ns
+write_unlock
+wait 100 ns
+read_sem_post 00000000
+wait 1000 ns
+
+request_yield
+wait 100 ns
+read_thread_delay 0000007F
+wait 1000 ns
+write_unlock
+wait 100 ns
+read_sem_post 00000001
+wait 1000 ns
+
+request_yield
+wait 100 ns
+read_mutex_lock 00000003
+wait 1000 ns
+write_unlock 00000001
+wait 100 ns
+read_sem_post 00000002
+wait 1000 ns
+
+read_thread_exit 00000000
+wait 100 ns
+
+reset
+wait 500 ns
+
+# THIRD RUN:
+# test resume
+
+# resume at STATE_POST_YIELD
+write_resume 02 00
+wait 100 ns
+write_unlock    # start thread
+wait 100 ns
+write_unlock    # unblock after thread_resume()
+wait 1000 ns
+read_sem_post 00000000
+wait 1000 ns
+
+reset
+wait 500 ns
+
+# resume at STATE_POST_DELAY
+write_resume 04 00
+wait 100 ns
+write_unlock    # start thread
+wait 100 ns
+write_unlock    # unblock after thread_resume()
+wait 1000 ns
+read_sem_post 00000001
+wait 1000 ns
+
+reset
+wait 500 ns
+
+# resume inside STATE_LOCK (step 1)
+write_resume 05 01
+wait 100 ns
+# start thread
+write_unlock
+wait 500 ns
+# return from lock() (unblock after thread_resume())
+write_unlock 00000001
+wait 200 ns
+read_sem_post 00000002
+wait 1000 ns
+read_thread_exit 00000000
+wait 100 ns
+
+reset
+wait 500 ns
+
+# resume inside STATE_LOCK (step 1) with failure
+write_resume 05 01
+wait 100 ns
+# start thread
+write_unlock
+wait 500 ns
+# return from lock()
+write_unlock 00000000
+wait 200 ns
+read_thread_exit 00000000
+wait 100 ns
+

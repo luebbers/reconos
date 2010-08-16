@@ -1,0 +1,2735 @@
+Saved contents of this file to bfm_system_log.92 during revup to EDK 10.1.
+
+Generating Block Diagram : /home/rmeiche/Xilinx/reconos-projects/test osif_new/bfmsim/blkdiagram/bfm_system.html...
+
+Generated --- bfm_system.svg
+
+Rendering --- bfm_system.png
+
+Exception in thread "main" java.lang.NoClassDefFoundError: osif_new/bfmsim/__xps//dswkshop/
+
+ERROR:MDT - Rendering engine could not generate block diagram.
+
+Generating Block Diagram : /home/rmeiche/Xilinx/reconos-projects/test osif_new/bfmsim/blkdiagram/bfm_system.html...
+
+Generated --- bfm_system.svg
+
+Rendering --- bfm_system.png
+
+Exception in thread "main" java.lang.NoClassDefFoundError: osif_new/bfmsim/__xps//dswkshop/
+
+ERROR:MDT - Rendering engine could not generate block diagram.
+
+bfm_synch_0 has been added to the project
+
+Project files have changed on disk.
+
+Xilinx Platform Studio (XPS)
+Xilinx EDK 10.1.03 Build EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+At Local date and time: Tue Jun 30 10:26:04 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 10:26:11 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl   -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+
+
+Simulation Model Generator started ...
+
+Reading MHS file ...
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 38 - tool is overriding PARAMETER C_PLBV46_DWIDTH value to
+   128
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 25 - tool
+   is overriding PARAMETER C_MPLB_DWIDTH value to 128
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 128
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+Performing Clock DRCs...
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+ERROR:MDT - File not found in any repository
+   'osif_v2_01_a/hdl/vhdl/bus_master.vhd'
+
+ERROR:MDT - File not found in any repository
+   'osif_v2_01_a/hdl/vhdl/command_decoder.vhd'
+ERROR:MDT - File not found in any repository
+   'osif_v2_01_a/hdl/vhdl/user_logic.vhd'
+ERROR:MDT - File not found in any repository
+   'osif_new_v1_00_a/hdl/vhdl/mem_plb46.vhd'
+ERROR:MDT - Error while creating simulator compile script
+make: *** [simulation/behavioral/bfm_system_setup.do] Error 4
+
+
+
+Done!
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/dcr_timebase_v1_00_b/data/dcr_timebase_v2_1_0.mpd line 10  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/dcrfifo_v1_00_a/data/dcrfifo_v2_1_0.mpd line 10  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/message_manager_v1_00_a/data/message_manager_v2_1_0.mpd line 19  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/osif_v2_01_a/data/osif_v2_1_0.mpd line 17  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/plb_osif_v2_01_a/data/plb_osif_v2_1_0.mpd line 17  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/v4_mgt_protector_v1_00_a/data/v4_mgt_protector_v2_1_0.mpd line 16  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/dcr_timebase_v1_00_b/data/dcr_timebase_v2_1_0.mpd line 10  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/dcrfifo_v1_00_a/data/dcrfifo_v2_1_0.mpd line 10  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/message_manager_v1_00_a/data/message_manager_v2_1_0.mpd line 19  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/osif_v2_01_a/data/osif_v2_1_0.mpd line 17  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/plb_osif_v2_01_a/data/plb_osif_v2_1_0.mpd line 17  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+WARNING:MDT - Option "CORE_STATE" in /home/rmeiche/Xilinx/Repository/MyProcessorIPLib/pcores/v4_mgt_protector_v1_00_a/data/v4_mgt_protector_v2_1_0.mpd line 16  is deprecated. Please use Option ARCH_SUPPORT_MAP instead. 
+
+At Local date and time: Tue Jun 30 10:28:21 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+Reading MHS file ...
+lp : /home/rmeiche/Xilinx/Repository/
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 38 - tool is overriding PARAMETER C_PLBV46_DWIDTH value to
+   128
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 25 - tool
+   is overriding PARAMETER C_MPLB_DWIDTH value to 128
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 128
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+Performing Clock DRCs...
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 11:10:37 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 11:10:44 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+
+Reading MHS file ...
+
+lp : /home/rmeiche/Xilinx/Repository/
+
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 38 - tool is overriding PARAMETER C_PLBV46_DWIDTH value to
+   128
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 25 - tool
+   is overriding PARAMETER C_MPLB_DWIDTH value to 128
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 128
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+
+Performing Clock DRCs...
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 11:36:17 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 11:36:22 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+Reading MHS file ...
+lp : /home/rmeiche/Xilinx/Repository/
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 38 - tool is overriding PARAMETER C_PLBV46_DWIDTH value to
+   128
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 25 - tool
+   is overriding PARAMETER C_MPLB_DWIDTH value to 128
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 128
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+
+Performing Clock DRCs...
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+
+Generating simulator helper scripts ...
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 11:38:35 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 11:38:39 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+
+Reading MHS file ...
+
+lp : /home/rmeiche/Xilinx/Repository/
+
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 38 - tool is overriding PARAMETER C_PLBV46_DWIDTH value to 32
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 31 - tool is overriding PARAMETER
+   C_SPLB_DWIDTH value to 32
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 32
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:bfm_processor INSTANCE:plbv46_master_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_master_bfm_v1_00_a/data/
+   plbv46_master_bfm_v2_1_0.mpd line 31 - tool is overriding PARAMETER
+   C_MPLB_DWIDTH value to 32
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 25 - tool
+   is overriding PARAMETER C_MPLB_DWIDTH value to 32
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 11:39:51 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 11:39:54 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+Reading MHS file ...
+lp : /home/rmeiche/Xilinx/Repository/
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 31 - tool is overriding PARAMETER
+   C_SPLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:bfm_processor INSTANCE:plbv46_master_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_master_bfm_v1_00_a/data/
+   plbv46_master_bfm_v2_1_0.mpd line 31 - tool is overriding PARAMETER
+   C_MPLB_DWIDTH value to 64
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+Generating Block Diagram : /home/rmeiche/Xilinx/reconos-projects/test osif_new/bfmsim/blkdiagram/bfm_system.html...
+
+Generated --- bfm_system.svg
+
+Rendering --- bfm_system.png
+
+Exception in thread "main" java.lang.NoClassDefFoundError: osif_new/bfmsim/__xps//dswkshop/
+
+ERROR:MDT - Rendering engine could not generate block diagram.
+
+At Local date and time: Tue Jun 30 12:31:23 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 12:31:33 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+
+*********************************************
+
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+
+Reading MHS file ...
+
+lp : /home/rmeiche/Xilinx/Repository/
+
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 31 - tool is overriding PARAMETER
+   C_SPLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:bfm_processor INSTANCE:plbv46_master_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_master_bfm_v1_00_a/data/
+   plbv46_master_bfm_v2_1_0.mpd line 31 - tool is overriding PARAMETER
+   C_MPLB_DWIDTH value to 64
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+The project's MHS file has changed on disk.
+
+The project's MHS file has changed on disk.
+
+At Local date and time: Tue Jun 30 12:42:55 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 12:43:00 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+
+Reading MHS file ...
+
+lp : /home/rmeiche/Xilinx/Repository/
+
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+The project's MHS file has changed on disk.
+
+At Local date and time: Tue Jun 30 12:54:48 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 12:54:55 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+Reading MHS file ...
+lp : /home/rmeiche/Xilinx/Repository/
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+Registry EDK compiled library [ /Xilinx/simlib/10.1/EDK_Lib/ ]
+
+Registry ISE compiled library [ /Xilinx/simlib/10.1/ISE_Lib/ ]
+
+running command: xilperl -S compedklib.pl unix -lp /Xilinx/10.1/edk_user_repository/ -lp /Xilinx/10.1/EDK/hw -intstyle=ise -hdl_type all -X /Xilinx/simlib/10.1/ISE_Lib/ -o /Xilinx/simlib/10.1/EDK_Lib/ -s mti_se  -exclude deprecated  -log /Xilinx/simlib/10.1/EDK_Lib/compedklib.log
+
+At Local date and time: Tue Jun 30 14:58:06 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 14:58:18 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+
+Reading MHS file ...
+
+lp : /home/rmeiche/Xilinx/Repository/
+
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+
+Generating simulator helper scripts ...
+
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+Registry EDK compiled library [ /Xilinx/simlib/10.1/EDK_Lib/ ]
+
+Registry ISE compiled library [ /Xilinx/simlib/10.1/ISE_Lib/ ]
+
+running command: xilperl -S compedklib.pl unix -lp /Xilinx/10.1/edk_user_repository/ -lp /Xilinx/10.1/EDK/hw -intstyle=ise -hdl_type all -X /Xilinx/simlib/10.1/ISE_Lib/ -o /Xilinx/simlib/10.1/EDK_Lib/ -s mti_se  -exclude deprecated  -log /Xilinx/simlib/10.1/EDK_Lib/compedklib.log
+
+Registry EDK compiled library [ /Xilinx/simlib/10.1/EDK_Lib/ ]
+
+Registry ISE compiled library [ /Xilinx/simlib/10.1/ISE_Lib/ ]
+
+running command: xilperl -S compedklib.pl unix -lp /Xilinx/10.1/edk_user_repository/ -lp /Xilinx/10.1/EDK/hw -intstyle=ise -hdl_type all -X /Xilinx/simlib/10.1/ISE_Lib/ -o /Xilinx/simlib/10.1/EDK_Lib/ -s mti_se  -exclude deprecated  -log /Xilinx/simlib/10.1/EDK_Lib/compedklib.log
+
+Registry EDK compiled library [ /Xilinx/simlib/10.1/EDK_Lib/ ]
+
+Registry ISE compiled library [ /Xilinx/simlib/10.1/ISE_Lib/ ]
+
+running command: xilperl -S compedklib.pl unix -lp /Xilinx/10.1/edk_user_repository/ -lp /Xilinx/10.1/EDK/hw -intstyle=ise -hdl_type all -X /Xilinx/simlib/10.1/ISE_Lib/ -o /Xilinx/simlib/10.1/EDK_Lib/ -s mti_se  -exclude deprecated  -log /Xilinx/simlib/10.1/EDK_Lib/compedklib.log
+
+The project's MHS file has changed on disk.
+
+ERROR:MDT - IPNAME:plbv46_master_bfm INSTANCE:bfm_processor - /home/rmeiche/Xilinx/reconos-projects/test osif_new/bfmsim/bfm_system.mhs line 59 - PARAMETER PLB_DATA_BUS_WIDTH not found in mpd.
+
+Xilinx Platform Studio (XPS)
+Xilinx EDK 10.1.03 Build EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+At Local date and time: Tue Jun 30 16:04:19 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 16:04:34 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+Reading MHS file ...
+lp : /home/rmeiche/Xilinx/Repository/
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+
+Generating simulator helper scripts ...
+
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+The project's MHS file has changed on disk.
+
+At Local date and time: Tue Jun 30 16:32:28 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 16:32:33 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+
+Reading MHS file ...
+
+lp : /home/rmeiche/Xilinx/Repository/
+
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+The project's MHS file has changed on disk.
+
+At Local date and time: Tue Jun 30 16:55:28 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 16:55:32 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+
+Reading MHS file ...
+
+lp : /home/rmeiche/Xilinx/Repository/
+
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 59 - tool is overriding PARAMETER
+   C_MON_PLB_DWIDTH value to 64
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+
+Performing Clock DRCs...
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+
+Simulation Model Generator done!
+
+
+
+
+Done!
+
+The project's MHS file has changed on disk.
+
+At Local date and time: Tue Jun 30 17:05:36 2009
+ make -f bfm_sim_xps.make simclean started...
+
+rm -rf simulation/behavioral
+
+
+
+Done!
+
+At Local date and time: Tue Jun 30 17:05:39 2009
+ make -f bfm_sim_xps.make simmodel started...
+
+*********************************************
+Create behavioral simulation models ...
+*********************************************
+simgen bfm_system.mhs -p xc2vp4fg456-6 -lang vhdl -lp /home/rmeiche/Xilinx/Repository/  -mixed yes  -s mti -X /Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+
+Simulation Model Generator
+Xilinx EDK 10.1.03 EDK_K_SP3.6
+
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+
+Command Line: simgen -p xc2vp4fg456-6 -lang vhdl -lp
+/home/rmeiche/Xilinx/Repository/ -mixed yes -s mti -X
+/Xilinx/simlib/10.1/ISE_Lib/ -E /Xilinx/simlib/10.1/EDK_Lib/ -m behavioral
+bfm_system.mhs 
+
+
+MHS file              : /.../test osif_new/bfmsim/bfm_system.mhs
+Language (-lang)      : VHDL 
+Simulation Model (-m) : Behavioral
+Simulator (-s)        : ModelSim (MTI)
+Part (-p) [ family ]  : xc2vp4fg456-6 [ virtex2p ]
+Output directory (-od): /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/
+
+Edklib (-E) : /Xilinx/simlib/10.1/EDK_Lib/
+Xlib (-X)   : /Xilinx/simlib/10.1/ISE_Lib/
+
+Library Path (-lp): /home/rmeiche/Xilinx/Repository/
+
+
+Simulation Model Generator started ...
+
+
+Reading MHS file ...
+
+lp : /home/rmeiche/Xilinx/Repository/
+
+
+Reading MPD definitions ...
+
+
+Overriding IP level properties ...
+
+
+Performing IP level DRCs on properties...
+
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+
+
+WARNING:MDT - Peripheral bfm_memory is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. bfm_memory is not connected to any of the buses connected to a processor. 
+   2. bfm_memory does not have adresses set correctly. 
+   3. bfm_memory's address is not within any of the bridge windows connected to
+   a processor.
+
+
+
+WARNING:MDT - Peripheral my_core is not connected to any of the processors in
+   the system. Check for the following reasons.
+   1. my_core is not connected to any of the buses connected to a processor. 
+   2. my_core does not have adresses set correctly. 
+   3. my_core's address is not within any of the bridge windows connected to a
+   processor.
+
+
+Check platform address map ...
+
+Computing clock values...
+INFO:MDT - Frequency for Top-Level Input Clock 'sys_clk' is not specified. Clock
+   DRCs will not be performed for IPs connected to that clock port, unless they
+   are connected through the clock generator IP. 
+
+
+Overriding system level properties ...
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 34 - tool is overriding PARAMETER C_PLBV46_NUM_MASTERS value
+   to 2
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 35 - tool is overriding PARAMETER C_PLBV46_NUM_SLAVES value
+   to 1
+
+INFO:MDT - IPNAME:plb_v46_0 INSTANCE:plb_v46 -
+   /Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_03_a/data/plb_v46_
+   v2_1_0.mpd line 36 - tool is overriding PARAMETER C_PLBV46_MID_WIDTH value to
+   1
+INFO:MDT - IPNAME:bfm_memory INSTANCE:plbv46_slave_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_slave_bfm_v1_00_a/data/p
+   lbv46_slave_bfm_v2_1_0.mpd line 32 - tool is overriding PARAMETER
+   C_SPLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 60 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_MASTERS value to 2
+INFO:MDT - IPNAME:bfm_monitor INSTANCE:plbv46_monitor_bfm -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 61 - tool is overriding PARAMETER
+   C_MON_PLB_NUM_SLAVES value to 1
+INFO:MDT - IPNAME:my_core INSTANCE:osif_tb -
+   /home/rmeiche/Xilinx/reconos-projects/test
+   osif_new/bfmsim/pcores/osif_tb_v1_00_c/data/osif_tb_v2_1_0.mpd line 28 - tool
+   is overriding PARAMETER C_MPLB_SMALLEST_SLAVE value to 64
+
+Running system level Update ...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Check platform configuration ...
+IPNAME:plb_v46 INSTANCE:plb_v46_0 - /home/rmeiche/Xilinx/reconos-projects/test
+osif_new/bfmsim/bfm_system.mhs line 22 - 2 master(s) : 1 slave(s)
+
+Check port drivers...
+
+WARNING:MDT - PORT:PLB_SMIRQ CONNECTOR:plb_v46_0_PLB_SMIRQ -
+   /Xilinx/10.1/EDK/hw/XilinxBFMinterface/pcores/plbv46_monitor_bfm_v1_00_a/data
+   /plbv46_monitor_bfm_v2_1_0.mpd line 159 - No driver found. Port will be
+   driven to GND!
+
+
+Performing Clock DRCs...
+
+
+
+Running UPDATE Tcl procedures for OPTION SIMGEN_SYSLEVEL_UPDATE_PROC...
+
+Elaborating instances ...
+
+Generating simulation files ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+
+
+Constructing platform-level signal connectivity ...
+
+WARNING:MDT - (GLOBAL) - atleast 1 toplevel output/input needs to be defined!
+
+
+Writing HDL ...
+
+
+Generating simulator compile script ...
+
+
+Using the following precompiled EDK libraries:
+
+  /Xilinx/simlib/10.1/EDK_Lib/bfm_synch_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/proc_common_v2_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plb_v46_v1_03_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_bfm/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_slave_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_monitor_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_bfm_v1_00_a/
+  /Xilinx/simlib/10.1/EDK_Lib/plbv46_master_burst_v1_00_a/
+
+
+Generating simulator helper scripts ...
+
+Simulation Model Generator done!
+
+
+
+
+Done!
+

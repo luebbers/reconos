@@ -1,0 +1,69 @@
+###################################################################
+##
+## Name     : message_manager
+## Desc     : Microprocessor Peripheral Description
+## Date     : Oct 26 2007
+##
+## Core written by Jason Agron <jagron@ittc.ku.edu>
+## Wrapper written by Enno Luebbers <enno.luebbers@upb.de>
+##
+###################################################################
+
+BEGIN message_manager
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION IP_GROUP = PPC:MICROBLAZE:USER
+OPTION CORE_STATE = DEVELOPMENT
+
+
+## Bus Interfaces
+BUS_INTERFACE BUS = RING_OUT, BUS_TYPE = INITIATOR, BUS_STD = RING_STD
+BUS_INTERFACE BUS = RING_IN, BUS_TYPE = TARGET, BUS_STD = RING_STD
+BUS_INTERFACE BUS = USER, BUS_TYPE = TARGET, BUS_STD = MSG_USER_STD
+
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER START_WITH_TOKEN = 0, DT = INTEGER, RANGE = (0:1), DESC = Initially give token to this manager, VALUES = (0= FALSE , 1= TRUE )
+PARAMETER DATA_WIDTH = 32, DT = INTEGER
+PARAMETER CHANNEL_ID_WIDTH = 8, DT = INTEGER
+PARAMETER SENDER_ID_WIDTH = 8, DT = INTEGER
+
+
+## Ports
+# System-Level Control Ports
+PORT clk = "clk", DIR = I, SIGIS = Clk, BUS = USER
+PORT reset = "reset", DIR = I, BUS = USER
+
+# User Interface Ports
+PORT i_request = "request", DIR = I, BUS = USER
+PORT i_user_opcode = "opcode", DIR = I, VEC = [0:7], BUS = USER
+PORT i_user_data = "send_data", DIR = I, VEC = [0:DATA_WIDTH-1], BUS = USER
+PORT i_user_channel = "send_channel", DIR = I, VEC = [0:CHANNEL_ID_WIDTH-1], BUS = USER
+PORT i_user_sender = "send_sender", DIR = I, VEC = [0:SENDER_ID_WIDTH-1], BUS = USER
+PORT o_user_data = "recv_data", DIR = O, VEC = [0:DATA_WIDTH-1], BUS = USER
+PORT o_user_channel = "recv_channel", DIR = O, VEC = [0:CHANNEL_ID_WIDTH-1], BUS = USER
+PORT o_user_sender = "recv_sender", DIR = O, VEC = [0:SENDER_ID_WIDTH-1], BUS = USER
+PORT o_busy = "busy", DIR = O, BUS = USER
+PORT o_send_ready = "send_ready", DIR = O, BUS = USER
+PORT o_recv_ready = "recv_ready", DIR = O, BUS = USER
+
+# System Ports - Incoming Packet Interface
+PORT i_packet_data = "data", DIR = I, VEC = [0:DATA_WIDTH-1], BUS = RING_IN
+PORT i_packet_channel = "channel", DIR = I, VEC = [0:CHANNEL_ID_WIDTH-1], BUS = RING_IN
+PORT i_packet_sender = "sender", DIR = I, VEC = [0:SENDER_ID_WIDTH-1], BUS = RING_IN
+PORT i_packet_valid = "valid", DIR = I, BUS = RING_IN
+
+# System Ports -- Token Interface
+PORT i_token = "token", DIR = I, BUS = RING_IN
+PORT o_token = "token", DIR = O, BUS = RING_OUT
+
+# System Ports - Outgoing Packet Interface
+PORT o_packet_data = "data", DIR = O, VEC = [0:DATA_WIDTH-1], BUS = RING_OUT
+PORT o_packet_channel = "channel", DIR = O, VEC = [0:CHANNEL_ID_WIDTH-1], BUS = RING_OUT
+PORT o_packet_sender = "sender", DIR = O, VEC = [0:SENDER_ID_WIDTH-1], BUS = RING_OUT
+PORT o_packet_valid = "valid", DIR = O, BUS = RING_OUT
+
+END

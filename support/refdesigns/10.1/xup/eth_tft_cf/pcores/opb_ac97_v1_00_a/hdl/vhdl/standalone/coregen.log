@@ -1,0 +1,22 @@
+# Xilinx CORE Generator 6.3.02i; Cores Update # 3
+# User = markp
+Initializing default project...
+Loading plug-ins...
+All runtime messages will be recorded in C:\BYU_DEV_KIT\lib\XilinxProcessorIP\pcores\opb_ac97_v1_00_a\hdl\vhdl\standalone\coregen.log
+NEWPROJECT .
+SETPROJECT .
+# busformat=BusFormatAngleBracketNotRipped
+# designflow=VHDL
+# expandedprojectpath=C:\BYU_DEV_KIT\lib\XilinxProcessorIP\pcores\opb_ac97_v1_00_a\hdl\vhdl\standalone
+# flowvendor=Foundation_iSE
+# formalverification=None
+# simulationoutputproducts=VHDL
+# xilinxfamily=Virtex2
+# outputoption=DesignFlow
+# overwritefiles=Default
+# simvendor=ModelSim
+# expandedprojectpath=C:\BYU_DEV_KIT\lib\XilinxProcessorIP\pcores\opb_ac97_v1_00_a\hdl\vhdl\standalone
+Set current Project to C:\BYU_DEV_KIT\lib\XilinxProcessorIP\pcores\opb_ac97_v1_00_a\hdl\vhdl\standalone
+SET BusFormat = BusFormatAngleBracketNotRipped
+SETXIPCPORTHOST 1449
+XIPCPJSENDCORES virtex2p

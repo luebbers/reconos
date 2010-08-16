@@ -1,0 +1,98 @@
+\input texinfo
+@c *** start of header
+@setfilename reconos_ug.texi
+@settitle ReconOS User's Manual
+@c *** end of header
+
+@c *** copyright definition
+@copying
+The license notice (i.e. BSD-like) goes here.
+
+Copyright @copyright{} 2006-2010 Enno Luebbers <luebbers@@reconos.de>
+@end copying
+
+@c *** title and copyright output
+@titlepage
+@title ReconOS User's Manual
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@c *** top node and master menu
+@ifnottex
+@node Top
+@top ReconOS
+
+This is the user's manual for ReconOS, a programming and execution
+environment for CPU/FPGA systems based on multithreaded programming.
+
+Developed within the context of a university research project and a PhD
+thesis, ReconOS is a way to bring some of the convenience of a software-like
+programming model to the detail-ridden world of reconfigurable hardware
+design. With ReconOS, you can model a concurrent application for
+reconfigurable systems-on-chip (rSoC) using both software and hardware
+threads. The interactions between all threads are handled through common
+POSIX-like abstractions such as mailboxes, semaphores, or shared memory,
+hiding the complexities of bus access protocols, memory spaces, register files
+and interrupt handling.
+
+@quotation
+@strong{Note:} This document is in a very early design stage -- it thus may
+contain inaccuracies and missing a considerable amount of content. If you spot
+inconsistencies or would otherwise like to contribute to the documentation,
+please visit the @uref{http://github.com/luebbers/reconos, ReconOS repository
+on GitHub} and the @uref{http://reconos-devel.lists.reconos.de, reconos-devel
+mailing list}.
+@end quotation
+
+@end ifnottex
+
+@menu
+
+* Introduction::                Introduces the concepts and ideas behind ReconOS
+* Installation::                Outlines the requirements and installation instructions
+                                    to establish a ReconOS development environment
+* Quick Start::                 A set of simple tutorials to get you up and running
+* Designing Hardware Threads::  Describes in detail how hardware modules written in VHDL
+                                    can be turned into hardware threads
+* Hardware Architecture::       Gives an overview of the underlying hardware architecture
+                                    and hardware components of current ReconOS systems
+* Software Architecture::       Details the software part of ReconOS, e.g., the 
+                                    integration into OS kernels
+* Partial Reconfiguration::     Explains the ReconOS components and mechanisms used for
+                                    exploiting partial reconfiguration features
+* Tools::                       Contains specific information about the ReconOS tool
+                                    flow and the associated scripts and programs
+* Target Platforms::            Detailed descriptions of the target platforms ReconOS
+                                    has been successfully run on
+* Sample Applications::         A list of example applications illustrating various
+                                    features of ReconOS
+
+* Unplaced Topics::         Topics which are not yet placed within the manual's outline
+
+@end menu
+
+
+
+
+
+@c *** body *****************************************************************
+
+@include introduction.texi
+@include installation.texi
+@include quickstart.texi
+@include hardware_threads.texi
+@include hardware_arch.texi
+@include software_arch.texi
+@include partial_reconfiguration.texi
+@include tools.texi
+@include targets.texi
+@include samples.texi
+
+@include unplaced.texi
+
+@bye
+

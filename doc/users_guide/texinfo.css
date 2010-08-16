@@ -1,0 +1,33 @@
+* {
+   font-family: Helvetica, Arial, sans-serif;
+   color: #555555;
+   src: url(../fonts/Inconsolata.otf);
+}
+
+a {
+   color: #5555FF;
+}
+
+pre {
+    border-left: 4px solid #999999;
+    background: #EEEEEE;
+    color: #000000;
+    line-height: 130%;
+    padding: 10px 10px 10px;
+    margin-bottom: 22px;
+    font-family: Monaco, Courier, monospace;
+}
+
+blockquote {
+    border-left: 4px solid #999999;
+    background: #EEEEEE;
+    color: #555555;
+    line-height: 130%;
+    padding: 10px 10px 10px;
+    margin-bottom: 22px;
+}
+
+p code {
+    font-family: Monaco, Courier, monospace;
+}
+

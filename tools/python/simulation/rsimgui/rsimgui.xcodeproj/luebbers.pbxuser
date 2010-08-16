@@ -1,0 +1,611 @@
+// !$*UTF8*$!
+{
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = D5029873104275F100189000 /* rsimgui */;
+		activeTarget = 8D1107260486CEB800E47090 /* rsimgui */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* rsimgui */,
+		);
+		codeSenseManager = D502988E104275FD00189000 /* Code sense */;
+		executables = (
+			D5029873104275F100189000 /* rsimgui */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					993,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 274372896;
+			PBXWorkspaceStateSaveDate = 274372896;
+		};
+		perUserProjectItems = {
+			D502995D1042D6A600189000 /* PBXTextBookmark */ = D502995D1042D6A600189000 /* PBXTextBookmark */;
+			D502995F1042D6A600189000 /* PBXTextBookmark */ = D502995F1042D6A600189000 /* PBXTextBookmark */;
+			D50299601042D6A600189000 /* PBXTextBookmark */ = D50299601042D6A600189000 /* PBXTextBookmark */;
+			D50299611042D6A600189000 /* PBXTextBookmark */ = D50299611042D6A600189000 /* PBXTextBookmark */;
+			D50299641042D6A600189000 /* PBXTextBookmark */ = D50299641042D6A600189000 /* PBXTextBookmark */;
+			D50299651042D6A600189000 /* PBXTextBookmark */ = D50299651042D6A600189000 /* PBXTextBookmark */;
+			D50299661042D6A600189000 /* PBXTextBookmark */ = D50299661042D6A600189000 /* PBXTextBookmark */;
+			D50299681042D6A600189000 /* PBXTextBookmark */ = D50299681042D6A600189000 /* PBXTextBookmark */;
+			D502996B1042D6A600189000 /* PBXTextBookmark */ = D502996B1042D6A600189000 /* PBXTextBookmark */;
+			D502996D1042D6A600189000 /* PBXTextBookmark */ = D502996D1042D6A600189000 /* PBXTextBookmark */;
+			D50299711042D6A600189000 /* PBXTextBookmark */ = D50299711042D6A600189000 /* PBXTextBookmark */;
+			D593646E105A993F00FF21A0 /* PBXTextBookmark */ = D593646E105A993F00FF21A0 /* PBXTextBookmark */;
+			D593647E105A998A00FF21A0 /* PBXTextBookmark */ = D593647E105A998A00FF21A0 /* PBXTextBookmark */;
+			D593647F105A998A00FF21A0 /* PBXTextBookmark */ = D593647F105A998A00FF21A0 /* PBXTextBookmark */;
+			D593648F105A9B1600FF21A0 /* PBXTextBookmark */ = D593648F105A9B1600FF21A0 /* PBXTextBookmark */;
+			D5936492105A9B1600FF21A0 /* PBXTextBookmark */ = D5936492105A9B1600FF21A0 /* PBXTextBookmark */;
+			D5936494105A9B1600FF21A0 /* PBXTextBookmark */ = D5936494105A9B1600FF21A0 /* PBXTextBookmark */;
+			D5936495105A9B1600FF21A0 /* PBXTextBookmark */ = D5936495105A9B1600FF21A0 /* PBXTextBookmark */;
+			D5936496105A9B1600FF21A0 /* PBXTextBookmark */ = D5936496105A9B1600FF21A0 /* PBXTextBookmark */;
+			D5936497105A9B1600FF21A0 /* PBXTextBookmark */ = D5936497105A9B1600FF21A0 /* PBXTextBookmark */;
+			D5936498105A9B1600FF21A0 /* PBXTextBookmark */ = D5936498105A9B1600FF21A0 /* PBXTextBookmark */;
+			D59364A4105A9BCF00FF21A0 /* PBXTextBookmark */ = D59364A4105A9BCF00FF21A0 /* PBXTextBookmark */;
+			D59364A6105A9BCF00FF21A0 /* PBXTextBookmark */ = D59364A6105A9BCF00FF21A0 /* PBXTextBookmark */;
+			D59364A7105A9BCF00FF21A0 /* PBXTextBookmark */ = D59364A7105A9BCF00FF21A0 /* PBXTextBookmark */;
+			D59364AF105A9D0900FF21A0 /* PBXTextBookmark */ = D59364AF105A9D0900FF21A0 /* PBXTextBookmark */;
+			D59364B1105A9D0900FF21A0 /* PBXTextBookmark */ = D59364B1105A9D0900FF21A0 /* PBXTextBookmark */;
+			D59364B3105A9D0900FF21A0 /* PBXTextBookmark */ = D59364B3105A9D0900FF21A0 /* PBXTextBookmark */;
+			D59364B5105A9D0900FF21A0 /* PBXTextBookmark */ = D59364B5105A9D0900FF21A0 /* PBXTextBookmark */;
+			D59364B6105A9D0900FF21A0 /* PBXTextBookmark */ = D59364B6105A9D0900FF21A0 /* PBXTextBookmark */;
+			D59364C2105AA44700FF21A0 /* PBXTextBookmark */ = D59364C2105AA44700FF21A0 /* PBXTextBookmark */;
+			D59364C4105AA44700FF21A0 /* PBXTextBookmark */ = D59364C4105AA44700FF21A0 /* PBXTextBookmark */;
+			D59364C8105AA44700FF21A0 /* PBXTextBookmark */ = D59364C8105AA44700FF21A0 /* PBXTextBookmark */;
+			D59364C9105AA44700FF21A0 /* PBXTextBookmark */ = D59364C9105AA44700FF21A0 /* PBXTextBookmark */;
+			D59364D7105AA55B00FF21A0 /* PBXTextBookmark */ = D59364D7105AA55B00FF21A0 /* PBXTextBookmark */;
+			D59364D8105AA55B00FF21A0 /* PBXTextBookmark */ = D59364D8105AA55B00FF21A0 /* PBXTextBookmark */;
+			D59364D9105AA55B00FF21A0 /* PBXTextBookmark */ = D59364D9105AA55B00FF21A0 /* PBXTextBookmark */;
+			D59364E1105AA76C00FF21A0 /* PBXTextBookmark */ = D59364E1105AA76C00FF21A0 /* PBXTextBookmark */;
+			D59364E2105AA76C00FF21A0 /* PBXTextBookmark */ = D59364E2105AA76C00FF21A0 /* PBXTextBookmark */;
+			D59364E3105AA76C00FF21A0 /* PBXTextBookmark */ = D59364E3105AA76C00FF21A0 /* PBXTextBookmark */;
+			D59364E4105AA76C00FF21A0 /* PBXTextBookmark */ = D59364E4105AA76C00FF21A0 /* PBXTextBookmark */;
+			D5936505105AA96600FF21A0 /* PBXTextBookmark */ = D5936505105AA96600FF21A0 /* PBXTextBookmark */;
+			D5936506105AA96600FF21A0 /* PBXTextBookmark */ = D5936506105AA96600FF21A0 /* PBXTextBookmark */;
+		};
+		sourceControlManager = D502988D104275FD00189000 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1200, 765}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1814}";
+		};
+	};
+	77631A3E0C0748CF005415CB /* main.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1015, 765}}";
+			sepNavSelRange = "{408, 0}";
+			sepNavVisRange = "{0, 510}";
+		};
+	};
+	7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 3080}}";
+			sepNavSelRange = "{5147, 0}";
+			sepNavVisRange = "{4755, 740}";
+			sepNavWindowFrame = "{{34, 224}, {750, 558}}";
+		};
+	};
+	8D1107260486CEB800E47090 /* rsimgui */ = {
+		activeExec = 0;
+		executables = (
+			D5029873104275F100189000 /* rsimgui */,
+		);
+	};
+	96F61150103FCD65002EF8C9 /* SchedulingView.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 3920}}";
+			sepNavSelRange = "{3847, 0}";
+			sepNavVisRange = "{3475, 1234}";
+		};
+	};
+	96F6116C103FD82B002EF8C9 /* coop.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 6146}}";
+			sepNavSelRange = "{5779, 0}";
+			sepNavVisRange = "{5581, 1112}";
+			sepNavWindowFrame = "{{71, 4}, {713, 874}}";
+		};
+	};
+	96F611F2103FE16D002EF8C9 /* rsimguiMainWindowController.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 630}}";
+			sepNavSelRange = "{595, 0}";
+			sepNavVisRange = "{510, 682}";
+		};
+	};
+	D5029873104275F100189000 /* rsimgui */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = rsimgui;
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+	};
+	D502988D104275FD00189000 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	D502988E104275FD00189000 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	D50298AF1042817100189000 /* LogWindowController.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1015, 765}}";
+			sepNavSelRange = "{705, 0}";
+			sepNavVisRange = "{0, 705}";
+			sepNavWindowFrame = "{{-714, 96}, {634, 648}}";
+		};
+	};
+	D50298B4104281EC00189000 /* ThreadsWindowController.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 1148}}";
+			sepNavSelRange = "{2434, 27}";
+			sepNavVisRange = "{1236, 1502}";
+			sepNavWindowFrame = "{{-1064, 84}, {634, 648}}";
+		};
+	};
+	D502995D1042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1814;
+		vrLoc = 0;
+	};
+	D502995F1042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 77631A3E0C0748CF005415CB /* main.py */;
+		name = "main.py: 17";
+		rLen = 0;
+		rLoc = 408;
+		rType = 0;
+		vrLen = 510;
+		vrLoc = 0;
+	};
+	D50299601042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = D50298AF1042817100189000 /* LogWindowController.py */;
+		name = "LogWindowController.py: 28";
+		rLen = 0;
+		rLoc = 705;
+		rType = 0;
+		vrLen = 705;
+		vrLoc = 0;
+	};
+	D50299611042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F611F2103FE16D002EF8C9 /* rsimguiMainWindowController.py */;
+		name = "rsimguiMainWindowController.py: 21";
+		rLen = 0;
+		rLoc = 595;
+		rType = 0;
+		vrLen = 1252;
+		vrLoc = 0;
+	};
+	D50299641042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1814;
+		vrLoc = 0;
+	};
+	D50299651042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 77631A3E0C0748CF005415CB /* main.py */;
+		name = "main.py: 20";
+		rLen = 24;
+		rLoc = 485;
+		rType = 0;
+		vrLen = 471;
+		vrLoc = 0;
+	};
+	D50299661042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 15";
+		rLen = 115;
+		rLoc = 552;
+		rType = 0;
+		vrLen = 346;
+		vrLoc = 0;
+	};
+	D50299681042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F611F2103FE16D002EF8C9 /* rsimguiMainWindowController.py */;
+		name = "rsimguiMainWindowController.py: 148";
+		rLen = 0;
+		rLoc = 510;
+		rType = 0;
+		vrLen = 334;
+		vrLoc = 918;
+	};
+	D502996B1042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = D50298AF1042817100189000 /* LogWindowController.py */;
+		name = "LogWindowController.py: 5";
+		rLen = 0;
+		rLoc = 41;
+		rType = 0;
+		vrLen = 190;
+		vrLoc = 0;
+	};
+	D502996D1042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = D50298B4104281EC00189000 /* ThreadsWindowController.py */;
+		name = "ThreadsWindowController.py: 5";
+		rLen = 0;
+		rLoc = 45;
+		rType = 0;
+		vrLen = 198;
+		vrLoc = 0;
+	};
+	D50299711042D6A600189000 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F61150103FCD65002EF8C9 /* SchedulingView.py */;
+		name = "SchedulingDiagramView.py: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 555;
+		vrLoc = 0;
+	};
+	D593646E105A993F00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F6116C103FD82B002EF8C9 /* coop.py */;
+		name = "coop.py: 313";
+		rLen = 0;
+		rLoc = 11849;
+		rType = 0;
+		vrLen = 1163;
+		vrLoc = 11080;
+	};
+	D593647E105A998A00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 79";
+		rLen = 0;
+		rLoc = 2410;
+		rType = 0;
+		vrLen = 873;
+		vrLoc = 3152;
+	};
+	D593647F105A998A00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F6116C103FD82B002EF8C9 /* coop.py */;
+		name = "coop.py: 65";
+		rLen = 0;
+		rLoc = 1800;
+		rType = 0;
+		vrLen = 652;
+		vrLoc = 1331;
+	};
+	D593648F105A9B1600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F6116C103FD82B002EF8C9 /* coop.py */;
+		name = "coop.py: 398";
+		rLen = 0;
+		rLoc = 14224;
+		rType = 0;
+		vrLen = 451;
+		vrLoc = 13881;
+	};
+	D5936492105A9B1600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F61150103FCD65002EF8C9 /* SchedulingView.py */;
+		name = "SchedulingView.py: 121";
+		rLen = 0;
+		rLoc = 3646;
+		rType = 0;
+		vrLen = 1175;
+		vrLoc = 3380;
+	};
+	D5936494105A9B1600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 165";
+		rLen = 0;
+		rLoc = 6635;
+		rType = 0;
+		vrLen = 861;
+		vrLoc = 4847;
+	};
+	D5936495105A9B1600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F61150103FCD65002EF8C9 /* SchedulingView.py */;
+		name = "SchedulingView.py: 121";
+		rLen = 0;
+		rLoc = 3646;
+		rType = 0;
+		vrLen = 1200;
+		vrLoc = 3380;
+	};
+	D5936496105A9B1600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F6116C103FD82B002EF8C9 /* coop.py */;
+		name = "coop.py: 268";
+		rLen = 0;
+		rLoc = 9701;
+		rType = 0;
+		vrLen = 330;
+		vrLoc = 13597;
+	};
+	D5936497105A9B1600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 165";
+		rLen = 0;
+		rLoc = 6635;
+		rType = 0;
+		vrLen = 566;
+		vrLoc = 419;
+	};
+	D5936498105A9B1600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F61150103FCD65002EF8C9 /* SchedulingView.py */;
+		name = "SchedulingView.py: 121";
+		rLen = 0;
+		rLoc = 3646;
+		rType = 0;
+		vrLen = 1175;
+		vrLoc = 3380;
+	};
+	D59364A4105A9BCF00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F6116C103FD82B002EF8C9 /* coop.py */;
+		name = "coop.py: 160";
+		rLen = 26;
+		rLoc = 4851;
+		rType = 0;
+		vrLen = 678;
+		vrLoc = 4501;
+	};
+	D59364A6105A9BCF00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 46";
+		rLen = 0;
+		rLoc = 1296;
+		rType = 0;
+		vrLen = 681;
+		vrLoc = 931;
+	};
+	D59364A7105A9BCF00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F6116C103FD82B002EF8C9 /* coop.py */;
+		name = "coop.py: 160";
+		rLen = 26;
+		rLoc = 4851;
+		rType = 0;
+		vrLen = 678;
+		vrLoc = 4501;
+	};
+	D59364AF105A9D0900FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F61150103FCD65002EF8C9 /* SchedulingView.py */;
+		name = "SchedulingView.py: 124";
+		rLen = 0;
+		rLoc = 3847;
+		rType = 0;
+		vrLen = 1234;
+		vrLoc = 3475;
+	};
+	D59364B1105A9D0900FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F61150103FCD65002EF8C9 /* SchedulingView.py */;
+		name = "SchedulingView.py: 124";
+		rLen = 0;
+		rLoc = 3847;
+		rType = 0;
+		vrLen = 1234;
+		vrLoc = 3475;
+	};
+	D59364B3105A9D0900FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F611F2103FE16D002EF8C9 /* rsimguiMainWindowController.py */;
+		name = "rsimguiMainWindowController.py: 21";
+		rLen = 0;
+		rLoc = 595;
+		rType = 0;
+		vrLen = 682;
+		vrLoc = 510;
+	};
+	D59364B5105A9D0900FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 25";
+		rLen = 0;
+		rLoc = 722;
+		rType = 0;
+		vrLen = 618;
+		vrLoc = 419;
+	};
+	D59364B6105A9D0900FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F611F2103FE16D002EF8C9 /* rsimguiMainWindowController.py */;
+		name = "rsimguiMainWindowController.py: 21";
+		rLen = 0;
+		rLoc = 595;
+		rType = 0;
+		vrLen = 682;
+		vrLoc = 510;
+	};
+	D59364C2105AA44700FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F6116C103FD82B002EF8C9 /* coop.py */;
+		name = "coop.py: 187";
+		rLen = 0;
+		rLoc = 5779;
+		rType = 0;
+		vrLen = 1112;
+		vrLoc = 5581;
+	};
+	D59364C4105AA44700FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96F6116C103FD82B002EF8C9 /* coop.py */;
+		name = "coop.py: 187";
+		rLen = 0;
+		rLoc = 5779;
+		rType = 0;
+		vrLen = 1112;
+		vrLoc = 5581;
+	};
+	D59364C8105AA44700FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 131";
+		rLen = 0;
+		rLoc = 4802;
+		rType = 0;
+		vrLen = 1125;
+		vrLoc = 3523;
+	};
+	D59364C9105AA44700FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = D50298B4104281EC00189000 /* ThreadsWindowController.py */;
+		name = "ThreadsWindowController.py: 67";
+		rLen = 0;
+		rLoc = 2276;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 2105;
+	};
+	D59364D7105AA55B00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 112";
+		rLen = 0;
+		rLoc = 3754;
+		rType = 0;
+		vrLen = 835;
+		vrLoc = 2781;
+	};
+	D59364D8105AA55B00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = D50298B4104281EC00189000 /* ThreadsWindowController.py */;
+		name = "ThreadsWindowController.py: 67";
+		rLen = 0;
+		rLoc = 2276;
+		rType = 0;
+		vrLen = 657;
+		vrLoc = 2081;
+	};
+	D59364D9105AA55B00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 112";
+		rLen = 0;
+		rLoc = 3754;
+		rType = 0;
+		vrLen = 835;
+		vrLoc = 2781;
+	};
+	D59364E1105AA76C00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = D50298B4104281EC00189000 /* ThreadsWindowController.py */;
+		name = "ThreadsWindowController.py: 41";
+		rLen = 0;
+		rLoc = 1296;
+		rType = 0;
+		vrLen = 657;
+		vrLoc = 2081;
+	};
+	D59364E2105AA76C00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 141";
+		rLen = 0;
+		rLoc = 5006;
+		rType = 0;
+		vrLen = 958;
+		vrLoc = 3934;
+	};
+	D59364E3105AA76C00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 141";
+		rLen = 0;
+		rLoc = 5006;
+		rType = 0;
+		vrLen = 959;
+		vrLoc = 3934;
+	};
+	D59364E4105AA76C00FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = D50298B4104281EC00189000 /* ThreadsWindowController.py */;
+		name = "ThreadsWindowController.py: 41";
+		rLen = 0;
+		rLoc = 1296;
+		rType = 0;
+		vrLen = 657;
+		vrLoc = 2081;
+	};
+	D5936505105AA96600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* rsimguiAppDelegate.py */;
+		name = "rsimguiAppDelegate.py: 151";
+		rLen = 0;
+		rLoc = 5147;
+		rType = 0;
+		vrLen = 740;
+		vrLoc = 4755;
+	};
+	D5936506105AA96600FF21A0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = D50298B4104281EC00189000 /* ThreadsWindowController.py */;
+		name = "ThreadsWindowController.py: 73";
+		rLen = 27;
+		rLoc = 2434;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 2105;
+	};
+}

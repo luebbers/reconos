@@ -1,0 +1,94 @@
+#
+# \file mq_receive.cmddef
+#
+# Command definition for mqueue receive operations
+#
+# \author Enno Luebbers <luebbers@reconos.de>
+# \date   07.05.2009
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+
+COMMAND reconos_mq_receive
+
+    SYMBOL      OSIF_CMD_MQ_RECEIVE
+    ENCODING    0x8C
+    TYPE        TASK2OS
+    OPTIONS     BLOCKING RETVAL
+
+
+    DELEGATE ecos_posix
+        HOST_OS             ecos
+        RESTYPE             PTHREAD_MQD_T
+        HEADER              <cyg/posix/types.h>
+        HEADER              <fcntl.h>
+        HEADER              <mqueue.h>
+        HEADER              <xcache_l.h>
+        IFDEF               UPBFUN_RECONOS_POSIX
+        CODE '''
+            mqd_t q;
+            char * mqname;
+            struct mq_attr oldattr, newattr;
+            unsigned int msg_size;
+            unsigned int msg_offset;
+            char * msg;
+
+            mqname = $resources[$data].ptr;
+            msg_size = $datax & 0xFFFF;
+            msg_offset = $datax >> 16;
+            q = mq_open(mqname, O_RDWR);
+            if(q == (mqd_t)(-1)){
+                    CYG_FAIL("error opening posix mq for writing");
+                    break;
+            }
+            
+            // set queue to be blocking
+            // FIXME: memory offset is hardcoded!
+            msg = (char*)($plb_base_addr + 0x4000 + msg_offset);
+            mq_getattr(q, &oldattr);
+            newattr = oldattr;
+            newattr.mq_flags = newattr.mq_flags & ~O_NONBLOCK;
+            mq_setattr(q, &newattr, NULL);
+#ifdef HWTHREAD_DEBUG
+            diag_printf("MQ_RECEIVE: &msg = 0x%08X, msgsize = 0x%08X, offset = 0x%08X\\n", (unsigned int)msg, msg_size, msg_offset);
+#endif
+
+            if ((retval = mq_receive(q, msg, newattr.mq_msgsize, 0)) < 0) {
+                    perror("mq_receive");
+                    $retval = 0;     // signal error
+            }
+
+#ifdef UPBFUN_RECONOS_CACHE_BURST_RAM
+            // flush cache lines corresponding to burst RAM
+            // FIXME: memory offset is hardcoded!
+            XCache_FlushDCacheRange((unsigned int)msg, newattr.mq_msgsize);
+#endif
+
+            // restore old queue attributes
+            mq_setattr(q, &oldattr, NULL);
+        '''
+    END # ecos.posix
+
+
+END # reconos_mq_receive

@@ -1,0 +1,17 @@
+bfm_system.mhs
+-p
+xc2vp4fg456-6
+-lang
+vhdl
+-lp
+/home/rmeiche/Xilinx/Repository/
+-mixed
+yes
+-s
+mti
+-X
+/Xilinx/simlib/10.1/ISE_Lib/
+-E
+/Xilinx/simlib/10.1/EDK_Lib/
+-m
+behavioral

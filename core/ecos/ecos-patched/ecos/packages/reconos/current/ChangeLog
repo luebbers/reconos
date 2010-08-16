@@ -1,0 +1,10 @@
+2007-03-28  Enno Luebbers  <enno.luebbers@upb.de>
+
+	* Moved reconos thread handling routines to separate package
+	
+	
+1007-04-02	Enno Luebbers	<enno.luebbers@upb.de>
+
+	* Cleaned up state trace code
+	* Moved state trace code to eCos /reconos/ package
+	

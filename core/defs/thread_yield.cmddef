@@ -1,0 +1,53 @@
+#
+# \file thread_yield.cmddef
+#
+# Command definition for thread_yield()
+#
+# \author Enno Luebbers <luebbers@reconos.de>
+# \date   07.05.2009
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+
+COMMAND reconos_thread_yield
+
+    SYMBOL      OSIF_CMD_THREAD_YIELD
+    ENCODING    0xF1
+    TYPE        TASK2OS
+    OPTIONS     BLOCKING
+
+    DELEGATE ecos_all
+        HOST_OS             ecos
+        # NO RESOURCES
+#        HEADER              <cyg/kernel/kapi.h>
+#        HEADER              <cyg/infra/cyg_type.h>
+        CODE                '''
+#ifdef HWTHREAD_DEBUG
+            diag_printf("Thread yielded. Will resume with state 0x%02X (encoded) step %d.\n", (unsigned char)$saved_state_enc (unsigned char)$saved_step_enc);
+#endif
+'''
+
+    END # ecos_all
+
+END # reconos_thread_exit

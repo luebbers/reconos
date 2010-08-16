@@ -1,0 +1,63 @@
+#
+# \file thread_exit.cmddef
+#
+# Command definition for thread_exit()
+#
+# \author Enno Luebbers <luebbers@reconos.de>
+# \date   07.05.2009
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+
+COMMAND reconos_thread_exit
+
+    SYMBOL      OSIF_CMD_THREAD_EXIT
+    ENCODING    0xF0
+    TYPE        TASK2OS
+    # NO OPTIONS     
+
+    DELEGATE ecos_all
+        HOST_OS             ecos
+        # NO RESOURCES
+        HEADER              <cyg/kernel/kapi.h>
+        HEADER              <cyg/infra/cyg_type.h>
+        CODE                '''
+#ifdef UPBFUN_RECONOS_POSIX                        
+            if ($flags & RTHREAD_ATTR_IS_POSIX)  // we are a POSIX thread!
+                    pthread_exit((void*)$data);
+            else
+#endif
+            {
+#ifdef HWTHREAD_DEBUG
+                    if ((int)$data != 0)
+                            diag_printf("Thread exited with status %d, but eCos "
+                                        "doesn't handle thread return values.\n", (int)$data);
+#endif
+                    cyg_thread_exit();
+            }
+'''
+
+    END # ecos_all
+
+END # reconos_thread_exit

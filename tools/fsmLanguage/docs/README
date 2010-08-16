@@ -1,0 +1,11 @@
+****************************
+This is the README file.
+****************************
+
+* The FSMLanguage compiler is located in /fpga_scripts/generate_fsm/src/
+    * Requires installation of GHCi
+    * http://www.haskell.org/ghc/
+
+* The FSM Visualization tool is located in /fpga_scripts/fsm_visualizer/src/
+    * Requires installation of DOT/DOTTY (GraphViz)
+    * http://www.graphviz.org/

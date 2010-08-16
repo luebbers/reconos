@@ -1,0 +1,16 @@
+#
+# Usage: generate.exe ila -f=<arg_file_name>
+#
+-compname=dcr_ila
+-outputdirectory=/home/luebbers/work/reconos/trunk/sandbox/dcr_test/hw/pcores/dcr_test_v1_00_a/netlist
+-datadepth=2048
+-datawidth=77
+-numtrigports=1
+-trigportwidth0=3
+-nummatchunits=1
+-mtrigport0=0
+-mtype0=0
+-enablestoragequal
+-devicefamily=Virtex2P
+-srl16type=2
+-createcdc

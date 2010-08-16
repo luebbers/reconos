@@ -1,0 +1,278 @@
+
+------------------------------------------------------------------------------
+-- Description:       Sample BFL command script to test hardware task
+-- Date:              2007-09-28 15:07:11.829036
+-- Created by:        /home/luebbers/work/reconos/tools/python/mkbfl.py sample.sst
+------------------------------------------------------------------------------
+
+
+--
+-- Define Alias
+--
+
+-- Byte Enable Alias
+set_alias(IGNOR = 00000000)
+set_alias(BYTE0 = 10000000)
+set_alias(BYTE1 = 01000000)
+set_alias(BYTE2 = 00100000)
+set_alias(BYTE3 = 00010000)
+set_alias(BYTE4 = 00001000)
+set_alias(BYTE5 = 00000100)
+set_alias(BYTE6 = 00000010)
+set_alias(BYTE7 = 00000001)
+set_alias(BYTE8 = 10000000)
+set_alias(BYTE9 = 01000000)
+set_alias(BYTEA = 00100000)
+set_alias(BYTEB = 00010000)
+set_alias(BYTEC = 00001000)
+set_alias(BYTED = 00000100)
+set_alias(BYTEE = 00000010)
+set_alias(BYTEF = 00000001)
+set_alias(HWRD0 = 11000000)
+set_alias(HWRD2 = 00110000)
+set_alias(HWRD4 = 00001100)
+set_alias(HWRD6 = 00000011)
+set_alias(HWRD8 = 11000000)
+set_alias(HWRDA = 00110000)
+set_alias(HWRDC = 00001100)
+set_alias(HWRDE = 00000011)
+set_alias(WORD0 = 11110000)
+set_alias(WORD4 = 00001111)
+set_alias(WORD8 = 11110000)
+set_alias(WORDC = 00001111)
+set_alias(DWORD = 11111111)
+
+-- PLB BE aliases (fixed length burst)
+set_alias(IBURST   = 00000000)
+set_alias(FBURST2  = 00010000)
+set_alias(FBURST3  = 00100000)
+set_alias(FBURST4  = 00110000)
+set_alias(FBURST5  = 01000000)
+set_alias(FBURST6  = 01010000)
+set_alias(FBURST7  = 01100000)
+set_alias(FBURST8  = 01110000)
+set_alias(FBURST9  = 10000000)
+set_alias(FBURST10 = 10010000)
+set_alias(FBURST11 = 10100000)
+set_alias(FBURST12 = 10110000)
+set_alias(FBURST13 = 11000000)
+set_alias(FBURST14 = 11010000)
+set_alias(FBURST15 = 11100000)
+set_alias(FBURST16 = 11110000)
+
+-- PLB Size Alias
+set_alias(SINGLE_NORMAL  = 0000)
+set_alias(CACHELN_4WRD   = 0001)
+set_alias(CACHELN_8WRD   = 0010)
+set_alias(CACHELN_16WRD  = 0011)
+set_alias(BYTE_BURST     = 1000)
+set_alias(HLFWORD_BURST  = 1001)
+set_alias(WORD_BURST     = 1010)
+set_alias(DBLWORD_BURST  = 1011)
+set_alias(QUADWORD_BURST = 1100)
+set_alias(OCTWORD_BURST  = 1101)
+
+-- UUT Address Space Alias
+set_alias(USER_SLAVE_BASEADDR       = 30000000)
+set_alias(USER_MASTER_BASEADDR      = 30000100)
+
+-- Memory Address Space Alias
+set_alias(MEM0_BASEADDR = 10000000)
+set_alias(MEM1_BASEADDR = 20000000)
+
+-- UUT User Slave Register(s)
+set_alias(SLAVE_REG0 = 30000000)
+set_alias(SLAVE_REG0_BE = WORD0)
+set_alias(SLAVE_REG1 = 30000004)
+set_alias(SLAVE_REG1_BE = WORD4)
+set_alias(SLAVE_REG2 = 30000008)
+set_alias(SLAVE_REG2_BE = WORD8)
+
+set_alias(SLAVE_DREG0 = 30000100)
+set_alias(SLAVE_DREG0_BE = WORD0)
+set_alias(SLAVE_DREG1 = 30000104)
+set_alias(SLAVE_DREG1_BE = WORD4)
+
+set_alias(SLAVE_BURST = 30001000)
+
+-- UUT User Master Register(s)
+set_alias(MASTER_CONTROL_REG = 30000100)
+set_alias(MASTER_CONTROL_REG_BE = BYTE0)
+set_alias(MASTER_STATUS_REG = 30000101)
+set_alias(MASTER_STATUS_REG_BE = BYTE1)
+set_alias(MASTER_IP2IP_ADDR_REG = 30000104)
+set_alias(MASTER_IP2IP_ADDR_REG_BE = WORD4)
+set_alias(MASTER_IP2IP_ADDR_REG_BYTE0 = 30000104)
+set_alias(MASTER_IP2IP_ADDR_REG_BYTE0_BE = BYTE4)
+set_alias(MASTER_IP2IP_ADDR_REG_BYTE1 = 30000105)
+set_alias(MASTER_IP2IP_ADDR_REG_BYTE1_BE = BYTE5)
+set_alias(MASTER_IP2IP_ADDR_REG_BYTE2 = 30000106)
+set_alias(MASTER_IP2IP_ADDR_REG_BYTE2_BE = BYTE6)
+set_alias(MASTER_IP2IP_ADDR_REG_BYTE3 = 30000107)
+set_alias(MASTER_IP2IP_ADDR_REG_BYTE3_BE = BYTE7)
+set_alias(MASTER_IP2BUS_ADDR_REG = 30000108)
+set_alias(MASTER_IP2BUS_ADDR_REG_BE = WORD8)
+set_alias(MASTER_IP2BUS_ADDR_REG_BYTE0 = 30000108)
+set_alias(MASTER_IP2BUS_ADDR_REG_BYTE0_BE = BYTE8)
+set_alias(MASTER_IP2BUS_ADDR_REG_BYTE1 = 30000109)
+set_alias(MASTER_IP2BUS_ADDR_REG_BYTE1_BE = BYTE9)
+set_alias(MASTER_IP2BUS_ADDR_REG_BYTE2 = 3000010A)
+set_alias(MASTER_IP2BUS_ADDR_REG_BYTE2_BE = BYTEA)
+set_alias(MASTER_IP2BUS_ADDR_REG_BYTE3 = 3000010B)
+set_alias(MASTER_IP2BUS_ADDR_REG_BYTE3_BE = BYTEB)
+set_alias(MASTER_LENGTH_REG = 3000010C)
+set_alias(MASTER_LENGTH_REG_BE = HWRDC)
+set_alias(MASTER_LENGTH_REG_BYTE0 = 3000010C)
+set_alias(MASTER_LENGTH_REG_BYTE0_BE = BYTEC)
+set_alias(MASTER_LENGTH_REG_BYTE1 = 3000010D)
+set_alias(MASTER_LENGTH_REG_BYTE1_BE = BYTED)
+set_alias(MASTER_BE_REG = 3000010E)
+set_alias(MASTER_BE_REG_BE = BYTEE)
+set_alias(MASTER_GO_PORT = 3000010F)
+set_alias(MASTER_GO_PORT_BE = BYTEF)
+
+--
+-- Data Alias
+--
+
+-- Common Data
+set_alias(ALL_CLEARED         = 00000000)
+
+-- Data for IP Master
+set_alias(MASTER_STAT_DONE    = 00800000)       -- user logic master operation done
+set_alias(MASTER_STAT_BUSY    = 00400000)       -- user logic master is busy
+set_alias(MASTER_STAT_CLEAR   = 00000000)       -- user logic master status is clear
+set_alias(MASTER_CNTL_RDBRST  = 90000000)       -- burst read without bus lock
+set_alias(MASTER_CNTL_WRBRST  = 50000000)       -- burst write without bus lock
+set_alias(MASTER_CNTL_RDSNGL  = 80000000)       -- single read without bus lock
+set_alias(MASTER_CNTL_WRSNGL  = 40000000)       -- single write without bus lock
+set_alias(MASTER_LEN_128      = 0080FF0A)       -- transfer 128 bytes
+set_alias(MASTER_LEN_0        = 0000FF0A)       -- transfer 0 bytes
+
+--
+-- BFL/VHDL communication alias
+--
+
+set_alias(NOP        = 0)
+set_alias(START      = 1)
+set_alias(STOP       = 2)
+set_alias(WAIT_IN    = 3)
+set_alias(WAIT_OUT   = 4)
+set_alias(ASSERT_IN  = 5)
+set_alias(ASSERT_OUT = 6)
+set_alias(ASSIGN_IN  = 7)
+set_alias(ASSIGN_OUT = 8)
+set_alias(RESET_WDT  = 9)
+set_alias(INTERRUPT  = 31)
+
+--
+-- Initialize the PLB Slave as slave memory ...
+--
+-- Note:
+--
+-- 	The instance name for bfm_memory is duplicated in the path due to the
+-- 	wrapper level inserted by SimGen to support mixed language simulation.
+--
+
+set_device(path = /bfm_system/bfm_memory/bfm_memory/slave, device_type = plb_slave)
+configure(ssize = 01)
+
+-- initialize the source data memory (first 16 locations) ...
+mem_init(addr = 10000000, data = 00010203)
+mem_init(addr = 10000004, data = 04050607)
+--mem_init(addr = 10000000, data = 20000000)
+--mem_init(addr = 10000004, data = 10000000)
+mem_init(addr = 10000008, data = 08090A0B)
+mem_init(addr = 1000000C, data = 0C0D0E0F)
+mem_init(addr = 10000010, data = 10111213)
+mem_init(addr = 10000014, data = 14151617)
+mem_init(addr = 10000018, data = 18191A1B)
+mem_init(addr = 1000001C, data = 1C1D1E1F)
+mem_init(addr = 10000020, data = 20212223)
+mem_init(addr = 10000024, data = 24252627)
+mem_init(addr = 10000028, data = 28292A2B)
+mem_init(addr = 1000002C, data = 2C2D2E2F)
+mem_init(addr = 10000030, data = 30313233)
+mem_init(addr = 10000034, data = 34353637)
+mem_init(addr = 10000038, data = 38393A3B)
+mem_init(addr = 1000003C, data = 3C3D3E3F)
+mem_init(addr = 10000040, data = 40414243)
+mem_init(addr = 10000044, data = 44454647)
+mem_init(addr = 10000048, data = 48494A4B)
+mem_init(addr = 1000004C, data = 4C4D4E4F)
+mem_init(addr = 10000050, data = 50515253)
+mem_init(addr = 10000054, data = 54555657)
+mem_init(addr = 10000058, data = 58595A5B)
+mem_init(addr = 1000005C, data = 5C5D5E5F)
+mem_init(addr = 10000060, data = 60616263)
+mem_init(addr = 10000064, data = 64656667)
+mem_init(addr = 10000068, data = 68696A6B)
+mem_init(addr = 1000006C, data = 6C6D6E6F)
+mem_init(addr = 10000070, data = 70717273)
+mem_init(addr = 10000074, data = 74757677)
+mem_init(addr = 10000078, data = 78797A7B)
+mem_init(addr = 1000007C, data = 7C7D7E7F)
+mem_init(addr = 10000080, data = 80818283)
+mem_init(addr = 10000084, data = 84858687)
+mem_init(addr = 10000088, data = 88898A8B)
+mem_init(addr = 1000008C, data = 8C8D8E8F)
+
+-- initialize the destination data memory (first 16 locations) ...
+mem_init(addr = 20000000, data = DEADBEEF)
+mem_init(addr = 20000004, data = DEADBEEF)
+mem_init(addr = 20000008, data = DEADBEEF)
+mem_init(addr = 2000000C, data = DEADBEEF)
+mem_init(addr = 20000010, data = DEADBEEF)
+mem_init(addr = 20000014, data = DEADBEEF)
+mem_init(addr = 20000018, data = DEADBEEF)
+mem_init(addr = 2000001C, data = DEADBEEF)
+mem_init(addr = 20000020, data = DEADBEEF)
+mem_init(addr = 20000024, data = DEADBEEF)
+mem_init(addr = 20000028, data = DEADBEEF)
+mem_init(addr = 2000002C, data = DEADBEEF)
+mem_init(addr = 20000030, data = DEADBEEF)
+mem_init(addr = 20000034, data = DEADBEEF)
+mem_init(addr = 20000038, data = DEADBEEF)
+mem_init(addr = 2000003C, data = DEADBEEF)
+mem_init(addr = 20000040, data = DEADBEEF)
+mem_init(addr = 20000044, data = DEADBEEF)
+mem_init(addr = 20000048, data = DEADBEEF)
+mem_init(addr = 2000004C, data = DEADBEEF)
+mem_init(addr = 20000050, data = DEADBEEF)
+mem_init(addr = 20000054, data = DEADBEEF)
+mem_init(addr = 20000058, data = DEADBEEF)
+mem_init(addr = 2000005C, data = DEADBEEF)
+mem_init(addr = 20000060, data = DEADBEEF)
+mem_init(addr = 20000064, data = DEADBEEF)
+mem_init(addr = 20000068, data = DEADBEEF)
+mem_init(addr = 2000006C, data = DEADBEEF)
+mem_init(addr = 20000070, data = DEADBEEF)
+mem_init(addr = 20000074, data = DEADBEEF)
+mem_init(addr = 20000078, data = DEADBEEF)
+mem_init(addr = 2000007C, data = DEADBEEF)
+
+
+--
+-- Initialize the PLB Master as master processor ...
+--
+-- Note:
+--
+-- 	The instance name for bfm_processor is duplicated in the path due to the
+-- 	wrapper level inserted by SimGen to support mixed language simulation.
+--
+
+set_device(path = /bfm_system/bfm_processor/bfm_processor/master, device_type = plb_master)
+configure(msize = 01)
+
+-------------------------------------------------------------------------------
+-- Start Testing ...
+-------------------------------------------------------------------------------
+
+wait(level = START)
+
+
+send(level = STOP)
+
+-------------------------------------------------------------------------------
+-- End of Testing ...
+-------------------------------------------------------------------------------

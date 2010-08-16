@@ -1,0 +1,2 @@
+Test for memory accesses with different alignments and burst lengths. Not
+really automatically verifiable.

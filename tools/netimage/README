@@ -1,0 +1,15 @@
+This directory contains the 'netimage' tools for the ReconOS project.
+They include tools to send and receive image data (still images and
+video) over TCP/IP connections. The 'netimage' tools are written to
+facilitate transfer of image data to and from an embedded system
+running eCos/ReconOS.
+
+The main tools are:
+
+    sendvideo	transmits video data from a file or a camera
+    recvvideo	receives video data
+    sendimage	transmits still data from a file
+    recvimage	receives video data
+    
+All tools are capable of saving received (and in sendvideo's case,
+also transmitted) data to disk for later analysis.

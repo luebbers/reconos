@@ -1,0 +1,78 @@
+ReconOS/Linux OSIF kernel driver
+================================
+
+Author: Enno Luebbers <enno.luebbers@upb.de>
+Date  : 18.11.2008
+
+
+OVERVIEW AND USAGE
+
+This driver is responsible for handling the communication between the delegate
+thread (in user space) and the OSIF (in hardware).
+
+The current version of the driver can only handle communications going across
+the DCR bus. The OSIF has six DCR registers, three of which can be read, and
+three of which written across the bus by the CPU. The driver lets user space
+applications read and write to these registers by using the character devices
+/dev/osif0, /dev/osif1, etc. If the DCR is not directly connected to the CPU,
+but to a OPB2DCR bridge, the driver will use standard bus transactions via the
+OPB to rach the OSIF. This works transparently, as the correct way to acces
+the DCR (native or MMIO) is detected by the kernel.
+
+The hardware thread signals a new command (and as such, new data in the
+readable DCR registers) by issuing an interrupt. A process reading from the
+character device will block until such an interrupt occurs. After that, it
+can read twelve bytes (=three 32bit registers) from the device; after that,
+a subsequent read() will block (or fail with errno EAGAIN, if O_NONBLOCK was
+used when opening the device). 
+
+Writing to the device will never block. After twelve bytes (=three registers)
+have been written to the character device, the driver will transfer them to
+the DCR registers.
+
+The following practices are recommended:
+
+    - Always transfer 12 bytes at once using read(fd, buf, 12) or 
+      write(fd, buf, 12). This is not necessary, but recommended.
+
+    - The delegate thread should open() the device on initialization, and
+      close() it only if it intends to suspend communication with the
+      hardware thread in this slot for a longer period (e.g. on thread
+      preemption, thread_exit(), or similar). Especially, the device should
+      remain open while waiting for a blocking system call.
+
+
+
+MODULE OPTIONS
+
+The module takes a number of option which can be passed to the insmod command:
+
+    osif_major      The major number to register the character devices with.
+                    If not specified, a major number is dynamically allocated
+                    by the kernel. It can be read using /proc or sysfs.
+
+    osif_numslots   The number of OSIF modules (i.e. slots) to register devices
+                    for. If not specified, a value determined at compile time
+                    from the current kernel sources (esp. the xparameters.h) is
+                    used.
+
+    osif_irq        An array of interrupt vector numbers to be used for the
+                    individual slots. The first array element corresponds to
+                    slot 0 (/dev/osif0), the second element to slot 1 
+                    (/dev/osif1), and so on. If ommitted, values are taken
+                    from the open firmware device tree.
+                    NOT YET IMPLEMENTED
+
+    osif_baseaddr   An array of base addresses to be used for the 
+                    individual slots. The first element corresponds to slot 0
+                    (/dev/osif0), the second element to slot 1 (/dev/osif1),
+                    and so on. If ommitted, values determined at compile time
+                    from the current kernel sources are used.
+                    Note: If the DCR is directly attached to the CPU, these
+                    addresses are raw DCR addresses, with a spacing of 1
+                    between the individual registers. If a opb2dcr bridge is
+                    used, these addresses are OPB addresses, with a spacing
+                    of 4 between the registers.
+                    NOT YET IMPLEMENTED
+
+

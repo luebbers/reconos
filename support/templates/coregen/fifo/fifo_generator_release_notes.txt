@@ -1,0 +1,127 @@
+COPYRIGHT (c) 2006 XILINX, INC.
+ALL RIGHTS RESERVED
+
+Core name            : FIFO Generator 
+Version              : v3.2
+Release Date         : September 21, 2006
+File                 : fifo_generator_release_notes.txt
+
+Revision History
+Date     By            Version   Change Description
+========================================================================
+09/2006  Xilinx, Inc.  3.2       Initial creation.
+========================================================================
+
+INTRODUCTION
+RELEASE NOTES
+  1. General Core Design
+    1.1 Enhancements
+    1.2 Resolved Issues
+    1.3 Outstanding Issues
+  2. General Simulation
+    2.1 Enhancements
+    2.2 Resolved Issues
+    2.3 Outstanding Issues
+  3. Documentation
+    3.1 Enhancements
+    3.2 Resolved Issues
+    3.3 Outstanding Issues
+OTHER GENERAL INFORMATION
+TECHNICAL SUPPORT
+
+========================================================================
+
+INTRODUCTION
+============
+Thank you using the FIFO Generator core from Xilinx!  
+In order to obtain the latest core updates and documentation, 
+please visit the Intellectual Property page located at:
+http://www.xilinx.com/ipcenter/index.htm
+This document contains the release notes for FIFO Generator v3.2
+which includes enhancements, resolved issues and outstanding known
+issues.  For release notes and known issues for CORE Generator 8.2i IP
+Update 2 and FIFO Generator v3.2 please see Answer Record 23831.
+
+RELEASE NOTES
+=============
+This section lists any enhancements, resolved issues and outstanding
+known issues.
+
+
+1. General Core Design
+  1.1 Enhancements
+    1.1.1 Added Support for Spartan(TM)-3A, Spartan-3 XA, Spartan-3E XA, and 
+           Virtex(TM)-4 XA
+
+    1.1.2 Added Support for synchronous reset for Common Clock Block RAM and 
+          Distributed RAM implementations
+
+  1.2 Resolved Issues
+    1.2.1 Cleaned-up the power-on states of the flags in common clock Block RAM 
+          and Distributed RAM FIFOs. The flags now start in a valid state on 
+          power-up and the FIFO is ready to be written on the very first clock 
+          edge.
+          Change request: 423373
+
+  1.3 Outstanding Issues
+    1.3.1 Coregen GUI - For Block RAM and Distributed RAM FIFOs, if the reset pin 
+          is not chosen, the reset type text in page 6 of the GUI (summary) is
+          displayed as "Asynchronous" instead of "Not Selected".
+          Change request: 423076
+
+2. General Simulation
+  2.1 Enhancements
+      None at this time.
+
+  2.2 Resolved Issues
+    2.2.1 VHDL Behavioral model simulation fails for incorrect FIFO
+          implementation types
+          Simulations using the VHDL behavioral model issue a failure message
+          intended only for Virtex-4 and Virtex-5 built-in FIFO types. 
+          Change request: 422741
+
+    2.2.2 UNDERFLOW flag asserting unexpectedly 
+          Verilog Behavioral model simulation of a First-Word-Fall-Through
+          FIFO with Independent Clocks asserts the UNDERFLOW flag unexpectedly.
+ 	  Change request: 419555   
+	
+    2.2.3 VHDL Behavioral Simulation failure with a message, "Array lengths 
+          do not match", for the WR_DATA_COUNT flag for a First-Word-Fall-Through
+          FIFO with asymmetric ports and "Use Extra Logic" option.
+          Change request: 415411
+
+  2.3 Outstanding Issues
+    2.3.1 Ncelab warnings during Verilog structural and timing simulations in ncsim
+          for Virtex5 Block RAM FIFOs. 
+          The simulations will be successful, but there will be warnings similar to 
+          the following in the log file: "memory index out of declared bounds" in 
+          simprims_ver_virtex5_source.v or unisims_ver_virtex5_source.v.
+          Cadence does not want to fix this issue. These warning messages can safely 
+          be ignored.
+          Change request: 423374, 423375
+
+3. Documentation
+  3.1 Enhancements
+    3.1.1 Added a table describing the reset and power-on values for all output ports.
+
+  3.2 Resolved Issues
+      None at this time.
+      
+  3.3 Outstanding Issues
+      None at this time.
+
+
+TECHNICAL SUPPORT
+=================
+The fastest method for obtaining specific technical support for the 
+Block Memory Generator core is through the http://support.xilinx.com/
+website. Questions are routed to a team of engineers with specific
+expertise in using the Block Memory Generator core.  Xilinx will provide
+technical support for use of this product as described in the Block
+Memory Generator Datasheet. Xilinx cannot guarantee timing,
+functionality, or support of this product for designs that do not
+follow these guidelines.
+
+
+
+

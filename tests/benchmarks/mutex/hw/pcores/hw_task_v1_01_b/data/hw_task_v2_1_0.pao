@@ -1,0 +1,8 @@
+
+#####
+# Peripheral Analyze Order file.
+# generated at 2008-02-14 17:14:05.727709 by 'mkhwtask.py hwt_mutex 1 ../src/hwt_mutex_unlock.vhd'
+#####
+lib reconos_v2_00_a reconos_pkg vhdl
+lib hw_task_v1_01_b hwt_mutex vhdl
+lib hw_task_v1_01_b hw_task vhdl

@@ -1,0 +1,13 @@
+This directory contains a simple framework to implement and test window
+based image filters.
+
+video_filter.cpp
+	Contains the main programm. Captures images via opencv and supplies
+	them to the filter() function.
+
+window_filter.h
+	Base class for window based single channel image filters.
+
+conv_filter.h, rank_filter.h, susan_filter.h
+	Implementations of the convolution filter, rank filter and susan filter.
+

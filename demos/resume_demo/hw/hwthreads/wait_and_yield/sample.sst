@@ -1,0 +1,13 @@
+# sample slot stimulus
+
+wait 1000 ns
+write_init_data 0000007F
+write_resume 04
+wait 100 ns
+
+write_unlock
+wait 500 ns
+read_mbox_put 00000001 FFFFFFFF
+wait 500 ns
+write_unlock 00000001
+wait 100 ns

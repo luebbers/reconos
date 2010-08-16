@@ -1,0 +1,59 @@
+#
+# \file cond_signal.cmddef
+#
+# Command definition for signalling condition variables
+#
+# \author Enno Luebbers <luebbers@reconos.de>
+# \date   07.05.2009
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+
+COMMAND reconos_cond_signal
+
+    SYMBOL      OSIF_CMD_COND_SIGNAL
+    ENCODING    0x04
+    TYPE        TASK2OS
+    # NO OPTIONS
+
+
+    DELEGATE ecos_ecos
+        HOST_OS             ecos
+        RESTYPE             CYG_COND_T
+        HEADER              <cyg/kernel/kapi.h>
+        HEADER              <cyg/infra/cyg_type.h>
+        CODE                "cyg_cond_signal((cyg_cond_t *)$resources[$data].ptr);"
+    END # ecos.ecos
+
+
+    DELEGATE ecos_posix
+        HOST_OS             ecos
+        RESTYPE             PTHREAD_COND_T
+        HEADER              <cyg/posix/types.h>
+        HEADER              <cyg/posix/pthread.h>
+        IFDEF               UPBFUN_RECONOS_POSIX
+        CODE                "pthread_cond_signal((pthread_cond_t*) $resources[$data].ptr);"
+    END # ecos.posix
+
+END # reconos_cond_signal

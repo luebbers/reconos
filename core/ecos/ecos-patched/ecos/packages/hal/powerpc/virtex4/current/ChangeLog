@@ -1,0 +1,188 @@
+2006-05-26  Andreas Agne
+        * cdl/hal_powerpc_virtex4.cdl: fixed cdl_option MNDHWR_VIRTEX4_TFT
+	to compile simple_keyboard code.
+
+2006-05-26  Enno Luebbers
+	* cdl/hal_powerpc_virtex4.cdl: made a few display strings a little
+        more meaningful.
+
+2003-10-06  Gary Thomas 
+
+	* misc/redboot_ROMRAM.ecm: RedBoot configuration, suitable for 
+	use with System-ACE.
+
+	* src/drivers/common_v1_00_a/src/xbasic_types.c:
+	* src/drivers/common_v1_00_a/src/xutil_memtest.c:
+	* src/drivers/common_v1_00_a/src/xversion.c:
+	* src/drivers/cpu_ppc405_v1_00_a/src/xio.c:
+	* src/drivers/cpu_ppc405_v1_00_a/src/xio_dcr.c:
+	* src/drivers/dma_v1_00_a/src/xbuf_descriptor.c:
+	* src/drivers/dma_v1_00_a/src/xdma_channel.c:
+	* src/drivers/dma_v1_00_a/src/xdma_channel_sg.c:
+	* src/drivers/emac_v1_00_b/src/xemac.c:
+	* src/drivers/emac_v1_00_b/src/xemac_g.c:
+	* src/drivers/emac_v1_00_b/src/xemac_intr.c:
+	* src/drivers/emac_v1_00_b/src/xemac_intr_dma.c:
+	* src/drivers/emac_v1_00_b/src/xemac_intr_fifo.c:
+	* src/drivers/emac_v1_00_b/src/xemac_l.c:
+	* src/drivers/emac_v1_00_b/src/xemac_multicast.c:
+	* src/drivers/emac_v1_00_b/src/xemac_options.c:
+	* src/drivers/emac_v1_00_b/src/xemac_phy.c:
+	* src/drivers/emac_v1_00_b/src/xemac_polled.c:
+	* src/drivers/emac_v1_00_b/src/xemac_selftest.c:
+	* src/drivers/emac_v1_00_b/src/xemac_stats.c:
+	* src/drivers/ipif_v1_23_b/src/xipif_v1_23_b.c:
+	* src/drivers/packet_fifo_v1_00_b/src/xpacket_fifo_v1_00_b.c:
+	* src/drivers/gpio_v1_00_a/src/xgpio.c:
+	* src/drivers/gpio_v1_00_a/src/xgpio_extra.c:
+	* src/drivers/gpio_v1_00_a/src/xgpio_g.c:
+	* src/drivers/gpio_v1_00_a/src/xgpio_selftest.c:
+	* src/drivers/iic_v1_01_b/src/xiic.c:
+	* src/drivers/iic_v1_01_b/src/xiic_g.c:
+	* src/drivers/iic_v1_01_b/src/xiic_intr.c:
+	* src/drivers/iic_v1_01_b/src/xiic_l.c:
+	* src/drivers/iic_v1_01_b/src/xiic_master.c:
+	* src/drivers/iic_v1_01_b/src/xiic_multi_master.c:
+	* src/drivers/iic_v1_01_b/src/xiic_options.c:
+	* src/drivers/iic_v1_01_b/src/xiic_selftest.c:
+	* src/drivers/iic_v1_01_b/src/xiic_slave.c:
+	* src/drivers/iic_v1_01_b/src/xiic_stats.c:
+	* src/drivers/intc_v1_00_b/src/xintc.c:
+	* src/drivers/intc_v1_00_b/src/xintc_g.c:
+	* src/drivers/intc_v1_00_b/src/xintc_intr.c:
+	* src/drivers/intc_v1_00_b/src/xintc_l.c:
+	* src/drivers/intc_v1_00_b/src/xintc_lg.c:
+	* src/drivers/intc_v1_00_b/src/xintc_options.c:
+	* src/drivers/intc_v1_00_b/src/xintc_selftest.c:
+	* src/drivers/ps2_ref_v1_00_a/src/xps2.c:
+	* src/drivers/ps2_ref_v1_00_a/src/xps2_g.c:
+	* src/drivers/ps2_ref_v1_00_a/src/xps2_intr.c:
+	* src/drivers/ps2_ref_v1_00_a/src/xps2_l.c:
+	* src/drivers/ps2_ref_v1_00_a/src/xps2_options.c:
+	* src/drivers/ps2_ref_v1_00_a/src/xps2_stats.c:
+	* src/drivers/sysace_v1_00_a/src/xsysace.c:
+	* src/drivers/sysace_v1_00_a/src/xsysace_compactflash.c:
+	* src/drivers/sysace_v1_00_a/src/xsysace_g.c:
+	* src/drivers/sysace_v1_00_a/src/xsysace_intr.c:
+	* src/drivers/sysace_v1_00_a/src/xsysace_jtagcfg.c:
+	* src/drivers/sysace_v1_00_a/src/xsysace_l.c:
+	* src/drivers/sysace_v1_00_a/src/xsysace_selftest.c:
+	* src/drivers/uartns550_v1_00_b/src/xuartns550.c:
+	* src/drivers/uartns550_v1_00_b/src/xuartns550_format.c:
+	* src/drivers/uartns550_v1_00_b/src/xuartns550_g.c:
+	* src/drivers/uartns550_v1_00_b/src/xuartns550_intr.c:
+	* src/drivers/uartns550_v1_00_b/src/xuartns550_l.c:
+	* src/drivers/uartns550_v1_00_b/src/xuartns550_options.c:
+	* src/drivers/uartns550_v1_00_b/src/xuartns550_selftest.c:
+	* src/drivers/uartns550_v1_00_b/src/xuartns550_stats.c:
+	* src/drivers/tft_ref_v1_00_a/src/xtft.c:
+	* src/drivers/tft_ref_v1_00_a/src/xtft_charcode.c:
+	* src/drivers/tft_ref_v1_00_a/src/xtft_g.c:
+	* src/drivers/tft_ref_v1_00_a/src/xtft_l.c:
+	* src/drivers/touchscreen_ref_v1_00_a/src/xtouchscreen.c:
+	* src/drivers/touchscreen_ref_v1_00_a/src/xtouchscreen_g.c:
+	* src/drivers/touchscreen_ref_v1_00_a/src/xtouchscreen_intr.c:
+	* src/drivers/touchscreen_ref_v1_00_a/src/xtouchscreen_l.c:
+	* include/xilinx/xparameters.h:	
+	* include/xilinx/xparameters_ml300.h:
+	* include/xilinx/xbasic_types.h:
+	* include/xilinx/xenv.h:
+	* include/xilinx/xstatus.h:
+	* include/xilinx/xutil.h:
+	* include/xilinx/xversion.h:
+	* include/xilinx/xio.h:
+	* include/xilinx/xio_dcr.h:
+	* include/xilinx/xbuf_descriptor.h:
+	* include/xilinx/xdma_channel.h:
+	* include/xilinx/xdma_channel_i.h:
+	* include/xilinx/xipif_v1_23_b.h:
+	* include/xilinx/xpacket_fifo_v1_00_b.h:
+	* include/xilinx/xemac.h:
+	* include/xilinx/xemac_i.h:
+	* include/xilinx/xemac_l.h:
+	* include/xilinx/xgpio.h:
+	* include/xilinx/xgpio_i.h:
+	* include/xilinx/xgpio_l.h:
+	* include/xilinx/xiic.h:
+	* include/xilinx/xiic_i.h:
+	* include/xilinx/xiic_l.h:
+	* include/xilinx/xintc.h:
+	* include/xilinx/xintc_i.h:
+	* include/xilinx/xintc_l.h:
+	* include/xilinx/xps2.h:
+	* include/xilinx/xps2_i.h:
+	* include/xilinx/xps2_l.h:
+	* include/xilinx/xsysace.h:
+	* include/xilinx/xsysace_l.h:
+	* include/xilinx/xuartns550.h:
+	* include/xilinx/xuartns550_i.h:
+	* include/xilinx/xuartns550_l.h:
+	* include/xilinx/xtouchscreen.h:
+	* include/xilinx/xtouchscreen_i.h:
+	* include/xilinx/xtouchscreen_l.h:
+	* include/xilinx/xtft.h:
+	* include/xilinx/xtft_charcode.h:
+	* include/xilinx/xtft_i.h:
+	* include/xilinx/xtft_l.h:
+	* include/xilinx/xtouchscreen_l.h: Xilinx ML300 platform development kit.
+	Included by permission of Xilinx, Inc.
+
+	* src/plf_redboot_linux_exec.c: 
+	* src/ml300.S: 
+	* src/lcd_support.c: 
+	* src/hal_diag.c: 
+	* src/hal_aux.c: 
+	* src/font.h: 
+	* src/banner.xpm: 
+	* include/pkgconf/mlt_powerpc_ml300_romram.mlt: 
+	* include/pkgconf/mlt_powerpc_ml300_romram.ldi: 
+	* include/pkgconf/mlt_powerpc_ml300_romram.h: 
+	* include/pkgconf/mlt_powerpc_ml300_ram.mlt: 
+	* include/pkgconf/mlt_powerpc_ml300_ram.ldi: 
+	* include/pkgconf/mlt_powerpc_ml300_ram.h: 
+	* include/plf_stub.h: 
+	* include/plf_regs.h: 
+	* include/plf_io.h: 
+	* include/plf_intr.h: 
+	* include/plf_cache.h: 
+	* include/plf.inc: 
+	* include/lcd_support.h: 
+	* include/hal_diag.h: 
+	* cdl/hal_powerpc_ml300.cdl: New package - platform support for
+	Xilinx ML300 (PowerPC 405) development board.
+
+//===========================================================================
+//####ECOSGPLCOPYRIGHTBEGIN####
+// -------------------------------------------
+// This file is part of eCos, the Embedded Configurable Operating System.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
+// Copyright (C) 2003, 2004, 2005 Mind n.v.
+//
+// eCos is free software; you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 2 or (at your option) any later version.
+//
+// eCos is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+// for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with eCos; if not, write to the Free Software Foundation, Inc.,
+// 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+//
+// As a special exception, if other files instantiate templates or use macros
+// or inline functions from this file, or you compile this file and link it
+// with other works to produce a work based on this file, this file does not
+// by itself cause the resulting work to be covered by the GNU General Public
+// License. However the source code for this file must still be made available
+// in accordance with section (3) of the GNU General Public License.
+//
+// This exception does not invalidate any other reasons why a work based on
+// this file might be covered by the GNU General Public License.
+//
+// Alternative licenses for eCos may be arranged by contacting Red Hat, Inc.
+// at http://sources.redhat.com/ecos/ecos-license/
+// -------------------------------------------
+//####ECOSGPLCOPYRIGHTEND####
+//===========================================================================

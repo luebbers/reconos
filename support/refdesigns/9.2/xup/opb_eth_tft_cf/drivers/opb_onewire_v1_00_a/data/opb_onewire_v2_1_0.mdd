@@ -1,0 +1,10 @@
+OPTION psf_version = 2.1;
+BEGIN driver opb_onewire
+ OPTION supported_peripherals = (opb_onewire);
+ PARAM name = level, desc = "Driver Level", type = int, default = 0, range = (0)
+ BEGIN BLOCK, dep = (level = 0)
+  OPTION depends = (common_v1_00_a ipif_v1_23_b);
+  OPTION copyfiles = (opb_onewire_l.c opb_onewire_l.h Makefile);
+ END BLOCK
+END driver
+

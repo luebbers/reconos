@@ -1,0 +1,570 @@
+# ====================================================================
+#
+#      hal_powerpc_virtex4.cdl
+#
+#      PowerPC/VIRTEX4 board HAL package configuration data
+#      Taken from ML300
+#
+# ====================================================================
+#####ECOSGPLCOPYRIGHTBEGIN####
+## -------------------------------------------
+## This file is part of eCos, the Embedded Configurable Operating System.
+## Copyright (C) 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
+## Copyright (C) 2002, 2003, 2004, 2005 Mind n.v.
+## Copyright (C) 2010 ReconOS
+##
+## eCos is free software; you can redistribute it and/or modify it under
+## the terms of the GNU General Public License as published by the Free
+## Software Foundation; either version 2 or (at your option) any later version.
+##
+## eCos is distributed in the hope that it will be useful, but WITHOUT ANY
+## WARRANTY; without even the implied warranty of MERCHANTABILITY or
+## FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+## for more details.
+##
+## You should have received a copy of the GNU General Public License along
+## with eCos; if not, write to the Free Software Foundation, Inc.,
+## 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+##
+## As a special exception, if other files instantiate templates or use macros
+## or inline functions from this file, or you compile this file and link it
+## with other works to produce a work based on this file, this file does not
+## by itself cause the resulting work to be covered by the GNU General Public
+## License. However the source code for this file must still be made available
+## in accordance with section (3) of the GNU General Public License.
+##
+## This exception does not invalidate any other reasons why a work based on
+## this file might be covered by the GNU General Public License.
+##
+## Alternative licenses for eCos may be arranged by contacting Red Hat, Inc.
+## at http://sources.redhat.com/ecos/ecos-license/
+## -------------------------------------------
+#####ECOSGPLCOPYRIGHTEND####
+# ====================================================================
+######DESCRIPTIONBEGIN####
+#
+# Author(s):      jskov
+# Original data:  hmt
+# Contributors:   gthomas, cduclos,luebbers
+# Date:           1999-11-02
+#                 2005-04-19
+#
+#####DESCRIPTIONEND####
+#
+# ====================================================================
+
+cdl_package CYGPKG_HAL_POWERPC_VIRTEX4 {
+    display       "XILINX VIRTEX4 (PowerPC 405) board"
+    parent        CYGPKG_HAL_POWERPC
+    requires      CYGPKG_HAL_POWERPC_PPC40x
+    define_header hal_powerpc_virtex4.h
+    include_dir   cyg/hal
+    description   "
+        The VIRTEX4 HAL package provides the support needed to run
+        eCos on a XILINX PowerPC 405 board."
+
+    compile       hal_aux.c virtex4.S hal_diag.c
+
+    implements    CYGINT_HAL_DEBUG_GDB_STUBS
+    implements    CYGINT_HAL_DEBUG_GDB_STUBS_BREAK
+    implements    CYGINT_HAL_VIRTUAL_VECTOR_SUPPORT
+#    requires      CYGSEM_HAL_POWERPC_RESET_USES_JUMP
+    requires      { CYGHWR_HAL_POWERPC_PPC4XX == "405" }
+# work around DCACHE problems - see errata for details, but
+# basically, writethru mode is the only safe way to run this
+#    requires      { CYGSEM_HAL_DCACHE_STARTUP_MODE == "WRITETHRU" }
+# having the MMU enabled just seems to cause no end of problems
+    requires      { !CYGHWR_HAL_POWERPC_ENABLE_MMU }
+# work around 2nd serial port
+#    requires      { CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS == 1 }
+
+    define_proc {
+        puts $::cdl_system_header "#define CYGBLD_HAL_TARGET_H   <pkgconf/hal_powerpc_ppc40x.h>"
+        puts $::cdl_system_header "#define CYGBLD_HAL_PLATFORM_H <pkgconf/hal_powerpc_virtex4.h>"
+        puts $::cdl_system_header "#define CYGBLD_HAL_PLF_IO_H   <cyg/hal/plf_io.h>"
+
+	puts $::cdl_header "#define HAL_PLATFORM_CPU    \"PowerPC 405\""
+        puts $::cdl_header "#define HAL_PLATFORM_BOARD  \"XILINX VIRTEX4\""
+        puts $::cdl_header "#define HAL_PLATFORM_EXTRA  \"\""
+    }
+    
+    cdl_option CYGHWR_HAL_VIRTEX_BOARD {
+        display       "Virtex Development Board"
+        flavor        data
+        legal_values  {"ML403" "XUP" "V4FX100" "other"}
+        default_value {"ML403"}
+        description   "
+          Defines which development board is being used. This sets 
+          some board-specific values (like number of push buttons etc.) in
+          the source. Use of reference designs is recommended.
+          
+          For example, the ML403 setting is based on the Xilinx ML403 reference
+          design, whereas the XUP setting assumes a ReconOS reference design.
+	  The V4FX100 assumes a ReconOS reference design for the Avnet
+	  V4FX100 PCIe development board.
+          
+          Selecting 'other' will disable some features altogether. Don't use it. :)"
+          
+          
+    }
+
+    cdl_component CYG_HAL_STARTUP {
+        display       "Startup type"
+        flavor        data
+        legal_values  {"RAM" "ROMRAM"}
+        default_value {"ROMRAM"}
+	no_define
+	define -file system.h CYG_HAL_STARTUP
+        description   "
+           This option is used to control where the application program will
+           run, either from RAM or ROM (flash) memory.  ROM based applications
+           must be self contained, while RAM applications will typically assume
+           the existence of a debug environment, such as GDB stubs."
+    }
+
+    cdl_option CYGHWR_HAL_POWERPC_CPU_SPEED {
+        display          "Development board clock speed (MHz)"
+        flavor           data
+        legal_values     {100 200 300 400 500 600} 
+        default_value    300
+        description      "
+           VIRTEX4 Development Boards have various system clock speeds
+           depending on the processor and oscillator fitted.  Select 
+           the clock speed appropriate for your board so that the system 
+           can set the serial baud rate correctly, amongst other things."
+   }
+
+   cdl_option CYGHWR_HAL_POWERPC_MEM_SPEED {
+        display          "Development board memory bus speed (MHz)"
+        flavor           data
+        legal_values     100
+        default_value    100
+        description      "
+           VIRTEX4 Development Boards have various system clock speeds
+           depending on the processor and oscillator fitted."
+   }
+
+    cdl_option CYGSEM_VIRTEX4_SYSACE_DISK_SUPPORT {
+        display       "Support SysACE drive via RedBoot"
+        active_if     CYGPKG_REDBOOT_DISK
+        default_value 1
+        implements    CYGINT_REDBOOT_DISK_DRIVERS
+        compile -library=libextras.a sysace.c
+    }
+
+    cdl_option MNDHWR_VIRTEX4_AC97 {
+        display       "AC97 IP core support"
+    }
+
+    cdl_option MNDHWR_VIRTEX4_CHARLCD {
+        display       "Character LCD support (GPIO)"
+    }
+    cdl_option MNDHWR_VIRTEX4_UART {
+        display       "UART IP core support"
+    }
+
+    cdl_option MNDHWR_VIRTEX4_EMAC {
+        display       "Ethernet MAC IP core support"
+    }
+
+    cdl_option MNDHWR_VIRTEX4_SGDMATEMAC {
+        display       "Should be set in BSP"
+    }
+
+    cdl_option MNDHWR_VIRTEX4_IIC {
+        display       "II2 IP core support"
+    }
+
+    cdl_option MNDHWR_VIRTEX4_PS21 {
+        display       "PS/2 (1) support"
+        compile simple_keyboard.c
+    }
+
+    cdl_option MNDHWR_VIRTEX4_PS22 {
+        display       "PS/2 (2) support"
+    }
+
+    cdl_component MNDHWR_VIRTEX4_SYSACE {
+        display       "SystemACE support"
+    
+        cdl_option CYGSEM_VIRTEX4_SYSACE_CF_SUPPORT {
+            display     "System ACE CompactFlash driver support"
+            requires    CYGPKG_IO_DISK
+            compile     sysace_cf.c
+            description "Device driver for CF cards through compact flash"
+        }
+        
+    }
+
+    cdl_option MNDHWR_VIRTEX4_TFT {
+        display       "VGA IP core support"
+        compile       simple_keyboard.c
+    }
+
+    cdl_option MNDHWR_VIRTEX4_USB {
+        display       "Should be set in BSP"
+    }
+
+    cdl_option MNDHWR_VIRTEX4_DATACACHE {
+        display       "Should be set in BSP"
+    }
+
+    cdl_component UPBHWR_VIRTEX4_ICAP {
+        display       "ICAP hardware support"
+        default_value 0
+        description   "Enables functions for easy partial reconfiguration"
+
+        cdl_option UPBHWR_VIRTEX4_ICAP_XILINX {
+            display "Xilinx ICAP drivers"
+            default_value 0
+            description "Uses Xilinx OPB_HWICAP core (slow)"
+            requires ! UPBHWR_VIRTEX4_ICAP_LIS
+            implements UPBHWR_ICAP
+            compile       icap_xilinx.c
+        }
+
+        cdl_option UPBHWR_VIRTEX4_ICAP_LIS {
+            display "LIS ICAP drivers"
+            default_value 0
+            description "Uses LIS IcapCTRL PLBv46 core (fast, needs PLBv46)"
+            requires ! UPBHWR_VIRTEX4_ICAP_XILINX
+            implements UPBHWR_ICAP
+            compile       icap_lis.c
+        }
+    }
+
+    cdl_option UPBHWR_VIRTEX4_GPIOINTR {
+        display       "GPIO interrupt support"
+    }
+    
+    cdl_option UPBHWR_VIRTEX4_PROFILE_TIMER {
+        display       "Fixed interval timer support"
+        description   "Fixed interval timer support. Required for gprof profiling"
+        implements     CYGINT_PROFILE_HAL_TIMER
+        implements     CYGINT_PROFILE_HAL_MCOUNT
+        compile        profile_timer.c _mcount.S
+    }
+    
+    
+    cdl_option UPBHWR_VIRTEX4_DCR_TIMEBASE {
+        display       "DCR timebase support"
+        description   "Support for DCR timer/counter"
+        compile        dcr_timebase.c
+    }
+    
+    
+    
+    cdl_component UPBHWR_VIRTEX4_RECONOS {
+        display       "ReconOS support"
+        implements	  RECONOS_HW_SUPPORT
+        description   "Enables support for ReconOS hw threads"
+	cdl_option UPBHWR_VIRTEX4_RECONOS_INTR {
+        		display       "hw-task interrupt support"
+		requires        RECONOS_HW_SUPPORT
+	}
+        cdl_option UPBDBG_VIRTEX4_RECONOS_OSIFPROFILE {
+            display       "OSIF profiling"
+            requires      RECONOS_HW_SUPPORT
+            default_value { 0 }
+            description   "OSIF profiling support" 
+        }
+        
+    }
+    
+    cdl_component CYGSEM_VIRTEX4_I2C_SUPPORT {
+        display         "Xilinx VIRTEX4 I2C controller support"
+        active_if        CYGPKG_IO_I2C
+        requires        MNDHWR_VIRTEX4_IIC
+        default_value   1
+        compile         i2c_support.c
+        description     "Enabling this will enable the use of the i2c controller
+                        included in the Xilinx VIRTEX4 development board."
+        
+        cdl_option CYGNUM_HAL_EEPROM_SIZE {
+            display       "Size of EEPROM device"
+            requires      CYGSEM_VIRTEX4_I2C_SUPPORT
+            flavor        data
+            legal_values  { 4096 8192 }
+            default_value { 4096 }
+            description   "
+                This option indicates the size of the EEPROM fitted on the board."
+        }
+    }
+
+    cdl_component CYGSEM_VIRTEX4_LCD_SUPPORT {
+        display        "Support VGA Controller"
+        requires        MNDHWR_VIRTEX4_TFT
+        flavor         bool
+        default_value  0
+        description    "
+          Enabling this option will enable the use the LCD as a 
+          simple framebuffer, suitable for use with a windowing
+          package."
+          
+        compile hal_diag2.c 
+        compile lcd_support.c
+
+        cdl_option  CYGSEM_VIRTEX4_LCD_PORTRAIT_MODE {
+            display       "LCD portrait mode"
+            flavor        bool
+            default_value 0
+            description   "
+                Setting this option will orient the data on the LCD screen
+                in portrait (480x640) mode."
+        }
+
+        cdl_component CYGSEM_VIRTEX4_LCD_COMM {
+            display        "Support LCD/keyboard for comminication channel"
+            active_if      CYGSEM_VIRTEX4_LCD_SUPPORT
+            flavor         bool
+            default_value  1
+            description    "
+              Enabling this option will use the LCD and keyboard for a
+              communications channel, suitable for RedBoot, etc."
+
+            cdl_option  CYGNUM_VIRTEX4_LCD_COMM_FONT_SIZE {
+                display       "Choice of font for characters on screen"
+                flavor        data
+                legal_values  { 8 16 }
+                default_value 16
+                description   "
+                    This option chooses the size of the font (characters)
+                    rendered on the screen.  The smaller font will yield
+                    more characters, but scrolling is slower."
+            }
+
+            cdl_option  CYGOPT_VIRTEX4_LCD_COMM_LOGO {
+                display       "RedHat logo location"
+                flavor        booldata
+                legal_values  { "TOP" "BOTTOM" }
+                default_value { "TOP" }
+                description   "
+                    Use this option to control where the RedHat logo is placed
+                    on the LCD screen."
+            }
+        }
+    }
+
+    cdl_component CYGSEM_VIRTEX4_GPIO_SUPPORT {
+        display         "Xilinx VIRTEX4 GPIO support"
+        default_value   1
+        compile gpio_basic.c
+  
+        cdl_option CYGSEM_VIRTEX4_GPIO_CHAR_LCD {
+            display         "Support for 2x16 Character LCD"
+            requires        MNDHWR_VIRTEX4_CHARLCD
+            compile         char_lcd_support.c
+            flavor          bool
+            default_value   1
+            description     "
+                Enabling this options adds support for the
+                included 2x16 character lcd."
+        }
+        cdl_option CYGSEM_VIRTEX4_GPIO_LED_MANAGER {
+            display         "Led manager support"
+            compile         led_manager.c
+            flavor          bool
+            default_value   1
+            description     "
+                Enabling this options adds support to
+                control the leds included in this board."
+        }
+    }
+
+
+    cdl_component CYGBLD_GLOBAL_OPTIONS {
+        display "Global build options"
+        flavor  none
+        description   "
+	    Global build options including control over
+	    compiler flags, linker flags and choice of toolchain."
+
+
+        parent  CYGPKG_NONE
+
+        cdl_option CYGBLD_GLOBAL_COMMAND_PREFIX {
+            display "Global command prefix"
+            flavor  data
+            no_define
+            default_value { "powerpc-eabi" }
+            description "
+                This option specifies the command prefix used when
+                invoking the build tools."
+        }
+
+        cdl_option CYGBLD_GLOBAL_CFLAGS {
+            display "Global compiler flags"
+            flavor  data
+            no_define
+            default_value { "-I$(HW_DESIGN) -I$(HW_DESIGN)/ppc405_0/include -I$(ECOS_EXTRA) -DVIRTEX4 -msoft-float -mcpu=405 -Wall -Wpointer-arith -Wstrict-prototypes -Winline -Wundef -Woverloaded-virtual -g -O2 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions -fvtable-gc" }
+            description   "
+                This option controls the global compiler flags which
+                are used to compile all packages by
+                default. Individual packages may define
+                options which override these global flags."
+        }
+
+        cdl_option CYGBLD_GLOBAL_LDFLAGS {
+            display "Global linker flags"
+            flavor  data
+            no_define
+            default_value { "-msoft-float -mcpu=405 -g -nostdlib -Wl,--gc-sections -Wl,-static" }
+            description   "
+                This option controls the global linker flags. Individual
+                packages may define options which override these global flags."
+        }
+
+        cdl_option CYGBLD_BUILD_GDB_STUBS {
+            display "Build GDB stub ROM image"
+            default_value 0
+            requires { CYG_HAL_STARTUP == "ROM" }
+            requires CYGSEM_HAL_ROM_MONITOR
+            requires CYGBLD_BUILD_COMMON_GDB_STUBS
+            requires CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS
+            requires CYGDBG_HAL_DEBUG_GDB_BREAK_SUPPORT
+            requires CYGDBG_HAL_DEBUG_GDB_THREAD_SUPPORT
+            requires ! CYGDBG_HAL_COMMON_INTERRUPTS_SAVE_MINIMUM_CONTEXT
+            requires ! CYGDBG_HAL_COMMON_CONTEXT_SAVE_MINIMUM
+            no_define
+            description "
+                This option enables the building of the GDB stubs for the
+                board. The common HAL controls takes care of most of the
+                build process, but the platform CDL takes care of creating
+                an S-Record data file suitable for programming using
+                the board's EPPC-Bug firmware monitor."
+
+            make -priority 320 {
+                <PREFIX>/bin/gdb_module.bin : <PREFIX>/bin/gdb_module.img
+                $(OBJCOPY) -O srec --change-address=0x02000000 $< $(@:.bin=.srec)
+                $(OBJCOPY) -O binary $< $@
+            }
+        }
+    }
+
+    cdl_component CYGPKG_HAL_POWERPC_VIRTEX4_OPTIONS {
+        display "VIRTEX4 build options"
+        flavor  none
+        description   "
+	    Package specific build options including control over
+	    compiler flags used only in building this package,
+	    and details of which tests are built."
+
+
+        cdl_option CYGPKG_HAL_POWERPC_VIRTEX4_CFLAGS_ADD {
+            display "Additional compiler flags"
+            flavor  data
+            no_define
+            default_value { "" }
+            description   "
+                This option modifies the set of compiler flags for
+                building the VIRTEX4 HAL. These flags are used in addition
+                to the set of global flags."
+        }
+
+        cdl_option CYGPKG_HAL_POWERPC_VIRTEX4_CFLAGS_REMOVE {
+            display "Suppressed compiler flags"
+            flavor  data
+            no_define
+            default_value { "" }
+            description   "
+                This option modifies the set of compiler flags for
+                building the VIRTEX4 HAL. These flags are removed from
+                the set of global flags if present."
+        }
+    }
+
+    cdl_component CYGHWR_MEMORY_LAYOUT {
+        display "Memory layout"
+        flavor data
+        no_define
+        calculated { CYG_HAL_STARTUP == "RAM" ? "powerpc_virtex4_ram" : \
+                     CYG_HAL_STARTUP == "ROMRAM" ? "powerpc_virtex4_romram" : \
+                                                "bogus_MLT" }
+
+        cdl_option CYGHWR_MEMORY_LAYOUT_LDI {
+            display "Memory layout linker script fragment"
+            flavor data
+            no_define
+            define -file system.h CYGHWR_MEMORY_LAYOUT_LDI
+            calculated { CYG_HAL_STARTUP == "RAM" ? "<pkgconf/mlt_powerpc_virtex4_ram.ldi>" : \
+                         CYG_HAL_STARTUP == "ROMRAM" ? "<pkgconf/mlt_powerpc_virtex4_romram.ldi>" : \
+                                                    "<pkgconf/bogus_MLT>" }
+        }
+
+        cdl_option CYGHWR_MEMORY_LAYOUT_H {
+            display "Memory layout header file"
+            flavor data
+            no_define
+            define -file system.h CYGHWR_MEMORY_LAYOUT_H
+            calculated { CYG_HAL_STARTUP == "RAM" ? "<pkgconf/mlt_powerpc_virtex4_ram.h>" : \
+                         CYG_HAL_STARTUP == "ROMRAM" ? "<pkgconf/mlt_powerpc_virtex4_romram.h>" : \
+                                                    "<pkgconf/bogus_MLT>" }
+        }
+    }
+
+    cdl_option CYGSEM_HAL_ROM_MONITOR {
+        display       "Behave as a ROM monitor"
+        flavor        bool
+        default_value 0
+        parent        CYGPKG_HAL_ROM_MONITOR
+        requires      { CYG_HAL_STARTUP == "ROMRAM" }
+        description   "
+            Enable this option if this program is to be used as a ROM monitor,
+            i.e. applications will be loaded into RAM on the board, and this
+            ROM monitor may process exceptions or interrupts generated from the
+            application. This enables features such as utilizing a separate
+            interrupt stack when exceptions are generated."
+    }
+
+    cdl_component CYGPKG_REDBOOT_HAL_OPTIONS {
+        display       "Redboot HAL options"
+        flavor        none
+        no_define
+        parent        CYGPKG_REDBOOT
+        active_if     CYGPKG_REDBOOT
+        description   "
+            This option lists the target's requirements for a valid Redboot
+            configuration."
+            
+        cdl_option CYGSEM_REDBOOT_PLF_LINUX_BOOT {
+            active_if      CYGBLD_BUILD_REDBOOT_WITH_EXEC
+            display        "Support booting Linux via RedBoot"
+            flavor         bool
+            default_value  1
+            description    "
+               This option enables RedBoot to support booting of a Linux kernel."
+
+            compile plf_redboot_linux_exec.c
+        }
+
+        cdl_component CYGBLD_BUILD_REDBOOT_OBJS {
+            display       "Build Redboot image(s)"
+            active_if     CYGBLD_BUILD_REDBOOT
+            default_value 1
+            no_define
+            description "This option enables the conversion of the Redboot ELF
+                         image various formats which simplify further manipulatations.
+                         The most basic of these forms is Motorola S-records, which
+                         are simpler and more reliable than binary formats when used
+                         for serial download."
+
+            make -priority 325 {
+                <PREFIX>/bin/redboot.srec : <PREFIX>/bin/redboot.elf
+                $(OBJCOPY) -O srec $< $(@:.bin=.srec)
+            }
+
+            cdl_option CYGBLD_BUILD_REDBOOT_BIN {
+                display       "Build RedBoot ROM/FLASH binary image"
+                default_value 0
+                description "This option enables the conversion of the Redboot ELF
+                             image to a binary image suitable for ROM/FLASH programming."
+                make -priority 324 {
+                    <PREFIX>/bin/redboot.bin : <PREFIX>/bin/redboot.elf
+                    $(OBJCOPY) -O binary $< /tmp/__redboot.bin
+                    make_VIRTEX4_flash /tmp/__redboot.bin $@
+                    rm -f /tmp/__redboot.bin
+                }
+            }
+        }
+    }
+}

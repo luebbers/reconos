@@ -1,0 +1,19 @@
+# sample slot stimulus
+
+wait 100
+write_init_data 10000000
+wait 10
+write_fifo_read_handle FFFFFFFF
+wait 10
+write_fifo_write_handle 00000001
+wait 30
+write_unlock
+
+wait 30
+read_sem_wait 00000000
+wait 50
+write_unlock
+
+wait 100
+
+

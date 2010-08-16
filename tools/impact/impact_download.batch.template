@@ -1,0 +1,7 @@
+setMode -bs
+setCable -port auto
+Identify
+IdentifyMPM
+assignFile -p 3 -file "PLACEHOLDER"
+Program -p 3
+quit

@@ -1,0 +1,22 @@
+OPTION psf_version = 2.1;
+
+BEGIN driver i2c
+
+ OPTION supported_peripherals = (opb_iic);
+
+ PARAM name = level, desc = "Driver Level", type = int, default = 0, range = (0)
+
+ BEGIN BLOCK, dep = (level = 0)
+  OPTION depends = (common_v1_00_a ipif_v1_23_b);
+  OPTION copyfiles = (xi2c_l.c xi2c_l.h Makefile);
+  
+  BEGIN ARRAY interrupt_handler
+   PROPERTY desc = "Interrupt Handler Information";
+   PROPERTY size = 1, permit = none;
+   PARAM name = int_handler, default = IP2INTC_Irpt, desc = "Interrupt pin associated with the interrupt handler", permit = none;
+  END ARRAY
+
+ END BLOCK
+
+END driver
+

@@ -1,0 +1,44 @@
+# Set the following values as appropriate for your hardware thread
+
+# source files for the sw the CPUHWT shall execute
+SOURCE_FILES=$template:source_files$
+
+# Target architecture
+ARCHITECTURE=$template:architecture$
+
+#optional args
+OPT_ARGS = $template:opt_args$
+
+#Which CPU Type
+CPUHWT_TYPE=$template:cpuhwt_type$
+# Which PCORE is used
+CPUHWT_CORE=$template:cpuhwt_pcore$
+
+BRAM_LOGIC_CORE=cpu_hwt_bram_logic_v1_00_a
+OSIF_ADAPTER=cpu_osif_adapter_v1_04_a
+
+######### NO CHANGES NECESSARY BEYOND THIS LINE ###########
+
+MKCPUHWTHREAD=$(RECONOS)/tools/python/mkCPUhwthread.py
+THREAD_PCORE_PREFIX=hw_task_v1_0
+THREAD_PCORE_SUFFIX=_b
+THREAD_PCORE=$(THREAD_PCORE_PREFIX)1$(THREAD_PCORE_SUFFIX)
+
+QUIET_MKCPUHWTHREAD=  echo "    MKCPUHWTHREAD  $@"; $(MKCPUHWTHREAD)
+
+ifeq ($(NUM_DYNAMIC_OSIFS),)
+    $(error Number of dynamic OSIFs unknown. Specify NUM_DYNAMIC_OSIFS)
+endif
+
+all: hwthread
+
+clean:
+	$(Q)rm -rf hw_task_v1_*_b
+
+$(THREAD_PCORE_PREFIX)%$(THREAD_PCORE_SUFFIX): 
+	$(Q)$($(QQ)MKCPUHWTHREAD) -n $(subst $(THREAD_PCORE_SUFFIX),,$(subst $(THREAD_PCORE_PREFIX),,$@)) -t $(CPUHWT_TYPE) -p $(ARCHITECTURE) $(OPT_ARGS) $(SOURCE_FILES)  >> make.log; \
+	ln -s $(RECONOS)/core/pcores/$(CPUHWT_CORE) ../../edk-static/pcores/ ; \
+	ln -s $(RECONOS)/core/pcores/$(BRAM_LOGIC_CORE) ../../edk-static/pcores/ ; \
+	ln -s $(RECONOS)/core/pcores/$(OSIF_ADAPTER) ../../edk-static/pcores/ ;
+    
+

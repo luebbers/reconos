@@ -1,0 +1,1265 @@
+@node Designing Hardware Threads
+@chapter Designing Hardware Threads
+
+In order to connect hardware components (either as VHDL modules or as
+black-box netlists) as threads to a ReconOS system, they need to conform to a set of
+requirements. In particular, hardware threads need to expose a strict
+@ref{Hardware Thread Interface, interface}, which is used to connect them to their
+@ref{OS Interface}, and to conform to a certain signalling
+protocol on this interface, which is most conveniently done by structuring all
+OS interactions in a dedicated state machine description.
+
+The former requirement is easily satisfied by reusing a common VHDL port
+template for all hardware threads (which may be extensible with specially
+annotated user ports). The latter requires the use of a predefined set of VHDL
+functions and procedures to ensure proper synchronization with the OSIF and to
+invoke the individual operating system calls from within the hardware
+component. This set of VHDL callables, when used in a structured fashion
+within the hardware thread's @ref{Hardware Thread FSM, OS Synchronization State Machine},
+mirrors the OS kernel's API as closely as possible and allows transparent
+interaction with the operating system's services and other threads.
+
+@menu
+* Hardware Thread Files::       Recommended file and directory structure for a
+                                hardware thread
+* Hardware Thread Interface::   Required interface ports for connecting a 
+                                hardware thread to its OSIF
+* Hardware Thread FSM::         Description of the recommended structured FSM
+                                controlling the OS interactions of the
+                                hardware thread
+* Hardware Thread API::         Reference of available hardware thread API 
+                                functions
+* Hardware Thread Tools::       Tools for creating and modifying hardware
+                                threads
+@end menu
+
+@c --------------------------------------------------------------------------
+
+@node Hardware Thread Files
+@section Hardware Thread Files
+
+@c --------------------------------------------------------------------------
+
+@node Hardware Thread Interface
+@section Hardware Thread Interface
+
+@c --------------------------------------------------------------------------
+
+@node Hardware Thread FSM
+@section Hardware Thread FSM
+
+@c --------------------------------------------------------------------------
+
+@node Hardware Thread Tools
+@section Hardware Thread Tools
+
+@c --------------------------------------------------------------------------
+
+@node Hardware Thread API
+@section Hardware Thread API
+
+The ReconOS hardware thread API, together with the @ref{OS Interface},
+provides a hardware thread written in VHDL with the capabilities to call
+kernel functions (or "system calls"). To implement blocking system calls,
+these VHDL procedures have to be called in a finite state machine that is
+written in a specific way. You can read more about this state machine in
+@ref{Hardware Thread FSM}.
+
+This section describes the procedure prototypes without going into
+implementation details. It is meant to serve as a reference when writing
+hardware threads. To understand how the internals of the hardware thread / OS
+communications work, @pxref{Execution Model}.
+
+The interface a hardware thread has to have is detailed in @ref{Hardware Thread Interface}.
+
+The datatypes and procedures for communication between a user task and the ReconOS OS interface are defined in @code{/hw/pcores/reconos_$RECONOS_VERSION/hdl/vhdl/reconos_pkg.vhd}. This package must be included in every ReconOS hardware thread, for example:
+
+@example
+library reconos_v2_01_a;
+use reconos_v2_01_a.reconos_pkg.all;
+@end example
+
+for version 2.01.a.
+
+@menu
+* Data Types::              Custom datatypes defined for hardware thread / OS 
+                                communication
+* Constants::               Constants for command encodings and other fixed 
+                                information
+* System Call Reference::   Comprehensive list of all available VHDL system
+                                calls
+@end menu
+
+@c --------------------------------------------------------------------------
+
+@node Data Types
+@subsection Data Types
+
+ReconOS defines two records for hardware thread / OS communication, one for each direction:
+
+@example
+  -- OS to task communication
+  type osif_os2task_t is record
+    -- [...]
+  end record;
+
+  -- task to OS communication
+  type osif_task2os_t is record
+    -- [...]
+  end record;
+@end example
+
+The actual contents of these records are not important to the thread developer---they are manipulated through the ReconOS hardware API calls. The @code{i_osif} and @code{o_osif} ports in every HardwareThread entity have to be passed to the API calls.
+
+@c --------------------------------------------------------------------------
+
+@node Constants
+@subsection Constants
+
+There are constants for the binary encoding of all ReconOS commands passed between hardware threads and the OS interface. They are listed in the system call overview table for reference and debugging purposes. When writing hardware threads, you do not need to specifiy these---they are implicitly encoded in the hardware API procedures.
+
+Other constants include the bit width of the different osif fields, which can be interesting for thread designers, e.g. for determining the width of values read from memory. Which is fixed at 32 bits, but anyway...
+
+@example
+  -- width of OSIF commands, data and status registers
+  constant C_OSIF_CMD_WIDTH       : natural := 8;
+  constant C_OSIF_DATA_WIDTH      : natural := 32;
+  constant C_OSIF_STATUS_WIDTH    : natural := C_OSIF_DATA_WIDTH;
+  constant C_OSIF_NUM_STATUS_REGS : natural := 2;  -- access latency and busy load
+
+  -- number of bits in communication records
+  constant C_OSIF_OS2TASK_REC_WIDTH : natural := C_OSIF_CMD_WIDTH + C_OSIF_DATA_WIDTH + 3 + 2;
+  constant C_OSIF_TASK2OS_REC_WIDTH : natural := C_OSIF_CMD_WIDTH + C_OSIF_DATA_WIDTH + 2;
+
+  -- maximum steps a multicycle command can take
+  constant C_MAX_MULTICYCLE_STEPS : natural := 4;
+
+  -- common constants
+  constant C_RECONOS_FAILURE : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1) := X"00000000";
+@end example
+
+@c --------------------------------------------------------------------------
+
+@node System Call Reference
+@subsection System Call Reference
+
+ReconOS hardware system calls can be split into two classes: blocking and non-blocking calls. The meaning of 'blocking' here is a little different than in the context of software system calls. A 'blocking' call will halt the execution of the synchronization state machine (and thus all OS interaction) until the corresponding software call (initiated by the delegate thread) returns. This way the hardware thread will also block while the delegate thread is blocking, but it is also necessary, for example, to transfer the return value of a call back to the hardware thread. Other system calls (e.g. @code{semaphore_post()}) that are 'software-nonblocking' and do not return anything will be 'hardware-nonblocking', thus allowing the state machine to continue as soon as the delegate thread has relayed the call to the eCos kernel.
+
+In essence, every 'software-blocking' call is also 'hardware-blocking', but additionally all 'software-nonblocking' calls @strong{with a return value} also have to be 'hardware-blocking'.
+
+We also have to distinguish between "single-cycle" and "multi-cycle" commands. Multi-cycle commands are used if the communication between the thread and the OSIF cannot be completed in a single cycle. This is the case, for example, if the OSIF needs more than 32 bits of data, or if the OSIF will return a value to the thread upon completion. These commands have to be used in a certain way, which is described in @ref{Multi Cycle Commands}.
+
+System calls that return a value usually exist in two variants, e.g. @code{reconos_read()} and @code{reconos_read_s()}. The first flavour returns the return value in a variable, so that it can be evaluated in the same state of the synchronization FSM. The @code{@strong{_s()}} variety is a convenience wrapper which returns the return value in a signal, so that it can be directly connected to a separate process. This introduces one cycle of latency. The table below lists only the 'non-_s()' variant.
+
+Some of the commands (such as memory accesses) are handled directly in hardware, while others (like calls to kernel synchronization primitives) have to be handled in software. See the ExecutionModel for details.
+
+Most programming model objects (like mutexes or semaphores) are referenced by a handle. This handle is usually encoded as a 32 bit value, which is transferred to software and translated into the actual address of the object. See ResourceHandling for details.
+
+@strong{NOTE:} There can be only one OS command per state in the synchronization state machine!
+
+The following table shows all available system calls, their associated constants and binary encodings (for debugging/simulation purposes), where applicable:
+
+@multitable @columnfractions .3 .075 .4 .05 .05 .05 .05 
+@iftex
+@headitem command                       @tab  bin              @tab  symbolic name              @tab  SW                 @tab  HW                 @tab  MC           @tab  SW-proc
+@end iftex                                                                                   
+@ifnottex                                                                                    
+@headitem command                       @tab  binary encoding  @tab   symbolic name             @tab  software-blocking  @tab  hardware-blocking  @tab  multi-cycle  @tab  handled in SW
+@end ifnottex                                                                                
+@item     @ref{reconos_sem_post}        @tab  0x00             @tab   OSIF_CMD_SEM_POST         @tab                     @tab                     @tab  X
+@item     @ref{reconos_sem_wait}        @tab  0x81             @tab   OSIF_CMD_SEM_WAIT         @tab  X                  @tab  X                  @tab               @tab  X
+@item     @ref{reconos_write}           @tab  0x49             @tab   OSIF_CMD_WRITE            @tab                     @tab                     @tab  X            @tab
+@item     @ref{reconos_read}            @tab  0x48             @tab   OSIF_CMD_READ             @tab                     @tab                     @tab  X            @tab
+@item     @ref{reconos_write_burst}     @tab  0x4B             @tab   OSIF_CMD_WRITE_BURST      @tab                     @tab                     @tab  X            @tab
+@item     @ref{reconos_read_burst}      @tab  0x4A             @tab   OSIF_CMD_READ_BURST       @tab                     @tab                     @tab  X            @tab
+@item     @ref{reconos_get_init_data}   @tab  0x40             @tab   OSIF_CMD_GET_INIT_DATA    @tab                     @tab                     @tab  X            @tab
+@item     @ref{reconos_mutex_lock}      @tab  0x82             @tab   OSIF_CMD_MUTEX_LOCK       @tab   X                 @tab   X                 @tab  X            @tab  X   
+@item     @ref{reconos_mutex_trylock}   @tab  0x83             @tab   OSIF_CMD_MUTEX_TRYLOCK    @tab                     @tab   X                 @tab  X            @tab  X   
+@item     @ref{reconos_mutex_unlock}    @tab  0x02             @tab   OSIF_CMD_MUTEX_UNLOCK     @tab                     @tab                     @tab               @tab  X   
+@item     @ref{reconos_mutex_release}   @tab  0x03             @tab   OSIF_CMD_MUTEX_RELEASE    @tab                     @tab                     @tab               @tab  X   
+@item     @ref{reconos_cond_wait}       @tab  0x84             @tab   OSIF_CMD_COND_WAIT        @tab   X                 @tab   X                 @tab  X            @tab  X   
+@item     @ref{reconos_cond_signal}     @tab  0x04             @tab   OSIF_CMD_COND_SIGNAL      @tab                     @tab                     @tab               @tab  X   
+@item     @ref{reconos_cond_broadcast}  @tab  0x05             @tab   OSIF_CMD_COND_BROADCAST   @tab                     @tab                     @tab               @tab  X   
+@item     @ref{reconos_mbox_get}        @tab  0x85             @tab   OSIF_CMD_MBOX_GET         @tab   X                 @tab   X                 @tab  X            @tab  (X) 
+@item     @ref{reconos_mbox_tryget}     @tab  0x86             @tab   OSIF_CMD_MBOX_TRYGET      @tab                     @tab   X                 @tab  X            @tab  (X) 
+@item     @ref{reconos_mbox_put}        @tab  0x87             @tab   OSIF_CMD_MBOX_PUT         @tab   X                 @tab   X                 @tab  X            @tab  (X) 
+@item     @ref{reconos_mbox_tryput}     @tab  0x88             @tab   OSIF_CMD_MBOX_TRYPUT      @tab                     @tab   X                 @tab  X            @tab  (X) 
+@item     @ref{reconos_begin}           @tab                   @tab                             @tab                     @tab                     @tab               @tab 
+@item     @ref{reconos_ready}           @tab                   @tab                             @tab                     @tab                     @tab               @tab 
+@item     @ref{reconos_reset}           @tab                   @tab                             @tab                     @tab                     @tab               @tab 
+@item     @ref{reconos_thread_exit}     @tab   0xF0            @tab   OSIF_CMD_THREAD_EXIT      @tab                     @tab   X                 @tab               @tab  X   
+@end multitable
+
+
+@heading Procedure Descriptions
+
+The following is a short description of the individual function calls:
+
+@menu                                                                                  
+* reconos_sem_post::           post semaphore                                  
+* reconos_sem_wait::           wait on semaphore                               
+* reconos_write::              write single word to memory                     
+* reconos_read::               read single word from memory                    
+* reconos_write_burst::        write burst to memory                           
+* reconos_read_burst::         read burst from memory                          
+* reconos_get_init_data::      get initialization data                         
+* reconos_mutex_lock::         lock mutex                                      
+* reconos_mutex_trylock::      try lock mutex                                  
+* reconos_mutex_unlock::       unlock mutex                                    
+* reconos_mutex_release::      release mutex                                   
+* reconos_cond_wait::          wait on condition variable                      
+* reconos_cond_signal::        wake next thread waiting on condition variable  
+* reconos_cond_broadcast::     wake all threads waiting on condition variable  
+* reconos_mbox_get::           read from message box                           
+* reconos_mbox_tryget::        read from message box (non-blocking)            
+* reconos_mbox_put::           write to message box                            
+* reconos_mbox_tryput::        write to message box (non-blocking)             
+* reconos_begin::              set all interface signals to defined values     
+* reconos_ready::              check whether OSIF is busy or blocking          
+* reconos_reset::              reset all interface signals to initial values   
+* reconos_thread_exit::        terminate hardware thread                       
+@end menu
+
+
+@node reconos_sem_post
+@subsubsection  reconos_sem_post()
+@example
+  procedure reconos_sem_post (signal osif_task2os : out osif_task2os_t;
+                              osif_os2task        : in  osif_os2task_t;
+                              handle              : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Posts (increments) the semaphore identified by @code{handle}.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter            @tab   Description
+@item     @code{osif_task2os}  @tab   record of communication signals to the OS interface
+@item     @code{osif_os2task}  @tab   record of communication signals from the OS interface
+@item     @code{handle}        @tab   the thread-local identifier for the semaphore to post
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  case state is
+  ...
+    when STATE_POST =>
+      reconos_sem_post(o_osif, i_osif, C_MY_SEMAPHORE);
+      state <= STATE_IDLE;
+  ...
+@end example
+
+
+@node reconos_sem_wait
+@subsubsection reconos_sem_wait()
+@example
+  procedure reconos_sem_wait (signal osif_task2os : out osif_task2os_t;
+                              osif_os2task        : in  osif_os2task_t;
+                              handle              : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Waits for (then decrements) the semaphore identified by @code{handle}. Blocks until semaphore becomes available.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter  @tab  Description
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab the thread-local identifier for the semaphore to wait on
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  case state is
+  ...
+    when STATE_WAIT =>
+      reconos_sem_wait(o_osif, i_osif, C_MY_SEMAPHORE);
+      state <= STATE_READ;
+  ...
+@end example
+
+
+@node reconos_write
+@subsubsection reconos_write()
+@example
+procedure reconos_write (variable completed  : out boolean;
+                         signal osif_task2os : out osif_task2os_t;
+                         signal osif_os2task : in  osif_os2task_t;
+                         address             : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                         data                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Writes a single word (32 Bits) to system memory.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{address} @tab address to write to (can be memory or memory-mapped peripheral)
+@item     @code{data} @tab data word to write
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  variable done : boolean;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_WRITE =>
+        reconos_write(done, o_osif, i_osif, my_address, my_data);
+        if done then
+          state <= STATE_DO_SOMETHING;
+        end if;
+  ...
+@end example
+
+
+@node reconos_read
+@subsubsection reconos_read() / reconos_read_s()
+@example
+procedure reconos_read (variable completed    : out boolean;
+                        signal   osif_task2os : out osif_task2os_t;
+                        signal   osif_os2task : in  osif_os2task_t;
+                        address               : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                        variable data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+
+procedure reconos_read_s (variable completed  : out boolean;
+                          signal osif_task2os : out osif_task2os_t;
+                          signal osif_os2task : in  osif_os2task_t;
+                          address             : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                          signal data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Reads a single word (32 Bits) from system memory. @code{reconos_read()} reads into a variable for immediate evaluation, while @code{reconos_read_s()} reads into a signal for evaluation in a different process.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{address} @tab address to read from (can be memory or memory-mapped peripheral)
+@item     @code{data} @tab data word (signal/variable) to read into
+@end multitable
+
+@strong{Example 1} (inside the synchronization FSM process):
+@example
+  ...
+  variable done : boolean;
+  variable my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_READ =>
+        reconos_read(done, o_osif, i_osif, my_address, my_data);
+        if done then
+          if my_data = SOME_VALUE then
+            state <= STATE_DO_SOMETHING;
+          else
+            state <= STATE_DO_SOMETHING_ELSE;
+          end if;
+        end if;
+  ...
+@end example
+
+@strong{Example 2} (inside the synchronization FSM process):
+@example
+  signal my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  fsm_proc : process(...)
+  ...
+  variable done : boolean;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_READ =>
+        reconos_read_s(done, o_osif, i_osif, my_address, my_data);
+        if done then
+          state <= STATE_DO_SOMETHING;
+        end if;
+  ...
+  end process;
+  ...
+  some_other_proc : process(...)
+  ...
+  begin
+    ...
+    if my_data = SOME_VALUE then
+      ...
+    end if;
+    ...
+  end process
+@end example
+
+
+@node reconos_write_burst
+@subsubsection reconos_write_burst()
+@example
+procedure reconos_write_burst (variable completed  : out boolean;
+                               signal osif_task2os : out osif_task2os_t;
+                               signal osif_os2task : in  osif_os2task_t;
+                               my_address          : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                               target_address      : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Writes / copies a burst of 32 words (32x32 Bits) from the local burst RAM to system memory.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{my_address} @tab address in the local RAM to get data from (byte address)
+@item     @code{target_address} @tab address in the system memory space to write data to (byte address)
+@end multitable
+
+@strong{Example 1} (inside the synchronization FSM process):
+@example
+  ...
+  variable done : boolean;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_WRITE_BURST =>
+        reconos_write_burst(done, o_osif, i_osif, local_address, global_address);
+        if done then
+          state <= STATE_DO_SOMETHING;
+        end if;
+  ...
+@end example
+
+*Example 2* (inside the synchronization FSM process, type conversions omitted for simplicity):
+@example
+  ...
+  variable done : boolean;
+  variable count : natural;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_WRITE_BURST =>
+        reconos_write_burst(done, o_osif, i_osif, local_address + count, global_address + count);
+        if done then
+          count := count + 128;
+          if count > MAX_COUNT then
+            state <= STATE_DO_SOMETHING;
+          end if;
+        end if;
+  ...
+@end example
+
+
+@node reconos_read_burst
+@subsubsection reconos_read_burst()
+@example
+procedure reconos_read_burst (variable completed  : out boolean;
+                               signal osif_task2os : out osif_task2os_t;
+                               signal osif_os2task : in  osif_os2task_t;
+                               my_address          : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                               target_address      : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Reads / copies a burst of 32 words (32x32 Bits) from the system memory space to local burst RAM.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{my_address} @tab address in the local RAM to write data to (byte address)
+@item     @code{target_address} @tab address in the system memory space to get data from (byte address)
+@end multitable
+
+@strong{Example 1} (inside the synchronization FSM process):
+@example
+  ...
+  variable done : boolean;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_READ_BURST =>
+        reconos_read_burst(done, o_osif, i_osif, local_address, global_address);
+        if done then
+          state <= STATE_DO_SOMETHING;
+        end if;
+  ...
+@end example
+
+@strong{Example 2} (inside the synchronization FSM process, type conversions omitted for simplicity):
+@example
+  ...
+  variable done : boolean;
+  variable count : natural;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_READ_BURST =>
+        reconos_read_burst(done, o_osif, i_osif, local_address + count, global_address + count);
+        if done then
+          count := count + 128;
+          if count > MAX_COUNT then
+            state <= STATE_DO_SOMETHING;
+          end if;
+        end if;
+  ...
+@end example
+
+
+@node reconos_get_init_data
+@subsubsection reconos_get_init_data() / reconos_get_init_data_s()
+@example
+procedure reconos_get_init_data (variable completed    : out boolean;
+                                 signal   osif_task2os : out osif_task2os_t;
+                                 signal   osif_os2task : in  osif_os2task_t;
+                                 variable data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+
+procedure reconos_get_init_data_s (variable completed  : out boolean;
+                                   signal osif_task2os : out osif_task2os_t;
+                                   signal osif_os2task : in  osif_os2task_t;
+                                   signal data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Reads the thread initialization data (32 bit) from the OS interface. This data is passed to the OSIF on hardware thread initialization (@pxref{reconos_hwthread_create}). @code{reconos_get_init_data()} returns a variable for immediate evaluation, while @code{reconos_get_init_data_s()} returns a signal for evaluation in a separate process.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{data} @tab variable / signal to store initialization data in
+@end multitable
+
+@strong{Example 1} (inside the synchronization FSM process):
+@example
+  ...
+  variable done : boolean;
+  variable my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_INIT =>
+        reconos_get_init_data(done, o_osif, i_osif, my_data);
+        if done then
+          if my_data = SOME_VALUE then
+            state <= STATE_DO_SOMETHING;
+          else
+            state <= STATE_DO_SOMETHING_ELSE;
+          end if;
+        end if;
+  ...
+@end example
+
+@strong{Example 2} (inside the synchronization FSM process):
+@example
+  signal my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  fsm_proc : process(...)
+  ...
+  variable done : boolean;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_INIT =>
+        reconos_get_init_data_s(done, o_osif, i_osif, my_data);
+        if done then
+          state <= STATE_DO_SOMETHING;
+        end if;
+  ...
+  end process;
+  ...
+  some_other_proc : process(...)
+  ...
+  begin
+    ...
+    if my_data = SOME_VALUE then
+      ...
+    end if;
+    ...
+  end process
+@end example
+
+
+@node reconos_mutex_lock
+@subsubsection reconos_mutex_lock()
+@example
+procedure reconos_mutex_lock(variable completed    : out boolean;
+                             variable success      : out boolean;
+                             signal   osif_task2os : out osif_task2os_t;
+                             signal   osif_os2task : in  osif_os2task_t;
+                             handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Locks a mutex. @code{reconos_mutex_lock()} will block until mutex becomes available, lock it, and return. If unsuccessful (e.g. on error or thread termination) @code{success} will be false.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{success} @tab variable to indicate success of the mutex lock operation
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab handle of the mutex to lock
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  variable done : boolean;
+  variable okay : boolean;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_LOCK =>
+        reconos_mutex_lock(done, okay, o_osif, i_osif, C_MY_MUTEX);
+        if done and okay then                               -- note: this will loop forever on error
+          state <= STATE_DO_SOMETHING;
+        end if;
+  ...
+@end example
+
+
+@node reconos_mutex_trylock
+@subsubsection reconos_mutex_trylock()
+@example
+procedure reconos_mutex_trylock(variable completed    : out boolean;
+                                variable success      : out boolean;
+                                signal   osif_task2os : out osif_task2os_t;
+                                signal   osif_os2task : in  osif_os2task_t;
+                                handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Locks a mutex, if available. @code{reconos_mutex_trylock()} will lock the mutex indicated by @code{handle}, if and only if it is available, and return true in @code{success}. Otherwise (e.g. mutex is already locked, an error occurred or the thread terminates) @code{success} will be false.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{success} @tab variable to indicate success of the mutex trylock operation
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab handle of the mutex to lock
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  variable done : boolean;
+  variable okay : boolean;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_LOCK =>
+        reconos_mutex_trylock(done, okay, o_osif, i_osif, C_MY_MUTEX);
+        if done then
+          if okay then
+            state <= STATE_DO_SOMETHING;
+          else
+            state <= STATE_DO_SOMETHING_ELSE;
+          end if;
+        end if;
+  ...
+@end example
+
+
+@node reconos_mutex_unlock
+@subsubsection reconos_mutex_unlock()
+@example
+procedure reconos_mutex_unlock(signal osif_task2os : out osif_task2os_t;
+                               signal osif_os2task : in  osif_os2task_t;
+                               handle              : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Unlocks a mutex. 
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab handle of the mutex to unlock
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_UNLOCK =>
+        reconos_mutex_unlock(o_osif, i_osif, C_MY_MUTEX);
+        state <= STATE_DO_SOMETHING;
+  ...
+@end example
+
+
+@node reconos_mutex_release
+@subsubsection reconos_mutex_release()
+@example
+procedure reconos_mutex_release(signal osif_task2os : out osif_task2os_t;
+                                signal osif_os2task : in  osif_os2task_t;
+                                handle              : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+ 
+Releases a mutex (i.e. wakes all threads waiting on it, which will get a return value of false). 
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab handle of the mutex to release
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_RELEASE =>
+        reconos_mutex_release(o_osif, i_osif, C_MY_MUTEX);
+        state <= STATE_DO_SOMETHING;
+  ...
+@end example
+
+
+@node reconos_cond_wait
+@subsubsection reconos_cond_wait()
+@example
+procedure reconos_cond_wait(variable completed    : out boolean;
+                            variable success      : out boolean;
+                            signal   osif_task2os : out osif_task2os_t;
+                            signal   osif_os2task : in  osif_os2task_t;
+                            handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Waits on a condition variable. @code{reconos_cond_wait()} will block until a change of the condition variable referenced by @code{handle} is signalled. If unsuccessful (e.g. on error or thread termination) @code{success} will be false.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{success} @tab variable to indicate success of the cond_wait operation
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab handle of the condvar to wait on
+@end multitable
+
+@strong{TODO}
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  variable done : boolean;
+  variable okay : boolean;
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_WAIT =>
+        reconos_cond_wait(done, okay, o_osif, i_osif, C_MY_CONDVAR);
+        if done and okay then                               -- note: this will loop forever on error
+          state <= STATE_DO_SOMETHING;
+        end if;
+  ...
+@end example
+
+
+@node reconos_cond_signal
+@subsubsection reconos_cond_signal()
+@example
+procedure reconos_cond_signal(signal osif_task2os : out osif_task2os_t;
+                              signal osif_os2task : in  osif_os2task_t;
+                              handle              : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Signals a change of a condition variable, i.e. wakes up the @strong{next} thread waiting on that condition variable.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab handle of the condvar to signal
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_SIGNAL =>
+        reconos_cond_signal(o_osif, i_osif, C_MY_MUTEX);
+        state <= STATE_DO_SOMETHING;
+  ...
+@end example
+
+
+@node reconos_cond_broadcast
+@subsubsection reconos_cond_broadcast()
+@example
+procedure reconos_cond_broadcast(signal osif_task2os : out osif_task2os_t;
+                                 signal osif_os2task : in  osif_os2task_t;
+                                 handle              : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Broadcasts a change of a condition variable, i.e. wakes @strong{all} threads waiting on that condition variable.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab handle of the condvar to broadcast
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_SIGNAL =>
+        reconos_cond_broadcast(o_osif, i_osif, C_MY_MUTEX);
+        state <= STATE_DO_SOMETHING;
+  ...
+@end example
+
+
+@node reconos_mbox_get
+@subsubsection reconos_mbox_get() / reconos_mbox_get_s()
+@example
+  procedure reconos_mbox_get(variable completed    : out boolean;
+                             variable success      : out boolean;
+                             signal   osif_task2os : out osif_task2os_t;
+                             signal   osif_os2task : in  osif_os2task_t;
+                             handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                             variable data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+
+  procedure reconos_mbox_get_s(variable completed    : out boolean;
+                               variable success      : out boolean;
+                               signal   osif_task2os : out osif_task2os_t;
+                               signal   osif_os2task : in  osif_os2task_t;
+                               handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                               signal   data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Retrieves a 32bit value from the specified message box. The call may block if the message box is empty.
+
+This call can also be handled in hardware, if the message box is mapped to a hardware FIFO connected to the executing thread's OSIF (@pxref{Message Boxes}). If the call is handled in software, it will block until the return value arrives.
+
+@code{reconos_mbox_get()} returns the value from the message box in a variable for immediate evaluation, while @code{reconos_mbox_get_s()} returns a signal for evaluation in a separate process.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{success}      @tab signals whether the call succeeded. A failure can for example mean that the blocking call was interrupted by a signal
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab the handle (resource number) of the message box
+@item     @code{data} @tab variable / signal to store initialization data in
+@end multitable
+
+@strong{Example 1} (inside the synchronization FSM process):
+@example
+
+  ...
+  constant C_MBOX_HANDLE : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1) := X"00000001"
+  ...
+  variable success : boolean;
+  variable done : boolean;
+  variable my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_GET =>
+        reconos_mbox_get(done, success, o_osif, i_osif, C_MBOX_HANDLE, my_data);
+        if done then
+          if success then
+            if my_data = SOME_VALUE then
+              state <= STATE_DO_SOMETHING;
+            else
+              state <= STATE_DO_SOMETHING_ELSE;
+          else    -- no success
+            state <= HANDLE_ERROR;
+          end if;
+        end if;
+  ...
+@end example
+
+@strong{Example 2} (inside the synchronization FSM process):
+@example
+
+  ...
+  constant C_MBOX_HANDLE : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1) := X"00000001"
+  ...
+  variable done : boolean;
+  variable my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_GET =>
+        reconos_mbox_get(done, success, o_osif, i_osif, C_MBOX_HANDLE, my_data);
+        if done then
+          if success then
+            state <= STATE_DO_SOMETHING;
+          else    -- no success
+            state <= HANDLE_ERROR;
+          end if;
+        end if;
+  ...
+  some_other_proc : process(...)
+  ...
+  begin
+    ...
+    if my_data = SOME_VALUE then
+      ...
+    end if;
+    ...
+  end process
+@end example
+
+
+
+
+@node reconos_mbox_tryget
+@subsubsection reconos_mbox_tryget() / reconos_mbox_tryget_s()
+@example
+
+  procedure reconos_mbox_tryget(variable completed    : out boolean;
+                                variable success      : out boolean;
+                                signal   osif_task2os : out osif_task2os_t;
+                                signal   osif_os2task : in  osif_os2task_t;
+                                handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                                variable data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+
+  procedure reconos_mbox_tryget_s(variable completed    : out boolean;
+                                  variable success      : out boolean;
+                                  signal   osif_task2os : out osif_task2os_t;
+                                  signal   osif_os2task : in  osif_os2task_t;
+                                  handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                                  signal   data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Retrieves a 32bit value from the specified message box. The call will @strong{not} block if the message box is empty, but fail (@code{success = false}).
+
+This call can also be handled in hardware, if the message box is mapped to a hardware FIFO connected to the executing thread's OSIF (@pxref{Message Boxes}). If the call is handled in software, it will block until the return value arrives.
+
+@code{reconos_mbox_tryget()} returns the value from the message box in a variable for immediate evaluation, while @code{reconos_mbox_tryget_s()} returns a signal for evaluation in a separate process.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{success}      @tab signals whether the call succeeded.
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab the handle (resource number) of the message box
+@item     @code{data} @tab variable / signal to store initialization data in
+@end multitable
+
+@strong{Example 1} (inside the synchronization FSM process):
+@example
+
+  ...
+  constant C_MBOX_HANDLE : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1) := X"00000001"
+  ...
+  variable success : boolean;
+  variable done : boolean;
+  variable my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_GET =>
+        reconos_mbox_tryget(done, success, o_osif, i_osif, C_MBOX_HANDLE, my_data);
+        if done then
+          if success then
+            if my_data = SOME_VALUE then
+              state <= STATE_DO_SOMETHING;
+            else
+              state <= STATE_DO_SOMETHING_ELSE;
+          else    -- no success
+            state <= HANDLE_ERROR;
+          end if;
+        end if;
+  ...
+@end example
+
+@strong{Example 2} (inside the synchronization FSM process):
+@example
+
+  ...
+  constant C_MBOX_HANDLE : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1) := X"00000001"
+  ...
+  variable done : boolean;
+  variable my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_GET =>
+        reconos_mbox_tryget(done, success, o_osif, i_osif, C_MBOX_HANDLE, my_data);
+        if done then
+          if success then
+            state <= STATE_DO_SOMETHING;
+          else    -- no success
+            state <= HANDLE_ERROR;
+          end if;
+        end if;
+  ...
+  some_other_proc : process(...)
+  ...
+  begin
+    ...
+    if my_data = SOME_VALUE then
+      ...
+    end if;
+    ...
+  end process
+@end example
+
+
+
+@node reconos_mbox_put
+@subsubsection reconos_mbox_put()
+@example
+
+  procedure reconos_mbox_put(variable completed    : out boolean;
+                             variable success      : out boolean;
+                             signal   osif_task2os : out osif_task2os_t;
+                             signal   osif_os2task : in  osif_os2task_t;
+                             handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                             data                  : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+Sends a 32bit value to the specified message box. The call may block if the message box is full.
+
+This call can also be handled in hardware, if the message box is mapped to a hardware FIFO connected to the executing thread's OSIF (@pxref{Message Boxes}). If the call is handled in software, it will block until the return value arrives.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{success}      @tab signals whether the call succeeded. A failure can for example mean that the blocking call was interrupted by a signal
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab the handle (resource number) of the message box
+@item     @code{data} @tab variable / signal to store initialization data in
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+
+  ...
+  constant C_MBOX_HANDLE : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1) := X"00000001"
+  ...
+  variable success : boolean;
+  variable done : boolean;
+  signal/variable my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_PUT =>
+        reconos_mbox_put(done, success, o_osif, i_osif, C_MBOX_HANDLE, my_data);
+        if done then
+          if success then
+            state <= STATE_DO_SOMETHING;
+          else    -- no success
+            state <= HANDLE_ERROR;
+          end if;
+        end if;
+  ...
+@end example
+
+
+
+@node reconos_mbox_tryput
+@subsubsection reconos_mbox_tryput()
+@example
+
+  procedure reconos_mbox_tryput(variable completed    : out boolean;
+                                variable success      : out boolean;
+                                signal   osif_task2os : out osif_task2os_t;
+                                signal   osif_os2task : in  osif_os2task_t;
+                                handle                : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+                                data                  : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+
+Sends a 32bit value to the specified message box. The call will @strong{not} block if the message box is full, but fail (@code{success = false}).
+
+This call can also be handled in hardware, if the message box is mapped to a hardware FIFO connected to the executing thread's OSIF (@pxref{Message Boxes}). If the call is handled in software, it will block until the return value arrives.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{completed} @tab variable to indicate completion of this MultiCycle command
+@item     @code{success}      @tab signals whether the call succeeded.
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{handle} @tab the handle (resource number) of the message box
+@item     @code{data} @tab variable / signal to store initialization data in
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+
+  ...
+  constant C_MBOX_HANDLE : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1) := X"00000001"
+  ...
+  variable success : boolean;
+  variable done : boolean;
+  variable/signal my_data : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
+  ...
+  begin
+  ...
+    case state is
+  ...
+      when STATE_PUT =>
+        reconos_mbox_tryput(done, success, o_osif, i_osif, C_MBOX_HANDLE, my_data);
+        if done then
+          if success then
+            state <= STATE_DO_SOMETHING;
+          else    -- no success
+            state <= HANDLE_ERROR;
+          end if;
+        end if;
+  ...
+@end example
+
+
+
+
+@node reconos_begin
+@subsubsection reconos_begin()
+@example
+procedure reconos_begin (signal osif_task2os : out osif_task2os_t;
+                         osif_os2task        :     osif_os2task_t);
+@end example
+
+
+Sets all OSIF signals to valid starting values. Used at the beginning of a synchronization state machine (@pxref{Hardware Thread FSM}).
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@end multitable
+
+@strong{Example}:
+@example
+  ...
+  fsm_proc : process(clk, reset)
+  ...
+  begin
+    if reset = '1' then
+    ...
+      reconos_reset(o_osif, i_osif);
+      ...
+    elsif rising_edge(clk) then
+      ...
+      reconos_begin(o_osif, i_osif);
+      ...
+      if reconos_ready(i_osif) then
+        case state is
+        ...
+        when STATE_SIGNAL =>
+        ...
+      end if;
+    end if;
+  ...
+@end example
+
+
+
+@node reconos_ready
+@subsubsection reconos_ready()
+@example
+function reconos_ready (osif_os2task : osif_os2task_t) return boolean;
+@end example
+
+
+Returns true if the hardware thread is neither busy nor blocking. @pxref{Hardware Thread FSM} and @ref{Execution Model} for details.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@end multitable
+
+@strong{Example}: @pxref{reconos_begin}
+
+
+@node reconos_reset
+@subsubsection reconos_reset()
+@example
+procedure reconos_reset (signal osif_task2os : out osif_task2os_t;
+                         osif_os2task        :     osif_os2task_t);
+@end example
+
+
+Resets all OSIF signals to their initialization values. Used in the asynchronous reset block of a [[ReconOSHardwareTaskFSM][synchronization state machine]].
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@end multitable
+
+@strong{Example}: @pxref{reconos_begin}
+
+
+@node reconos_thread_exit
+@subsubsection reconos_thread_exit()
+@example
+  procedure reconos_thread_exit (signal osif_task2os : out osif_task2os_t;
+                              osif_os2task        : in  osif_os2task_t;
+                              retval              : in  std_logic_vector(0 to C_OSIF_DATA_WIDTH-1));
+@end example
+
+
+Causes the hardware thread to terminate itself. Depending on whether it was created using @code{reconos_hwthread_create()} or @code{rthread_create()} (eCos or POSIX), it uses @code{cyg_thread_exit()} or @code{pthread_exit()}, respectively. The latter can pass a return value to possible joiner threads.
+
+@multitable @columnfractions .3 .7
+@headitem Parameter @tab Description
+@item     @code{osif_task2os} @tab record of communication signals to the OS interface
+@item     @code{osif_os2task} @tab record of communication signals from the OS interface
+@item     @code{retval} @tab the return value to be passed to possible joiners (POSIX) or printed on diag (eCos)
+@end multitable
+
+@strong{Example} (inside the synchronization FSM process):
+@example
+  ...
+  case state is
+  ...
+    when STATE_EXIT =>
+      reconos_thread_exit(o_osif, i_osif, X"00000000");
+  ...
+@end example
+

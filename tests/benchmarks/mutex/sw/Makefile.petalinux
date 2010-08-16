@@ -1,0 +1,52 @@
+ifndef PETALINUX
+$(error You must source the petalinux/settings.sh script before working with PetaLinux)
+endif
+
+# Point to default PetaLinux root directory
+ifndef ROOTDIR
+ROOTDIR=$(PETALINUX)/software/petalinux-dist
+endif
+
+PATH:=$(PATH):$(ROOTDIR)/tools
+
+UCLINUX_BUILD_USER = 1
+-include $(ROOTDIR)/.config
+-include $(ROOTDIR)/$(CONFIG_LINUXDIR)/.config
+LIBCDIR = $(CONFIG_LIBCDIR)
+-include $(ROOTDIR)/config.arch
+ROMFSDIR=$(ROOTDIR)/romfs
+ROMFSINST=$(ROOTDIR)/tools/romfs-inst.sh
+
+APP = mutex_benchmark_posix
+
+# Add any other object files to this list below
+APP_OBJS = mutex_benchmark_posix.o $(RECONOS)/core/linux/libreconos/src/hw_thread.o
+CFLAGS += -I$(RECONOS)/core/linux/libreconos/include
+LDLIBS += -lpthread -lrt -lm
+
+all: $(APP)
+
+$(APP): $(APP_OBJS)
+	$(CC) $(LDFLAGS) -o $@ $(APP_OBJS) $(LDLIBS)
+
+clean:
+	-rm -f $(APP) *.elf *.gdb *.o $(APP_OBJS)
+
+romfs:
+	$(ROMFSINST) $(APP) /bin/$(APP)
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+
+# Targets for the required .config files - if they don't exist, the tree isn't
+# configured.  Tell the user this, how to fix it, and exit.
+${ROOTDIR}/config.arch ${ROOTDIR}/.config:
+	@echo "Error: You must configure the PetaLinux tree before compiling your application"
+	@echo ""
+	@echo "Change directory to ../../petalinux-dist and 'make menuconfig' or 'make xconfig'"
+	@echo ""
+	@echo "Once the tree is configured, return to this directory, and re-run make."
+	@echo ""
+	@exit -1
+

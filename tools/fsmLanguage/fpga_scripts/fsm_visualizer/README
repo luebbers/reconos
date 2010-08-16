@@ -1,0 +1,28 @@
+*************************
+FSM Visualizer for VHDL
+*************************
+
+* Use the extractStates.py script to create a DOT file representing the FSM of a VHDL file
+* Use the showGraph.py script to display the DOT file in PDF form
+
+NOTES:
+* This script makes some assumptions on the "format" of the FSM, namely it looks something like the code below:
+
+case (curSig) is
+
+	when STATE1 =>
+		nextSig <= STATE2;
+
+	when STATE2 =>
+		nextSig <= STATE3;
+
+	when STATE3 =>
+		if (...) then
+			nextSig <= STATE2;
+		else
+			nextSig <= STATE1;
+		end if;
+
+	when others => nextSig <= STATE1;
+
+end case;

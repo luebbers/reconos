@@ -1,0 +1,43 @@
+BEGIN cpu_hwt_bram_logic
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION HDL = VHDL
+OPTION DESC = BRAM LOGIC FOR CPU HW_THREADS
+
+
+##PARAMETERS
+PARAMETER BRAM_DWIDTH = 64, DT = integer
+PARAMETER BRAM_AWIDTH = 32, DT = integer
+PARAMETER CPU_DWIDTH = 32, DT = integer
+
+## Bus Interfaces
+BUS_INTERFACE BUS = PORTB, BUS_STD = XIL_BRAM, BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = CPU0, BUS_STD = CPU_HWT_BRAM_LOGIC_STD, BUS_TYPE = TARGET
+BUS_INTERFACE BUS = CPU1, BUS_STD = CPU_HWT_BRAM_LOGIC_STD, BUS_TYPE = TARGET
+
+##PORTS
+PORT clk = "", DIR = I, SIGIS = Clk
+PORT reset = "", DIR = I, SIGIS = Rst
+
+##BRAM PORTS
+PORT bram_rst = BRAM_Rst, DIR = O, BUS = PORTB
+PORT bram_clk = BRAM_Clk, DIR = O, BUS = PORTB
+PORT bram_en = BRAM_EN, DIR = O, BUS = PORTB
+PORT bram_wen = BRAM_WEN, DIR = O, VEC = [0:((BRAM_DWIDTH/8)-1)], BUS = PORTB
+PORT bram_addr = BRAM_Addr, DIR = O, VEC = [0:(BRAM_AWIDTH-1)], BUS = PORTB
+PORT bram_din = BRAM_Din, DIR = I, VEC = [0:(BRAM_DWIDTH-1)], BUS = PORTB
+PORT bram_dout = BRAM_Dout, DIR = O, VEC = [0:(BRAM_DWIDTH-1)], BUS = PORTB
+
+##PORTS CPU0
+PORT CPU0_boot_sect_ready = "boot_sect_ready", DIR = O, BUS = CPU0
+PORT CPU0_set_boot_sect = "set_boot_sect", DIR = I, BUS = CPU0
+PORT CPU0_boot_sect_data = "boot_sect_data", DIR = I, VEC = [CPU_DWIDTH-1:0], BUS = CPU0
+
+##PORTS CPU1
+PORT CPU1_boot_sect_ready = "boot_sect_ready", DIR = O, BUS = CPU1
+PORT CPU1_set_boot_sect = "set_boot_sect", DIR = I, BUS = CPU1
+PORT CPU1_boot_sect_data = "boot_sect_data", DIR = I, VEC = [CPU_DWIDTH-1:0], BUS = CPU1
+
+
+END

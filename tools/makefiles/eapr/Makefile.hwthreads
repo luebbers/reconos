@@ -1,0 +1,25 @@
+HW_THREAD_DIRS=$(shell find . -type d -mindepth 1 -maxdepth 1 -not -name "netlists" -and -not -name ".svn")
+
+# export QUIET settings
+export Q QQ
+
+export NUM_OSIFS NUM_DYNAMIC_OSIFS RECONOS_VER
+
+all:
+	@echo "$(NETLISTS)"
+	$(Q)[ -d netlists ] || mkdir netlists
+	$(Q)for d in $(HW_THREAD_DIRS); do make -C $$d ; done
+	$(Q)for d in $(HW_THREAD_DIRS); do [ -d netlists/$$d ] || mkdir netlists/$$d; done
+	$(Q)for d in $(HW_THREAD_DIRS); do cp $$d/implementation/*.ngc netlists/$$d; done
+
+dynamic:
+	@echo "$(NETLISTS)"
+	$(Q)[ -d netlists ] || mkdir netlists
+	$(Q)for d in $(DYNAMIC_THREADS); do make -C $$d ; done
+	$(Q)for d in $(DYNAMIC_THREADS); do [ -d netlists/$$d ] || mkdir netlists/$$d; done
+	$(Q)for d in $(DYNAMIC_THREADS); do cp $$d/implementation/*.ngc netlists/$$d; done
+
+clean:
+	$(Q)for d in $(HW_THREAD_DIRS); do make -C $$d clean; done
+	rm -rf netlists
+

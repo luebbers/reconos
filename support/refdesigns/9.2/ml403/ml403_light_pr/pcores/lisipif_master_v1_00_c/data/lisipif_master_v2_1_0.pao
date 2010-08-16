@@ -1,0 +1,12 @@
+##############################################################################
+## Filename:          D:\IpLibraries\MyProcessorIPLib\pcores/lisipif_master_v1_00_a/data/lisipif_master_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Thu Jun 01 10:15:46 2006 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib lisipif_master_v1_00_c lipif_mst_pipebuf vhdl
+lib lisipif_master_v1_00_c lipif_mst_pipeliner vhdl
+lib lisipif_master_v1_00_c lipif_mst_read vhdl
+lib lisipif_master_v1_00_c lipif_mst_write vhdl
+lib lisipif_master_v1_00_c lipif_mst_arbiter vhdl
+lib lisipif_master_v1_00_c lisipif_master vhdl

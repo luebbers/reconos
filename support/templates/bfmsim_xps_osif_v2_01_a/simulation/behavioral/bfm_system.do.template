@@ -1,0 +1,39 @@
+#  Simulation Model Generator
+#  Xilinx EDK 9.2.02 EDK_Jm_SP2.3
+#  Copyright (c) 1995-2007 Xilinx, Inc.  All rights reserved.
+#
+#  File     bfm_system.do (Thu Jul 23 14:51:50 2009)
+#
+vmap XilinxCoreLib "%%%ISE_SIMLIB%%%/XilinxCoreLib/"
+vmap XilinxCoreLib_ver "%%%ISE_SIMLIB%%%/XilinxCoreLib_ver/"
+vmap simprim "%%%ISE_SIMLIB%%%/simprim/"
+vmap simprims_ver "%%%ISE_SIMLIB%%%/simprims_ver/"
+vmap unisim "%%%ISE_SIMLIB%%%/unisim/"
+vmap unisims_ver "%%%ISE_SIMLIB%%%/unisims_ver/"
+vmap plbv46_bfm "%%%EDK_SIMLIB%%%/plbv46_bfm/"
+vmap plbv46_master_bfm_v1_00_a "%%%EDK_SIMLIB%%%/plbv46_master_bfm_v1_00_a/"
+vmap plbv46_slave_bfm_v1_00_a "%%%EDK_SIMLIB%%%/plbv46_slave_bfm_v1_00_a/"
+vmap plbv46_monitor_bfm_v1_00_a "%%%EDK_SIMLIB%%%/plbv46_monitor_bfm_v1_00_a/"
+vmap bfm_synch_v1_00_a "%%%EDK_SIMLIB%%%/bfm_synch_v1_00_a/"
+vmap proc_common_v2_00_a "%%%EDK_SIMLIB%%%/proc_common_v2_00_a/"
+vmap plb_v46_v1_00_a "%%%EDK_SIMLIB%%%/plb_v46_v1_00_a/"
+vmap plbv46_master_burst_v1_00_a "%%%EDK_SIMLIB%%%/plbv46_master_burst_v1_00_a/"
+# vlib xps_osif_v2_01_a
+# vmap xps_osif_v2_01_a xps_osif_v2_01_a
+vlib xps_osif_tb_v2_01_a
+vmap xps_osif_tb_v2_01_a xps_osif_tb_v2_01_a
+#%%%LIB_TEST%%%
+vlib work
+vmap work work
+# vcom -93 -work xps_osif_v2_01_a "/home/luebbers/work/plb46/bfmsim_9.2/pcores/xps_osif_v2_01_a/hdl/vhdl/user_logic.vhd"
+# vcom -93 -work xps_osif_v2_01_a "/home/luebbers/work/plb46/bfmsim_9.2/pcores/xps_osif_v2_01_a/hdl/vhdl/xps_osif.vhd"
+#%%%VHD_TEST%%%
+#%%%VHD_HW_TASK%%%
+vcom -93 -work xps_osif_tb_v2_01_a "../../pcores/xps_osif_tb_v2_01_a/simhdl/vhdl/xps_osif_tb.vhd"
+vcom -93 -work work "bfm_processor_wrapper.vhd"
+vcom -93 -work work "bfm_memory_wrapper.vhd"
+vcom -93 -work work "bfm_monitor_wrapper.vhd"
+vcom -93 -work work "synch_bus_wrapper.vhd"
+vcom -93 -work work "plb_bus_wrapper.vhd"
+vcom -93 -work work "my_core_wrapper.vhd"
+vcom -93 -work work "bfm_system.vhd"
