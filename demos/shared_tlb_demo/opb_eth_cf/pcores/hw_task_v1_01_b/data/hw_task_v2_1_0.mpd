@@ -1,0 +1,43 @@
+
+############
+# Microprocessor Peripheral Description
+# generated at 2008-08-02 04:42:39.703698 by 'mkhwthread.py hwt_mbox 1 hwt_mbox.vhd'
+############
+
+BEGIN hw_task
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION STYLE = MIX
+OPTION IP_GROUP = PPC:USER
+OPTION CORE_STATE = DEVELOPMENT
+
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER C_BUS_BURST_AWIDTH = 14, DT = INTEGER
+PARAMETER C_BUS_BURST_DWIDTH = 64, DT = INTEGER
+PARAMETER C_TASK_BURST_AWIDTH = 12, DT = INTEGER
+PARAMETER C_TASK_BURST_DWIDTH = 32, DT = INTEGER
+PARAMETER C_REGISTER_OSIF_PORTS = 0, DT = INTEGER
+PARAMETER C_DEDICATED_CLK = 0, DT = INTEGER
+
+## Bus Interfaces
+BUS_INTERFACE BUS = OSIF, BUS_TYPE = TARGET, BUS_STD = OSIF_STD
+
+## Ports
+PORT clk = "clk", DIR = I, SIGIS = Clk, BUS = OSIF
+PORT reset = "reset", DIR = I, SIGIS = Rst, BUS = OSIF
+PORT i_osif_flat = "osif_os2task_vec", DIR = I, VEC = [0:46], BUS = OSIF
+PORT o_osif_flat = "osif_task2os_vec", DIR = O, VEC = [0:50], BUS = OSIF
+PORT i_threadClk = "", DIR = I, SIGIS = Clk
+
+# Burst RAM interface
+PORT i_burstAddr = "burstAddr", DIR = I, VEC = [0:C_BUS_BURST_AWIDTH-1], BUS = OSIF
+PORT i_burstData = "burstWrData", DIR = I, VEC = [0:C_BUS_BURST_DWIDTH-1], BUS = OSIF
+PORT o_burstData = "burstRdData", DIR = O, VEC = [0:C_BUS_BURST_DWIDTH-1], BUS = OSIF
+PORT i_burstWE = "burstWE", DIR = I, BUS = OSIF
+PORT i_burstBE = "burstBE", DIR = I, VEC = [0:C_BUS_BURST_DWIDTH/8-1], BUS = OSIF
+
+END

@@ -1,0 +1,11 @@
+
+#####
+# Peripheral Analyze Order file.
+# generated at 2008-08-02 04:42:39.703698 by 'mkhwthread.py hwt_mbox 1 hwt_mbox.vhd'
+#####
+lib reconos_v2_01_a reconos_pkg vhdl
+lib burst_ram_v2_01_a bram_wrapper vhdl
+lib burst_ram_v2_01_a ram_single vhdl
+lib burst_ram_v2_01_a burst_ram vhdl
+lib hw_task_v1_01_b hwt vhdl
+lib hw_task_v1_01_b hw_task vhdl
