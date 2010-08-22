@@ -5,6 +5,7 @@ all: default
 default: lib/libreconos.a
 
 lib/libreconos.a:
+	mkdir -p lib
 	make -C src
 	cp src/libreconos.a lib
 

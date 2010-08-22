@@ -33,7 +33,7 @@
 //---------------------------------------------------------------------------
 // Major Changes:
 // 
-// 15.01.2008   Andreas Agne   File created
+// 22.08.2010   Andreas Agne   File created
 
 #include <linux/autoconf.h>
 #include <linux/module.h>
