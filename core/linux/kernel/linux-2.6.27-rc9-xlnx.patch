@@ -1,0 +1,96 @@
+diff --git a/arch/powerpc/include/asm/tlbflush.h b/arch/powerpc/include/asm/tlbflush.h
+index 361cd5c..370745e 100644
+--- a/arch/powerpc/include/asm/tlbflush.h
++++ b/arch/powerpc/include/asm/tlbflush.h
+@@ -36,33 +36,40 @@ extern void _tlbie(unsigned long address, unsigned int pid);
+ extern void _tlbia(void);
+ #endif
+ 
++extern void osif_tlbia(unsigned long id);
++
+ static inline void flush_tlb_mm(struct mm_struct *mm)
+ {
+ 	_tlbia();
++	osif_tlbia(mm ? (unsigned long)mm->pgd : 0);
+ }
+ 
+ static inline void flush_tlb_page(struct vm_area_struct *vma,
+ 				  unsigned long vmaddr)
+ {
+ 	_tlbie(vmaddr, vma ? vma->vm_mm->context.id : 0);
++	osif_tlbia(vma ? (unsigned long)vma->vm_mm->pgd : 0);
+ }
+ 
+ static inline void flush_tlb_page_nohash(struct vm_area_struct *vma,
+ 					 unsigned long vmaddr)
+ {
+ 	_tlbie(vmaddr, vma ? vma->vm_mm->context.id : 0);
++	osif_tlbia(vma ? (unsigned long)vma->vm_mm->pgd : 0);
+ }
+ 
+ static inline void flush_tlb_range(struct vm_area_struct *vma,
+ 				   unsigned long start, unsigned long end)
+ {
+ 	_tlbia();
++	osif_tlbia(vma ? (unsigned long)vma->vm_mm->pgd : 0);
+ }
+ 
+ static inline void flush_tlb_kernel_range(unsigned long start,
+ 					  unsigned long end)
+ {
+ 	_tlbia();
++	osif_tlbia(0);
+ }
+ 
+ #elif defined(CONFIG_PPC32)
+diff --git a/arch/powerpc/mm/Makefile b/arch/powerpc/mm/Makefile
+index e7392b4..a46749b 100644
+--- a/arch/powerpc/mm/Makefile
++++ b/arch/powerpc/mm/Makefile
+@@ -17,7 +17,7 @@ obj-$(CONFIG_PPC64)		+= hash_utils_64.o \
+ obj-$(CONFIG_PPC_STD_MMU_32)	+= ppc_mmu_32.o
+ obj-$(CONFIG_PPC_STD_MMU)	+= hash_low_$(CONFIG_WORD_SIZE).o \
+ 				   tlb_$(CONFIG_WORD_SIZE).o
+-obj-$(CONFIG_40x)		+= 40x_mmu.o
++obj-$(CONFIG_40x)		+= 40x_mmu.o reconos_tlb.o
+ obj-$(CONFIG_44x)		+= 44x_mmu.o
+ obj-$(CONFIG_FSL_BOOKE)		+= fsl_booke_mmu.o
+ obj-$(CONFIG_NEED_MULTIPLE_NODES) += numa.o
+diff --git a/arch/powerpc/mm/reconos_tlb.c b/arch/powerpc/mm/reconos_tlb.c
+new file mode 100644
+index 0000000..b100978
+--- /dev/null
++++ b/arch/powerpc/mm/reconos_tlb.c
+@@ -0,0 +1,32 @@
++#include <linux/mm.h>
++
++#define OSIF_TLB_INVALIDATE 0x147A11DA
++#define FLUSH_MEM_SIZE 16*1024
++
++int reconos_tlb_dcrn = -1;
++
++EXPORT_SYMBOL(reconos_tlb_dcrn);
++
++volatile unsigned int _ppc405_flush_mem[FLUSH_MEM_SIZE];
++
++void _ppc405_flush_dcache(void)
++{
++	int i;
++	for(i = 0; i < FLUSH_MEM_SIZE; i += 8){
++		_ppc405_flush_mem[i]++;
++	}
++}
++
++void osif_tlbia(unsigned long id)
++{
++	unsigned long data = OSIF_TLB_INVALIDATE;
++	unsigned long tlbid = 0xFFFFFFFF;
++	
++	__asm__("mfdcr %0,10" :  "=r" (tlbid));
++
++	if(!id || tlbid == id - 0xC0000000){
++		_ppc405_flush_dcache();
++		__asm__("mtdcr 11,%0" :: "r" (data));
++	}
++}
++
