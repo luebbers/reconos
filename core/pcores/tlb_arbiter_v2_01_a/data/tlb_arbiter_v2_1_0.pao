@@ -1,0 +1,9 @@
+##############################################################################
+## Filename:          tlb_arbiter_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Wed Nov 21 12:27:51 2007 
+##############################################################################
+
+lib reconos_v2_01_a reconos_pkg vhdl
+lib tlb_arbiter_v2_01_a tlb_arbiter vhdl
+

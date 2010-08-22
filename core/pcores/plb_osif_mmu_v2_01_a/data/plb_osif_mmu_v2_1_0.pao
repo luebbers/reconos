@@ -1,0 +1,61 @@
+##############################################################################
+## Filename:          plb_osif_mmu_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Wed Nov 21 12:27:51 2007 
+##############################################################################
+
+lib proc_common_v1_00_b proc_common_pkg vhdl
+lib proc_common_v1_00_b family vhdl
+lib proc_common_v1_00_b or_muxcy vhdl
+lib proc_common_v1_00_b or_gate vhdl
+lib proc_common_v1_00_b pselect vhdl
+lib proc_common_v1_00_b valid_be vhdl
+lib proc_common_v1_00_b ld_arith_reg vhdl
+lib proc_common_v1_00_b ld_arith_reg2 vhdl
+lib proc_common_v1_00_b down_counter vhdl
+lib proc_common_v1_00_b inferred_lut4 vhdl
+lib proc_common_v1_00_b srl_fifo vhdl
+lib proc_common_v1_00_b srl_fifo2 vhdl
+lib ipif_common_v1_00_e ipif_pkg vhdl
+lib ipif_common_v1_00_e ipif_steer vhdl
+lib ipif_common_v1_00_e interrupt_control vhdl
+lib ipif_common_v1_00_e dma_sg_pkg vhdl
+lib ipif_common_v1_00_e dma_sg_cmp vhdl
+lib ipif_common_v1_00_e ctrl_reg vhdl
+lib ipif_common_v1_00_e burst_size_calc vhdl
+lib ipif_common_v1_00_e dma_sg vhdl
+lib ipif_common_v1_00_e dma_sg_sim vhdl
+lib dre_v1_00_a dre_support vhdl
+lib dre_v1_00_a dre_64_top vhdl
+lib plb_ipif_v2_01_a pf_counter_bit vhdl
+lib plb_ipif_v2_01_a pf_counter vhdl
+lib plb_ipif_v2_01_a pf_counter_top vhdl
+lib plb_ipif_v2_01_a pf_occ_counter vhdl
+lib plb_ipif_v2_01_a pf_occ_counter_top vhdl
+lib plb_ipif_v2_01_a pf_adder_bit vhdl
+lib plb_ipif_v2_01_a pf_adder vhdl
+lib plb_ipif_v2_01_a pf_dpram_select vhdl
+lib plb_ipif_v2_01_a srl16_fifo vhdl
+lib plb_ipif_v2_01_a pf_dly1_mux vhdl
+lib plb_ipif_v2_01_a rdpfifo_dp_cntl vhdl
+lib plb_ipif_v2_01_a ipif_control_rd vhdl
+lib plb_ipif_v2_01_a rdpfifo_top vhdl
+lib plb_ipif_v2_01_a ipif_control_wr_dre vhdl
+lib plb_ipif_v2_01_a wrpfifo_dp_cntl vhdl
+lib plb_ipif_v2_01_a wrpfifo_top vhdl
+lib plb_ipif_v2_01_a addr_reg_cntr_brst vhdl
+lib plb_ipif_v2_01_a address_decoder vhdl
+lib plb_ipif_v2_01_a determinate_timer vhdl
+lib plb_ipif_v2_01_a plb_slave_attach_dtime_dma vhdl
+lib plb_ipif_v2_01_a master_attachment vhdl
+lib plb_ipif_v2_01_a plb_sesr_sear vhdl
+lib plb_ipif_v2_01_a ipif_reset vhdl
+lib plb_ipif_v2_01_a plb_dma_sg vhdl
+lib plb_ipif_v2_01_a plb_ipif vhdl
+lib reconos_v2_01_a reconos_pkg vhdl
+lib osif_core_mmu_v2_01_a all
+lib plb_osif_mmu_v2_01_a bus_master vhdl
+lib plb_osif_mmu_v2_01_a bus_slave_regs vhdl
+lib plb_osif_mmu_v2_01_a fifo_mgr vhdl
+lib plb_osif_mmu_v2_01_a mem_plb34 vhdl
+lib plb_osif_mmu_v2_01_a plb_osif vhdl
