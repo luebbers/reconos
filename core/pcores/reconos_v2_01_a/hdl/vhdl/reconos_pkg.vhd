@@ -51,6 +51,7 @@
 -- 19.04.2008  Enno Luebbers        added handshaking between command_decoder
 --                                  and HW thread
 -- 04.08.2008  Andreas Agne         implemented mq send and receive functions
+-- 22.08.2010  Andreas Agne         added MMU related command codes
 --*************************************************************************/
 
 library IEEE;
@@ -185,6 +186,9 @@ package reconos_pkg is
   -- local mbox tryput
   constant OSIF_CMD_MBOX_TRYPUT_LOCAL  : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"42";
 
+  -- mmu exceptions
+  constant OSIF_CMD_MMU_FAULT            : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"4C";
+  constant OSIF_CMD_MMU_ACCESS_VIOLATION : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"4D";
 
 
 
@@ -215,6 +219,12 @@ package reconos_pkg is
   constant OSIF_CMD_CLEAR_RESUME_STATE : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"07";
   constant OSIF_CMD_REQUEST_YIELD : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"08";
   constant OSIF_CMD_CLEAR_YIELD : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"09";
+
+  -- mmu initialization and exception handling
+  constant OSIF_CMD_MMU_SETPGD           : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"0A";
+  constant OSIF_CMD_MMU_REPEAT           : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"0B";
+  constant OSIF_CMD_MMU_RESET            : std_logic_vector(0 to C_OSIF_CMD_WIDTH-1) := X"0C";
+
 --######################## TYPES #########################
 
   ---------------------------------------------------
