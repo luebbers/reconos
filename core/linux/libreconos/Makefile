@@ -1,3 +1,6 @@
+CFLAGS=-O3
+
+all: default
 
 default: lib/libreconos.a
 
