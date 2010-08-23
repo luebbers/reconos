@@ -68,7 +68,7 @@ def create_reconos_config():
 
 supportedBoards = ('xup', 'ml403')
 baseDesign = {'xup': os.environ["RECONOS"] + "/support/refdesigns/10.1/xup/xup_light",
-              'ml403': os.environ["RECONOS"] + "/support/refdesigns/9.2/ml403/ml403_light"}
+              'ml403': os.environ["RECONOS"] + "/support/refdesigns/12.2/ml403/ml403_light"}
 tests = {}
 cfg = create_reconos_config()
 #cfg["verbose"] = True;

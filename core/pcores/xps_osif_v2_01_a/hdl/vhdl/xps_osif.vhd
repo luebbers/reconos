@@ -96,12 +96,12 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
-library proc_common_v2_00_a;
-use proc_common_v2_00_a.proc_common_pkg.all;
-use proc_common_v2_00_a.ipif_pkg.all;
+library proc_common_v3_00_a;
+use proc_common_v3_00_a.proc_common_pkg.all;
+use proc_common_v3_00_a.ipif_pkg.all;
 
-library plbv46_master_burst_v1_00_a;
-use plbv46_master_burst_v1_00_a.plbv46_master_burst;
+library plbv46_master_burst_v1_01_a;
+use plbv46_master_burst_v1_01_a.plbv46_master_burst;
 
 library osif_core_v2_01_a;
 use osif_core_v2_01_a.all;
@@ -686,7 +686,7 @@ task_reset <= task_reset_internal;
   ------------------------------------------
   -- instantiate plbv46_master_burst
   ------------------------------------------
-  PLBV46_MASTER_BURST_I : entity plbv46_master_burst_v1_00_a.plbv46_master_burst
+  PLBV46_MASTER_BURST_I : entity plbv46_master_burst_v1_01_a.plbv46_master_burst
     generic map
     (
       C_MPLB_AWIDTH                  => C_MPLB_AWIDTH,

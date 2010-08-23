@@ -158,7 +158,13 @@ hal_platform_IRQ_init(void)
 #ifndef CYGPKG_REDBOOT
     // This is a write-once bit, so if we are not planning to enable
     // interrupts at this time, we can safely delay this to a later time
+#ifdef XIntc_mMasterEnable
     XIntc_mMasterEnable(UPBHWR_INTC_0_BASEADDR);
+#else
+#ifdef XIntc_MasterEnable
+    XIntc_MasterEnable(UPBHWR_INTC_0_BASEADDR);
+#endif
+#endif
 #endif
 }
 

@@ -1,0 +1,11 @@
+-p
+xc4vfx12ff668-10
+-lang
+vhdl
+-lp
+/home/enno/reconos/
+-lp
+/home/enno/reconos/support/pcores/
+-msg
+__xps/ise/xmsgprops.lst
+system.mhs
