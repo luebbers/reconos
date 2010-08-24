@@ -2,8 +2,6 @@
 XmpVersion: 12.2
 VerMgmt: 12.2
 IntStyle: default
-ModuleSearchPath: /home/enno/reconos/support/pcores/dcr_timebase_v1_00_b/../../../
-ModuleSearchPath: /home/enno/reconos/support/pcores
 MHS File: system.mhs
 MSS File: system.mss
 Architecture: virtex4
