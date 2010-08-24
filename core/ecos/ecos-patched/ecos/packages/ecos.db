@@ -6364,4 +6364,163 @@ package CYGPKG_NET_LWIP {
 	description	"Lightweight TCP/IP stack: lwIP"
 }
 
+# --------------------------------------------------------------------------
+# Microblaze packages
+
+package CYGPKG_HAL_MICROBLAZE {
+    alias               { "Microblaze common HAL" hal_microblaze microblaze_hal microblaze_arch_hal }
+    directory   hal/microblaze/arch
+    script              hal_microblaze.cdl
+    hardware
+    description "
+        The Microblaze architecture HAL package provides generic
+        support for this processor architecture. It is also necessary to
+        select a CPU variant and a specific target platform HAL
+        package."
+}
+
+package CYGPKG_HAL_MICROBLAZE_MB4A {
+    alias               { "Microblaze 4.00.a variant HAL" hal_microblaze_mb4a microblaze_mb4a_hal }
+    directory   hal/microblaze/mb4a/
+    script              hal_microblaze_mb4a.cdl
+    hardware
+        description     "
+        The Microblaze 4.00.a variant HAL package provides generic support
+        for this processor variant. It is also necessary to
+        select a specific target platform HAL package."
+}
+
+package CYGPKG_HAL_MICROBLAZE_GENERIC {
+    alias               { "Generic support for Microblaze boards" hal_microblaze_generic microblaze_generic_hal }
+    directory   hal/microblaze/generic
+    script              hal_microblaze_generic.cdl
+    hardware
+    description "
+        The Generic support for Microblaze boards"
+}
+
+# Supported drivers
+package CYGPKG_DEVS_ETH_MICROBLAZE_EMACLITE {
+    alias               { "Xilinx Ethernet MAC Lite driver" devs_eth_emaclite }
+    hardware
+    directory   devs/eth/microblaze/emaclite
+    script              emaclite_eth_drivers.cdl
+    description "Xilinx Ethernet MAC Lite driver"
+}
+
+
+package CYGPKG_IO_SERIAL_MICROBLAZE_UART16550 {
+    alias               { "Xilinx Uart16550 serial driver" devs_serial_mb_uart16550 }
+    hardware
+    directory   devs/serial/microblaze/uart16550
+    script              ser_microblaze_uart16550.cdl
+    description "Xilinx Uart16550 serial driver"
+}
+
+# --------------------------------------------------------------------------
+
+## XILINX Spartan 3E Starter Kit (Microblaze 4a) packages
+package CYGPKG_HAL_MICROBLAZE_SPARTAN3ESK {
+        alias           { "Spartan 3E Starter Kit board - test " hal_microblaze_spartan3esk microblaze_spartan3esk_hal }
+        directory       hal/microblaze/spartan3esk
+        script          hal_microblaze_spartan3esk.cdl
+        hardware
+        description "
+            The SPARTAN3ESK HAL package provides the support needed to run
+            eCos on a XILINX Spartan 3E Starter Kit board."
+}
+
+target spartan3esk {
+    alias           { "Spartan 3E Starter Kit - test" xilinx_spartan3esk }
+    packages        { CYGPKG_HAL_MICROBLAZE
+            CYGPKG_HAL_MICROBLAZE_MB4A
+            CYGPKG_HAL_MICROBLAZE_GENERIC
+            CYGPKG_HAL_MICROBLAZE_SPARTAN3ESK
+            CYGPKG_IO_SERIAL_GENERIC_16X5X
+            CYGPKG_IO_SERIAL_MICROBLAZE_UART16550
+            CYGPKG_IO_ETH_DRIVERS
+            CYGPKG_DEVS_ETH_MICROBLAZE_EMACLITE
+    }
+    description "
+        The spartan3esk target provides the packages needed to run
+        eCos on the XILINX Spartan 3E Starter Kit board."
+}
+### start CYGPKG_HAL_MICROBLAZE_XILINX_SPARTAN3E1600_OPB_EDK92
+###############################################################################
+# Generate by ecos_v1.00.a - Copyright (C) Michal Simek 2008 <monstr@monstr.eu>
+###############################################################################
+package CYGPKG_HAL_MICROBLAZE_XILINX_SPARTAN3E1600_OPB_EDK92 {
+    alias       { "Xilinx Spartan3e1600 opb edk92" hal_microblaze_xilinx_spartan3e1600_opb_edk92 microblaze_xilinx_spartan3e1600_opb_edk92_hal }
+    directory   hal/microblaze/xilinx_spartan3e1600_opb_edk92
+    script              hal_microblaze_xilinx_spartan3e1600_opb_edk92.cdl
+    hardware
+    description " This platform is create by ecos_v1.00.a"
+}
+
+target xilinx_spartan3e1600_opb_edk92 {
+    alias       { "Xilinx Spartan3e1600 opb edk92" xilinx_spartan3e1600_opb_edk92 }
+    packages {  CYGPKG_HAL_MICROBLAZE
+            CYGPKG_HAL_MICROBLAZE_MB4A
+            CYGPKG_HAL_MICROBLAZE_GENERIC
+            CYGPKG_HAL_MICROBLAZE_XILINX_SPARTAN3E1600_OPB_EDK92
+            CYGPKG_IO_SERIAL_GENERIC_16X5X
+            CYGPKG_IO_SERIAL_MICROBLAZE_UART16550
+            CYGPKG_IO_ETH_DRIVERS
+            CYGPKG_DEVS_ETH_MICROBLAZE_EMACLITE
+    }
+    description " This target is create by ecos_v1.00.a"
+}
+### end CYGPKG_HAL_MICROBLAZE_XILINX_SPARTAN3E1600_OPB_EDK92
+### start CYGPKG_HAL_MICROBLAZE_XILINX_SPARTAN3E1600_XPS_EDK92
+###############################################################################
+# Generate by ecos_v1.00.a - Copyright (C) Michal Simek 2008 <monstr@monstr.eu>
+###############################################################################
+package CYGPKG_HAL_MICROBLAZE_XILINX_SPARTAN3E1600_XPS_EDK92 {
+    alias       { "Xilinx Spartan3e1600 xps edk92" hal_microblaze_xilinx_spartan3e1600_xps_edk92 microblaze_xilinx_spartan3e1600_xps_edk92_hal }
+    directory   hal/microblaze/xilinx_spartan3e1600_xps_edk92
+    script              hal_microblaze_xilinx_spartan3e1600_xps_edk92.cdl
+    hardware
+    description " This platform is create by ecos_v1.00.a"
+}
+
+target xilinx_spartan3e1600_xps_edk92 {
+    alias       { "Xilinx Spartan3e1600 xps edk92" xilinx_spartan3e1600_xps_edk92 }
+    packages {  CYGPKG_HAL_MICROBLAZE
+            CYGPKG_HAL_MICROBLAZE_MB4A
+            CYGPKG_HAL_MICROBLAZE_GENERIC
+            CYGPKG_HAL_MICROBLAZE_XILINX_SPARTAN3E1600_XPS_EDK92
+            CYGPKG_IO_SERIAL_GENERIC_16X5X
+            CYGPKG_IO_SERIAL_MICROBLAZE_UART16550
+            CYGPKG_IO_ETH_DRIVERS
+            CYGPKG_DEVS_ETH_MICROBLAZE_EMACLITE
+    }
+    description " This target is create by ecos_v1.00.a"
+}
+### end CYGPKG_HAL_MICROBLAZE_XILINX_SPARTAN3E1600_XPS_EDK92
+### start CYGPKG_HAL_MICROBLAZE_XILINX_ML505_XPS_EDK92
+###############################################################################
+# Generate by ecos_v1.00.a - Copyright (C) Michal Simek 2008 <monstr@monstr.eu>
+###############################################################################
+package CYGPKG_HAL_MICROBLAZE_XILINX_ML505_XPS_EDK92 {
+    alias       { "Xilinx ml505 xps edk92" hal_microblaze_xilinx_ml505_xps_edk92 microblaze_xilinx_ml505_xps_edk92_hal }
+    directory   hal/microblaze/xilinx_ml505_xps_edk92
+    script              hal_microblaze_xilinx_ml505_xps_edk92.cdl
+    hardware
+    description " This platform is create by ecos_v1.00.a"
+}
+
+target xilinx_ml505_xps_edk92 {
+    alias       { "Xilinx ml505 xps edk92" xilinx_ml505_xps_edk92 }
+    packages {  CYGPKG_HAL_MICROBLAZE
+            CYGPKG_HAL_MICROBLAZE_MB4A
+            CYGPKG_HAL_MICROBLAZE_GENERIC
+            CYGPKG_HAL_MICROBLAZE_XILINX_ML505_XPS_EDK92
+            CYGPKG_IO_SERIAL_GENERIC_16X5X
+            CYGPKG_IO_SERIAL_MICROBLAZE_UART16550
+            CYGPKG_IO_ETH_DRIVERS
+            CYGPKG_DEVS_ETH_MICROBLAZE_EMACLITE
+    }
+    description " This target is create by ecos_v1.00.a"
+}
+### end CYGPKG_HAL_MICROBLAZE_XILINX_ML505_XPS_EDK92
 
