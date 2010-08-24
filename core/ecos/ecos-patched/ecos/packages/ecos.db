@@ -6524,3 +6524,23 @@ target xilinx_ml505_xps_edk92 {
 }
 ### end CYGPKG_HAL_MICROBLAZE_XILINX_ML505_XPS_EDK92
 
+package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
+    alias       { "Xilinx ML605 Light" }
+    directory   hal/microblaze/xilinx_ml605
+    script              hal_microblaze_xilinx_ml605_light.cdl
+    hardware
+    description "ml605_light reference design"
+}
+
+target xilinx_ml605_light {
+    alias       { "Xilinx ML605 Light" }
+    packages {  CYGPKG_HAL_MICROBLAZE
+            CYGPKG_HAL_MICROBLAZE_MB4A
+            CYGPKG_HAL_MICROBLAZE_GENERIC
+            CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT
+            CYGPKG_IO_SERIAL_GENERIC_16X5X
+            CYGPKG_IO_SERIAL_MICROBLAZE_UART16550
+    }
+    description "Target for Xilinx ml605_light reference design"
+}
+
