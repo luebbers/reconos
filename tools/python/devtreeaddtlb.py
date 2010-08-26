@@ -36,7 +36,7 @@ Adds TLb entry to device tree.
 import sys
 
 def usage():
-	print "usage: %s <dts-input-file> <mhs-file>" % sys.argv[0]
+	sys.stderr.write("usage: %s <dts-input-file> <mhs-file>\n" % sys.argv[0])
 
 def count_tabs(line):
 	tabs = 0
@@ -56,9 +56,15 @@ def dts_entry(tlb,tabs):
 	entry.append("\t"*tabs + "} ;\n")	
 	return entry
 
-if len(sys.argv) != 3 or sys.argv[1] == "--help" or sys.argv[1] == "-h":
+
+if len(sys.argv) == 2 and (sys.argv[1] == "--help" or sys.argv[1] == "-h"):
 	usage()
 	sys.exit(0)
+
+if len(sys.argv) != 3:
+	sys.stderr.write("Error: Wrong number of input files.\n")
+	usage()
+	sys.exit(1)
 
 
 dts = open(sys.argv[1],"r")
