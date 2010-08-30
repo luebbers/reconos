@@ -63,6 +63,7 @@
 ##
 ##=============================================================================
 
+#include <xparameters.h>
 #include <pkgconf/system.h>
 #include <cyg/hal/arch.inc> /* for definition of function */
 

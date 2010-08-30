@@ -4,11 +4,12 @@
 
 #include <cyg/infra/cyg_type.inc>
 #include <pkgconf/hal_microblaze_platform.h>
+#include <xparameters.h>
 
 MEMORY
 {
-	bram(WA) : ORIGIN = MON_BRAM_BASE, LENGTH = MON_BRAM_HIGH
-	ram(WA) : ORIGIN = MON_MEMORY_BASE, LENGTH = (MON_MEMORY_HIGH - MON_MEMORY_BASE + 1)
+	bram(WA) : ORIGIN = XPAR_DLMB_CNTLR_BASEADDR, LENGTH = (XPAR_DLMB_CNTLR_HIGHADDR - XPAR_DLMB_CNTLR_BASEADDR + 1)
+	ram(WA) : ORIGIN = XPAR_DDR3_SDRAM_MPMC_BASEADDR, LENGTH = (XPAR_DDR3_SDRAM_MPMC_HIGHADDR - XPAR_DDR3_SDRAM_MPMC_BASEADDR + 1)
 }
 
 SECTIONS
@@ -21,7 +22,7 @@ SECTIONS
     CYG_LABEL_DEFN(__reserved_vsr_table) = ALIGN (0x4); 
 	. = CYG_LABEL_DEFN(__reserved_vsr_table) + 0x200;
     CYG_LABEL_DEFN(__reserved_virtual_table) = ALIGN (0x4); 
-	. = MON_MEMORY_BASE;
+	. = XPAR_DDR3_SDRAM_MPMC_BASEADDR;
     CYG_LABEL_DEFN(__reserved_for_rom) = ALIGN (0x4); 
 	. = CYG_LABEL_DEFN(__reserved_for_rom) + 0x3E800;
 	

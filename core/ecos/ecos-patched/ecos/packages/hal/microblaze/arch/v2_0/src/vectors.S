@@ -104,8 +104,10 @@
 
 #define CYGARC_HAL_COMMON_EXPORT_CPU_MACROS
 #include <cyg/hal/mb_regs.h>
+#include <xparameters.h>
 
 #include <cyg/hal/arch.inc>
+
 
 #===========================================================================
 

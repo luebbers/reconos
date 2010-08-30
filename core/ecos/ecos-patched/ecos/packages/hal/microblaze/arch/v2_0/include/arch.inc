@@ -55,6 +55,10 @@
 ##
 ##=============================================================================
 
+// include only once
+#ifndef __ARCH_INC__
+#define __ARCH_INC__
+
 #include <cyg/hal/variant.inc>
 
 #------------------------------------------------------------------------------
@@ -73,7 +77,7 @@ name:
 ## operations that may have CPU specific implementations on different
 ## variants of the architecture.		
 
-#ifdef MON_CPU_MSR_INSTR
+#ifdef XPAR_MICROBLAZE_0_USE_MSR_INSTR
 # Enable interrupts
 .macro hal_cpu_int_enable
 	msrset	r0, 0x2
@@ -117,5 +121,8 @@ name:
 	nop
 .endm
 
+#endif
+
 #------------------------------------------------------------------------------
 # end of arch.inc
+

@@ -57,10 +57,11 @@ cdl_package CYGPKG_HAL_MICROBLAZE_GENERIC {
 	description   "
 		Generic support."
 
-	compile		plf_io.c hal_diag.c hal_aux.c platform.S \
-			src/xuartns550_g.c src/xuartns550_intr.c src/xbasic_types.c\
-			src/xuartns550_options.c  src/xuartns550_stats.c src/xuartns550.c src/xuartns550_l.c \
-			src/xuartns550_selftest.c src/xuartns550_format.c src/xuartns550_sinit.c
+#	compile		plf_io.c hal_diag.c hal_aux.c platform.S \
+#			src/xuartns550_g.c src/xuartns550_intr.c src/xbasic_types.c\
+#			src/xuartns550_options.c  src/xuartns550_stats.c src/xuartns550.c src/xuartns550_l.c \
+#			src/xuartns550_selftest.c src/xuartns550_format.c src/xuartns550_sinit.c
+	compile		plf_io.c hal_diag.c hal_aux.c platform.S
 
 	implements    CYGINT_HAL_DEBUG_GDB_STUBS
 	implements    CYGINT_HAL_DEBUG_GDB_STUBS_BREAK

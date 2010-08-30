@@ -51,6 +51,7 @@
 ##
 ##=============================================================================
 
+#include <xparameters.h>
 #include <cyg/hal/variant.inc>
 #include <cyg/hal/mb_offsets.inc>
 

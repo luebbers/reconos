@@ -95,9 +95,9 @@ cdl_package CYGPKG_HAL_MICROBLAZE {
     }
 
 	make -priority 1 {
-		../../../common/v2_0/makefile.tmp : ../../../common/v2_0/makefile
-		mv ../../../common/v2_0/makefile ../../../common/v2_0/makefile.tmp
-		cat ../../../common/v2_0/makefile.tmp | sed -e "s/\$$(CC) \$$(CFLAGS) -nostdlib -Wl,-r -Wl,--whole-archive -o \$$@ \$$</$(COMMAND_PREFIX)ld -nostdlib -r --whole-archive -o \$$@ \$$</" > ../../../common/v2_0/makefile
+		../../../common/current/makefile.tmp : ../../../common/current/makefile
+		mv ../../../common/current/makefile ../../../common/current/makefile.tmp
+		cat ../../../common/current/makefile.tmp | sed -e "s/\$$(CC) \$$(CFLAGS) -nostdlib -Wl,-r -Wl,--whole-archive -o \$$@ \$$</$(COMMAND_PREFIX)ld -nostdlib -r --whole-archive -o \$$@ \$$</" > ../../../common/current/makefile
 	}
 
     cdl_option CYGSEM_HAL_MICROBLAZE_RESET_USES_JUMP {

@@ -78,9 +78,9 @@
 // it if necessary. The regions defined below are the minimum requirements.
 CYGARC_MEMDESC_TABLE CYGBLD_ATTRIB_WEAK = {
 	// Mapping for the Spartan3esk development boards
-	CYGARC_MEMDESC_NOCACHE( 0x00000000, (MON_CPU_DCACHE_BASE - 1) ),		/* Uncached */
-	CYGARC_MEMDESC_CACHE( MON_CPU_DCACHE_BASE, MON_CPU_DCACHE_HIGH ),			/* Cached region */
-	CYGARC_MEMDESC_NOCACHE( MON_CPU_DCACHE_HIGH + 1, 0xFFFFFFFF),	/* Uncached */
+	CYGARC_MEMDESC_NOCACHE( 0x00000000, (XPAR_MICROBLAZE_0_DCACHE_BASEADDR - 1) ),		/* Uncached */
+	CYGARC_MEMDESC_CACHE( XPAR_MICROBLAZE_0_DCACHE_BASEADDR, XPAR_MICROBLAZE_0_DCACHE_HIGHADDR ),			/* Cached region */
+	CYGARC_MEMDESC_NOCACHE( XPAR_MICROBLAZE_0_DCACHE_HIGHADDR + 1, 0xFFFFFFFF),	/* Uncached */
 	CYGARC_MEMDESC_TABLE_END
 };
 
@@ -102,7 +102,6 @@ void hal_platform_init(void)
 	hal_if_init();
 }
 
-#if 0
 //
 // Initialize serial ports - called during hal_if_init()
 // Note: actual serial port support code is supported by the mb4a variant layer
@@ -118,7 +117,6 @@ void cyg_hal_plf_comms_init(void)
 
     cyg_hal_plf_serial_init();
 }
-#endif
 
 /* Reset system */
 /* FIXME add printing message */
@@ -133,7 +131,7 @@ void _platform_reset(void)
 // We don't use the HAL completely, only the low-level functions
 
 /* map intc structure to intc ip */
-microblaze_intc_t *intc = (microblaze_intc_t *) (MON_INTC_BASE);
+microblaze_intc_t *intc = (microblaze_intc_t *) (XPAR_XPS_INTC_0_BASEADDR);
 //----------------------------------------------------------------------------
 // Interrupt support
 void hal_platform_IRQ_init(void)
@@ -200,7 +198,7 @@ void hal_interrupt_set_level(int vector, int level)
 //----------------------------------------------------------------------------
 // Real-time clock support
 /* Map timer structure to timer IP core */
-microblaze_timer_t *tmr = (microblaze_timer_t *) (MON_TIMER_BASE);
+microblaze_timer_t *tmr = (microblaze_timer_t *) (XPAR_XPS_TIMER_0_BASEADDR);
 
 externC void hal_clock_initialize(cyg_uint32 period)
 {

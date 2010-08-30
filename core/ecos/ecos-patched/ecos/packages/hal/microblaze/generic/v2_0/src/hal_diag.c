@@ -9,7 +9,8 @@
 // -------------------------------------------
 // This file is part of eCos, the Embedded Configurable Operating System.
 // Copyright (C) 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
-// Copyright (C) 2002, 2003 Gary Thomas
+// Copyright (C) 2002, 2003, 2004, 2005 Mind n.v.
+// Copyright (C) 2007 ReconOS
 //
 // eCos is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free
@@ -41,8 +42,8 @@
 //=============================================================================
 //#####DESCRIPTIONBEGIN####
 //
-// Author(s):      Michal Pfeifer
-// Original data:  PowerPC
+// Author(s):   hmt
+// Contributors:hmt, gthomas
 // Date:        1999-06-08
 // Purpose:     HAL diagnostic output
 // Description: Implementations of HAL diagnostic I/O support.
@@ -57,11 +58,9 @@
 #include <cyg/infra/cyg_type.h>         // base types
 #include <cyg/infra/cyg_trac.h>         // tracing macros
 #include <cyg/infra/cyg_ass.h>          // assertion macros
-#include <cyg/infra/diag.h>
 
 #include <cyg/hal/hal_io.h>             // IO macros
 #include <cyg/hal/hal_diag.h>
-#include <cyg/hal/hal_misc.h>           // cyg_hal_is_break()                          
 #include <cyg/hal/hal_intr.h>           // Interrupt macros
 #include <cyg/hal/drv_api.h>
 
@@ -69,15 +68,27 @@
 #include <cyg/hal/hal_stub.h>           // hal_output_gdb_string
 #endif
 
-//#include <cyg/hal/mb_regs.h>
+#include "xbasic_types.h"
+#include "xparameters.h"
+#include <xparameters_translation.h>
+#include "xuartns550.h"
+#include "xstatus.h"
 
-#include "src/xuartns550.h"
-#include <pkgconf/hal_microblaze_platform.h>
+// REMOVEME
+void inline led( unsigned int l ) {
+
+    volatile unsigned int *ledptr = (unsigned int*) 0x81440000;
+
+    // set as outputs
+    *(ledptr+1) = 0x00000000;
+
+    *ledptr = l;
+}
+
 
 //=============================================================================
 // Serial driver
 //=============================================================================
-
 
 //-----------------------------------------------------------------------------
 typedef struct {
@@ -90,13 +101,11 @@ typedef struct {
     unsigned char inq[16];
     unsigned char *qp;
     int            qlen;
-    XUartNs550 dev; //structure for uart16550 driver
+    XUartNs550 dev;
 } channel_data_t;
 
-
-// initialize part of structure
 static channel_data_t channels[] = {
-     { 0, 1000, MON_UART16550_0_INTR },
+    { UPBHWR_UART16550_0_DEVICE_ID, 1000, CYGNUM_HAL_INTERRUPT_UART0},
 };
 
 static void cyg_hal_plf_serial_isr_handler(channel_data_t *chan, int event, int len);
@@ -105,25 +114,16 @@ static void cyg_hal_plf_serial_isr_handler(channel_data_t *chan, int event, int 
 static void
 init_serial_channel(channel_data_t *chan)
 {
-#ifdef MON_UART16550_0
     XStatus stat;
     XUartNs550Format fmt;
     Xuint16 opt;
-//	int *led;
-//	led = 0x40200000;
-
-//	(&chan->dev)->BaseAddress=0x40400000;
-
-//   XUartNs550_SetBaud(XPAR_RS232_DTE_BASEADDR, XPAR_XUARTNS550_CLOCK_HZ, 9600);
-//   XUartNs550_mSetLineControlReg(XPAR_RS232_DTE_BASEADDR, XUN_LCR_8_DATA_BITS);
-
+   
     stat = XUartNs550_Initialize(&chan->dev, chan->dev_id);
+    
     if (stat != XST_SUCCESS) {
-//	*led = 0xfff;
         return;  // What else can be done?
     }
 
-//	*led = *led + 0x2;
     // Configure the port
     fmt.BaudRate = CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_BAUD;
     fmt.DataBits = XUN_FORMAT_8_BITS;
@@ -131,54 +131,31 @@ init_serial_channel(channel_data_t *chan)
     fmt.StopBits = XUN_FORMAT_1_STOP_BIT;
     stat = XUartNs550_SetDataFormat(&chan->dev, &fmt);
     if (stat != XST_SUCCESS) {
-//	*led = *led + 0x4;
         return;  // What else can be done?
     }
+
     opt = XUN_OPTION_FIFOS_ENABLE | XUN_OPTION_RESET_TX_FIFO | XUN_OPTION_RESET_RX_FIFO;
     opt = 0;
     stat = XUartNs550_SetOptions(&chan->dev, opt);
+
     if (stat != XST_SUCCESS) {
-//	*led = *led + 0x8;
-      return;  // What else can be done?
+        return;  // What else can be done?
     }
-    XUartNs550_SetHandler(&chan->dev, cyg_hal_plf_serial_isr_handler, (void *)chan);
+
+    XUartNs550_SetHandler(&chan->dev, cyg_hal_plf_serial_isr_handler, chan);
     XUartNs550_SetFifoThreshold(&chan->dev, XUN_FIFO_TRIGGER_01);
     chan->qlen = 0;  // No characters buffered
     chan->dev_ok = true;
-//	*led = *led + 0x10;
-#endif
 }
-
-cyg_uint8 XUartLite_RecvByte2()
-{
-	while (  ( XIo_In32(MON_UARTLITE_0_BASE + 0x8) & 0x01 ) != 0x01 );
-
-	return (cyg_uint8)XIo_In32(MON_UARTLITE_0_BASE);
-}
-
-void XUartLite_SendByte2(char Data)
-{
-	while ((XIo_In32(MON_UARTLITE_0_BASE + 0x8) & 0x08) == 0x08);
-
-	XIo_Out32(MON_UARTLITE_0_BASE + 0x4, Data);
-}
-
 
 static cyg_bool
 cyg_hal_plf_serial_getc_nonblock(channel_data_t *chan, cyg_uint8 *ch)
 {
-#ifdef MON_UARTLITE_0
-
-	*ch = XUartLite_RecvByte2();
-	return true;
-#else
-
     if (!chan->dev_ok) return false;
     if (chan->qlen == 0) {
         // See if any characters are now available
         chan->qp = chan->inq;
-//        chan->qlen = XUartNs550_Recv(&chan->dev, chan->qp, sizeof(chan->inq));
-
+        chan->qlen = XUartNs550_Recv(&chan->dev, chan->qp, sizeof(chan->inq));
     }
     if (chan->qlen) {
         *ch = *chan->qp++;
@@ -186,11 +163,7 @@ cyg_hal_plf_serial_getc_nonblock(channel_data_t *chan, cyg_uint8 *ch)
         return true;
     }
     return false;
-#endif
 }
-
-
-
 
 cyg_uint8
 cyg_hal_plf_serial_getc(channel_data_t *chan)
@@ -202,39 +175,13 @@ cyg_hal_plf_serial_getc(channel_data_t *chan)
 }
 
 
-
 void
 cyg_hal_plf_serial_putc(channel_data_t *chan, cyg_uint8 c)
 {
-#if 0
-	int *uart_tx;
-	int *uart_stat;
-
-	uart_tx = MON_UARTLITE_0_BASE + 0x4;
-	uart_stat = MON_UARTLITE_0_BASE + 0x8;
-
-	unsigned retries = 10000;
-	while (retries-- && (*uart_stat & (1<<3)))
-		;
-
-	/* Only attempt the iowrite if we didn't timeout */
-	if(retries)
-		*uart_tx = c & 0xff;
-
-
-	if (!chan->dev_ok) { 
-		return;
-	}
-#endif
-#ifdef MON_UARTLITE_0
-	XUartLite_SendByte2(c);
-#endif
-
-#ifdef MON_UART16550_0
+    if (!chan->dev_ok) return;
     XUartNs550_Send(&chan->dev, &c, 1);
     // Wait for character to get out
     while (XUartNs550_IsSending(&chan->dev)) ;
-#endif
 }
 
 static void
@@ -274,6 +221,8 @@ cyg_hal_plf_serial_control(channel_data_t *chan, __comm_control_cmd_t func, ...)
     Xuint16 opt;
     int ret = 0;
 
+    led(1);
+
     if (!chan->dev_ok) return ret;
 
     switch (func) {
@@ -303,7 +252,7 @@ cyg_hal_plf_serial_control(channel_data_t *chan, __comm_control_cmd_t func, ...)
         chan->msec_timeout = va_arg(ap, cyg_uint32);
 
         va_end(ap);
-    }
+    }        
     default:
         break;
     }
@@ -326,10 +275,6 @@ cyg_hal_plf_serial_isr_handler(channel_data_t *chan,
 {
     int res;
     char ch;
-
-	int *led;
-	led = 0x81400000;
-	*led = 0x40;
 
     *chan->ctrlc = 0;
     switch (event) {
@@ -378,18 +323,6 @@ cyg_hal_plf_serial_init(void)
     
     // Restore original console
     CYGACC_CALL_IF_SET_CONSOLE_COMM(cur);
-}
-
-void
-cyg_hal_plf_comms_init(void)
-{
-    static int initialized = 0;
-
-    if (initialized)
-        return;
-    initialized = 1;
-
-    cyg_hal_plf_serial_init();
 }
 
 // EOF hal_diag.c

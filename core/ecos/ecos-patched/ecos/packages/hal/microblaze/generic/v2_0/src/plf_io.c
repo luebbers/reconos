@@ -93,7 +93,7 @@ cyg_uint32 gpio_init(void)
 	cyg_uint32 i;
 
 	for(i = 0; i < (sizeof(gpio_dev) / sizeof(gpio_dev)[0]); i++) {
-		diag_printf("Init GPIO %d\n",i);
+//		diag_printf("Init GPIO %d\n",i);
 		*(cyg_uint32 *)(gpio_dev[i].baseaddr + 0x4) = 0x0; /* data direction */
 		*(cyg_uint32 *)gpio_dev[i].baseaddr = 0xffffffff;
 

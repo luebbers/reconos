@@ -65,6 +65,7 @@
 #include <cyg/hal/plf_cache.h>
 
 #include <pkgconf/hal_microblaze_platform.h>
+#include <xparameters.h>
 
 //-----------------------------------------------------------------------------
 // Cache dimensions
@@ -72,21 +73,21 @@
 // FIXME size of caches is wrong
 // Data cache
 #ifndef HAL_DCACHE_SIZE
-#define HAL_DCACHE_SIZE                 MON_CPU_DCACHE_SIZE   // Size of data cache in bytes
+#define HAL_DCACHE_SIZE                 (XPAR_MICROBLAZE_0_DCACHE_HIGHADDR - XPAR_MICROBLAZE_0_DCACHE_BASEADDR + 1)   // Size of data cache in bytes
 #define HAL_DCACHE_LINE_SIZE            16      // Size of a data cache line
 #define HAL_DCACHE_WAYS                 1       // Associativity of the cache
 #endif
-#define CYGARC_DCACHE_BASEADDR		MON_CPU_DCACHE_BASE
-#define CYGARC_DCACHE_HIGHADDR		MON_CPU_DCACHE_HIGH
+#define CYGARC_DCACHE_BASEADDR		XPAR_MICROBLAZE_0_DCACHE_BASEADDR
+#define CYGARC_DCACHE_HIGHADDR		XPAR_MICROBLAZE_0_DCACHE_HIGHADDR
 
 // Instruction cache
 #ifndef HAL_ICACHE_SIZE
-#define HAL_ICACHE_SIZE			MON_CPU_ICACHE_SIZE    // Size of cache in bytes
+#define HAL_ICACHE_SIZE			(XPAR_MICROBLAZE_0_ICACHE_HIGHADDR - XPAR_MICROBLAZE_0_ICACHE_BASEADDR + 1)    // Size of cache in bytes
 #define HAL_ICACHE_LINE_SIZE		16      // Size of a cache line
 #define HAL_ICACHE_WAYS			1       // Associativity of the cache
 #endif
-#define CYGARC_ICACHE_BASEADDR		MON_CPU_ICACHE_BASE
-#define CYGARC_ICACHE_HIGHADDR		MON_CPU_ICACHE_HIGH
+#define CYGARC_ICACHE_BASEADDR		XPAR_MICROBLAZE_0_ICACHE_BASEADDR
+#define CYGARC_ICACHE_HIGHADDR		XPAR_MICROBLAZE_0_ICACHE_HIGHADDR
 
 #define HAL_DCACHE_SETS		(HAL_DCACHE_SIZE/(HAL_DCACHE_LINE_SIZE*HAL_DCACHE_WAYS))
 #define HAL_ICACHE_SETS		(HAL_ICACHE_SIZE/(HAL_ICACHE_LINE_SIZE*HAL_ICACHE_WAYS))

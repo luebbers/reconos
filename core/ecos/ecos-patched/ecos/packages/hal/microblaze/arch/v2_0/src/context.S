@@ -53,6 +53,7 @@
 ##
 ##=============================================================================
 
+#include <xparameters.h>
 #include <pkgconf/hal.h>
 #include <cyg/hal/arch.inc>
 #include <cyg/hal/mb_offsets.inc>

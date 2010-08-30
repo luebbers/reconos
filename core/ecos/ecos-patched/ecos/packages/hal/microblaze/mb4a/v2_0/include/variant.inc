@@ -77,7 +77,7 @@
 ## mb4a CPU initialization
 # clearing MSR register
 
-#ifdef MON_CPU_MSR_INSTR
+#ifdef XPAR_MICROBLAZE_USE_MSR_INSTR
 	.macro hal_cpu_init
 		msrclr	r0, 0	# MSR = 0
 		nop

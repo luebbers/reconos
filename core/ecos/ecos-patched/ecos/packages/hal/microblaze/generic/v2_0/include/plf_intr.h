@@ -62,16 +62,19 @@
 
 #include <cyg/infra/cyg_type.h>
 
+#include <xparameters.h>
+
 //----------------------------------------------------------------------------
 // Platform specific interrupt mapping - interrupt vectors
+#define CYGNUM_HAL_INTERRUPT_MB_BASE    1
 #define CYGHWR_HAL_INTERRUPT_LAYOUT_DEFINED
 
-/* maximum number of interrupt */
-#define CYGNUM_HAL_ISR_MAX		MON_INTC_NUM_INTR
+/* maximum number of interrupt FIXME: use translated constant names */
+#define CYGNUM_HAL_ISR_MAX		XPAR_INTC_MAX_NUM_INTR_INPUTS
 
-//Real-time clock
+//Real-time clock FIXME: use translated constant names
 #ifndef CYGNUM_HAL_INTERRUPT_RTC
-#define CYGNUM_HAL_INTERRUPT_RTC	MON_TIMER_INTR
+#define CYGNUM_HAL_INTERRUPT_RTC	(CYGNUM_HAL_INTERRUPT_MB_BASE + XPAR_XPS_INTC_0_XPS_TIMER_0_INTERRUPT_INTR)
 #endif // CYGNUM_HAL_INTERRUPT_RTC
 
 // Platform specific interrupt handling - using EPIC

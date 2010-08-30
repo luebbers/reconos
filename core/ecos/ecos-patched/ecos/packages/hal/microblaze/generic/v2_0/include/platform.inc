@@ -60,8 +60,8 @@
 # decode the interrupt
 .macro  hal_intc_decode dreg,state
 	#addi	r3, r0, _S3ESK_INTC
-	lwi	\dreg, r0, MON_INTC_BASE # S3ESK_INTC_ISR load isr value
-	lwi	r3, r0, MON_INTC_BASE + 0x8  #_S3ESK_INTC_IER # load ier value
+	lwi	\dreg, r0, XPAR_XPS_INTC_0_BASEADDR # S3ESK_INTC_ISR load isr value
+	lwi	r3, r0, XPAR_XPS_INTC_0_BASEADDR + 0x8  #_S3ESK_INTC_IER # load ier value
 	and	r3, \dreg, r3
 
 	beqid	r3, 1f					# calculate irq number
