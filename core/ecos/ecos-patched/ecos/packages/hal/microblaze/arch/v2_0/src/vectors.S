@@ -769,7 +769,7 @@ cyg_hal_default_interrupt_vsr:
         addi    r5, r0, 0x0301                  # r3 = type = INTR,RAISE
         lwi     r6, r20, 4				        # arg1 = vector address
         xor     r7,r7,r7                        # arg2 = 0
-        bralid   cyg_instrument                  # call instrument function
+        bralid   r15, cyg_instrument                  # call instrument function
 		nop
         
 #endif

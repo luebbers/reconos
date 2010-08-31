@@ -69,11 +69,10 @@
 0:	srl	r3, r3
 	bneid	r3, 0b
 	addi	\dreg, \dreg, 1
-	addi	\dreg, \dreg, -1
 1:	
-	addi	\dreg, \dreg, 1 #FIXME interrupt first - there is something weird 
 	swi	\dreg, \state, 4			# update vector in state frame.
-	bslli	\dreg, \dreg, 2				# convert to byte offset.
+	addi	\dreg, \dreg, -1
+	bslli	\dreg, \dreg, 2				# convert to byte offset (needs barrel shifter)
 .endm
 
 #define CYGPKG_HAL_MB_INTC_DEFINED

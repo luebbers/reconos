@@ -55,7 +55,7 @@ ENTRY(__vcr_vector_reset)
 INPUT(extras.o)
 #endif
 #if (__GNUC__ >= 3)
-GROUP(libtarget.a libgcc.a libsupc++.a)
+GROUP(libtarget.a libgcc.a libsupc++.a libxil.a)
 #else
 GROUP(libtarget.a libgcc.a)
 #endif

@@ -99,7 +99,7 @@
 // Define decrementer as the first interrupt since it is guaranteed to
 // be defined on all MicroBlazes. External may expand into several interrupts
 // depending on interrupt controller capabilities.
-#define CYGNUM_HAL_INTERRUPT_EXTERNAL        0
+#define CYGNUM_HAL_INTERRUPT_EXTERNAL        1
 
 #define CYGNUM_HAL_ISR_MIN                   CYGNUM_HAL_INTERRUPT_EXTERNAL
 #ifndef CYGNUM_HAL_ISR_MAX
@@ -199,7 +199,7 @@ typedef cyg_uint32 CYG_INTERRUPT_STATE;
 // Basic MicroBlaze configuration only has two vectors; decrementer and
 // external. Isr tables/chaining use same vector decoder.
 #define HAL_TRANSLATE_VECTOR(_vector_,_index_) \
-    (_index_) = (_vector_)
+    (_index_) = (_vector_ - CYGNUM_HAL_ISR_MIN)
 #endif
 
 //--------------------------------------------------------------------------

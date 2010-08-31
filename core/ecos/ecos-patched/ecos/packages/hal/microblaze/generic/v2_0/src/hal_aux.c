@@ -154,10 +154,9 @@ void hal_interrupt_init(void)
 static inline unsigned long vectorToMask(int vector,
 		const char* defaultError, unsigned long defaultMask)
 {
-
-	if (vector > 0 && vector <= CYGNUM_HAL_ISR_MAX)
-		return (1 << (vector - 1));
-
+	if (vector >= CYGNUM_HAL_ISR_MIN && vector <= CYGNUM_HAL_ISR_MAX)
+		return (1 << (vector-1));
+        
 	diag_printf( defaultError );
 	return defaultMask;
 }
