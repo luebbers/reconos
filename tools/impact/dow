@@ -24,7 +24,7 @@ else
 fi
 
 echo $1 | grep -e "\.bit" > /dev/null
-if [ $? == 0 ]; then
+if [ $? -eq 0 ]; then
 	echo "it's a bitfile!"
 	$DOW_BIT $1 $JTAG_POS
 	echo
@@ -32,7 +32,7 @@ if [ $? == 0 ]; then
 fi
 
 echo $1 | grep -e "\.elf" > /dev/null
-if [ $? == 0 ]; then
+if [ $? -eq 0 ]; then
 	echo "it's an executable!"
 	$DOW_ELF $1
 	echo
