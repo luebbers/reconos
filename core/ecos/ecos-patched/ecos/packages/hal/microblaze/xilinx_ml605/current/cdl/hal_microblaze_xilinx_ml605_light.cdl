@@ -16,6 +16,7 @@ cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
 	parent		CYGPKG_HAL_MICROBLAZE
 	requires	CYGPKG_HAL_MICROBLAZE_MB4A
 	requires	CYGPKG_HAL_MICROBLAZE_GENERIC
+        implements      RECONOS_HW_SUPPORT
 	define_header	hal_microblaze_platform.h
 	include_dir	cyg/hal
 	description	"Xilinx ml605 HAL package"
