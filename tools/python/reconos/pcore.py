@@ -131,6 +131,9 @@ use reconos_%s.reconos_pkg.ALL;
 library burst_ram_%s;
 use burst_ram_%s.ALL;
 
+library %s;
+use %s.ALL;
+
 ---- Uncomment the following library declaration if instantiating
 ---- any Xilinx primitives in this code.
 --library UNISIM;
@@ -219,7 +222,7 @@ begin
         i_osif <= to_osif_os2task_t(i_osif_flat_i or (X"0000000000" & busy_local & "000000"));
         
         -- instantiate user task
-        %s_i : entity %s
+        %s_i : entity %s.%s
         generic map (
             C_BURST_AWIDTH => C_TASK_BURST_AWIDTH,
             C_BURST_DWIDTH => C_TASK_BURST_DWIDTH
@@ -281,7 +284,7 @@ begin
         end process;
 
 end structural;
-""" % (header,reconos_version,reconos_version,ram_version,ram_version,task_name,task_name,task_name,user_logic_name,user_logic_name,ram_version)
+""" % (header,reconos_version,reconos_version,ram_version,ram_version,pcore_name,pcore_name,task_name,task_name,task_name,user_logic_name,pcore_name,user_logic_name,ram_version)
 
         # create directory tree 
         os.mkdir(pcore_name)
