@@ -36,14 +36,15 @@
 #include <reconos/reconos.h>
 #include <reconos/osif_comm.h>
 #include <cyg/infra/diag.h>
+#include <pkgconf/system.h>
 
 // header files for low-level communication
 // FIXME: might be moved to HAL?
 // PowerPC uses DCR bus
-#ifdef CYGPKG_HAL_POWERPC_VIRTEX4
+#if defined(CYGPKG_HAL_POWERPC_VIRTEX4)
 #include <xio_dcr.h>
 // microblaze uses mmio'd bridge to DCR
-#elif CYGPKG_HAL_MICROBLAZE
+#elif defined(CYGPKG_HAL_MICROBLAZE)
 #include <xil_io.h>
 #endif
 
@@ -57,12 +58,12 @@
 #endif
 
 // Macros for OSIF bus communications
-#ifdef CYGPKG_HAL_POWERPC_VIRTEX4
+#if defined(CYGPKG_HAL_POWERPC_VIRTEX4)
 #define OSIF_READ(s, reg)            XIo_DcrIn(s->dcr_base_addr + reg)
 #define OSIF_WRITE(s, reg, value)    XIo_DcrOut(s->dcr_base_addr + reg, value)
 // Microblaze does not have a DCR, so we go across the memory bus
 // The DCR addresses are already converted to memory bus addresses by XPS
-#elif CYGPKG_HAL_MICROBLAZE
+#elif defined(CYGPKG_HAL_MICROBLAZE)
 #define OSIF_READ(s, reg)            Xil_In32(s->dcr_base_addr + (reg*4))
 #define OSIF_WRITE(s, reg, value)    Xil_Out32(s->dcr_base_addr + (reg*4), value)
 #endif
