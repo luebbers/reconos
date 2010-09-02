@@ -21,7 +21,15 @@
 
 #ifdef XPAR_DCR_TIMEBASE_0_DCR_BASEADDR
     #define USE_DCR_TIMEBASE
-    #include <xio_dcr.h>
+    #if XPAR_DCR_TIMEBASE_0_DCR_BASEADDR > 1024
+        #include <xil_io.h>
+        #define DCR_READ(s, reg)            Xil_In32(s + (reg*4))
+        #define DCR_WRITE(s, reg, value)    Xil_Out32(s + (reg*4), value)
+    #else
+        #include <xio_dcr.h>
+        #define DCR_READ(s, reg)            XIo_DcrIn(s + reg)
+        #define DCR_WRITE(s, reg, value)    XIo_DcrOut(s + reg, value)
+    #endif
 #endif
 
 
@@ -42,7 +50,7 @@ timing_t gettime(  )
 
 #ifdef USE_ECOS
     #ifdef USE_DCR_TIMEBASE
-        return XIo_DcrIn(XPAR_DCR_TIMEBASE_0_DCR_BASEADDR+1);
+        return DCR_READ(XPAR_DCR_TIMEBASE_0_DCR_BASEADDR, 1);
     #else
         return *tbr;
     #endif // USE_DCR_TIMEBASE

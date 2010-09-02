@@ -1,6 +1,12 @@
 # ReconOS project file (format v1.00.a)
+
+# for PowerPC
 #EDK_BASE_DIR = $(RECONOS)/support/refdesigns/9.2/xup/xup_light
-EDK_BASE_DIR = $(RECONOS)/support/refdesigns/9.2/ml403/ml403_light
+EDK_BASE_DIR = $(RECONOS)/support/refdesigns/12.2/ml403/ml403_light
+
+# for MicroBlaze
+EDK_BASE_DIR = $(RECONOS)/support/refdesigns/12.2/ml605/ml605_light
+
 #LAYOUT = sort_demo.lyt
 HW_THREAD_DIR = hwthreads
 PAROPTS = -ol high -w

@@ -15,18 +15,26 @@ include config.make
 
 help:
 	@echo "Available make targets:"
-	@echo "   setup        sets up and compiles eCos library"
+	@echo "   setup.mb     sets up and compiles eCos library (Microblaze)"
+	@echo "   setup.ppc    sets up and compiles eCos library (PowerPC)"
 	@echo "   mrproper     clean + delete eCos library"
 	@echo "   deps         create dependency file"
 	@echo "   pc           compile pc executables"
-	@echo "   ecos         compile eCos executables"
+	@echo "   ecos.mb      compile eCos executables (Microblaze)"
+	@echo "   ecos.ppc     compile eCos executables (PowerPC)"
 	@echo "   posix        compile eCos/POSIX executables"
 	@echo "   clean        clean all executables and objet files"
 
-setup:
+setup.mb:
 	mkdir $(ECOS_BUILD)
-	cp $(ECOS_CONFIG) $(ECOS_BUILD)
-	cd $(ECOS_BUILD) && ecosconfig --config=$(ECOS_CONFIG) --srcdir=$(ECOS_SRC) tree
+	cp $(ECOS_CONFIG_MB) $(ECOS_BUILD)
+	cd $(ECOS_BUILD) && ecosconfig --config=$(ECOS_CONFIG_MB) --srcdir=$(ECOS_SRC) tree
+	make -C $(ECOS_BUILD)
+
+setup.ppc:
+	mkdir $(ECOS_BUILD)
+	cp $(ECOS_CONFIG_PPC) $(ECOS_BUILD)
+	cd $(ECOS_BUILD) && ecosconfig --config=$(ECOS_CONFIG_PPC) --srcdir=$(ECOS_SRC) tree
 	make -C $(ECOS_BUILD)
 
 #libxil:
@@ -48,11 +56,16 @@ posix:
 	rm -f *.o
 	make -f Makefile.posix
 
-ecos: 
+ecos.mb: 
 	rm -f *.o
-	make -f Makefile.ecos
+	make -f Makefile.ecos.mb
+        
+ecos.ppc: 
+	rm -f *.o
+	make -f Makefile.ecos.ppc
         
 clean:
 	make -f Makefile.pc clean
-	make -f Makefile.ecos clean
+	make -f Makefile.ecos.ppc clean
+	make -f Makefile.ecos.mb clean
 	make -f Makefile.posix clean

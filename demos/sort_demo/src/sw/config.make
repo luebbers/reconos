@@ -11,7 +11,8 @@
 # (C) Copyright University of Paderborn 2007.
 #
 
-ECOS_CONFIG=sort.ecc
+ECOS_CONFIG_MB=sort.mb.ecc
+ECOS_CONFIG_PPC=sort.ppc.ecc
 ECOS_BUILD=ecos_build
 ECOS_INSTALL=$(ECOS_BUILD)/install
 ECOS_SRC=$(ECOS_REPOSITORY)
