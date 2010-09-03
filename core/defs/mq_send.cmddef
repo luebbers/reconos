@@ -44,7 +44,7 @@ COMMAND reconos_mq_send
         HEADER              <cyg/posix/types.h>
         HEADER              <fcntl.h>
         HEADER              <mqueue.h>
-        HEADER              <xcache_l.h>
+        HEADER              <cyg/hal/hal_cache.h>
         IFDEF               UPBFUN_RECONOS_POSIX
         CODE '''
             mqd_t q;
@@ -77,7 +77,7 @@ COMMAND reconos_mq_send
 #ifdef UPBFUN_RECONOS_CACHE_BURST_RAM
             // invalidate cache lines corresponding to burst RAM
             // FIXME: memory offset is hardcoded!
-            XCache_InvalidateDCacheRange((unsigned int)msg, msg_size);
+            HAL_DCACHE_INVALIDATE((unsigned int)msg, msg_size);
 #endif
 
             if (mq_send(q, msg, msg_size, 0) < 0) {

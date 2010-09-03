@@ -44,7 +44,7 @@ COMMAND reconos_mq_receive
         HEADER              <cyg/posix/types.h>
         HEADER              <fcntl.h>
         HEADER              <mqueue.h>
-        HEADER              <xcache_l.h>
+        HEADER              <cyg/hal/hal_cache.h>
         IFDEF               UPBFUN_RECONOS_POSIX
         CODE '''
             mqd_t q;
@@ -82,7 +82,7 @@ COMMAND reconos_mq_receive
 #ifdef UPBFUN_RECONOS_CACHE_BURST_RAM
             // flush cache lines corresponding to burst RAM
             // FIXME: memory offset is hardcoded!
-            XCache_FlushDCacheRange((unsigned int)msg, newattr.mq_msgsize);
+            HAL_DCACHE_FLUSH((unsigned int)msg, newattr.mq_msgsize);
 #endif
 
             // restore old queue attributes

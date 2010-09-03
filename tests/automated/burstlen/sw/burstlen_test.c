@@ -16,7 +16,7 @@
 #include <sys/stat.h>   // for mode constants
 #include <fcntl.h>
 #include <cyg/infra/diag.h>
-#include <xcache_l.h>
+#include <cyg/hal/hal_cache.h>
 #include "common.h"
 
 #ifndef MEMSIZE
@@ -41,7 +41,7 @@ int main( int argc, char *argv[] )
 	
 	volatile int * dst = src + MEMSIZE/4;
 
-	XCache_DisableDCache();
+	HAL_DCACHE_DISABLE();
 	
 	args[0] = (int)src;         // source address
 	args[1] = (int)dst;         // destination address

@@ -89,7 +89,8 @@ std_headers = [ ( '', '<reconos/reconos.h>' ),
                 ( '', '<stdio.h>' ),
                 ( '', '<cyg/kernel/kapi.h>' ),
                 ( '', '<cyg/infra/diag.h>' ),
-                ( '', '<reconos/osif_comm.h>' ) ]
+                ( '', '<reconos/osif_comm.h>' ),
+                ( '', '<cyg/hal/hal_cache.h>' ) ]
 
 # read all command files
 potential_commands = cmddef.parse_files( files )
@@ -431,7 +432,7 @@ void reconos_delegate_thread(cyg_addrword_t data)
 \#ifdef UPBFUN_RECONOS_CACHE_BURST_RAM
                         // invalidate cache lines corresponding to burst RAM
                         // FIXME: memory offset is hardcoded!
-                        XCache_InvalidateDCacheRange((unsigned int)(hwt->slot->plb_base_addr + 0x4000), hwt->state_size);
+                        HAL_DCACHE_INVALIDATE((unsigned int)(hwt->slot->plb_base_addr + 0x4000), hwt->state_size);
 \#endif
                         // FIXME: memory offset is hardcoded!
                         memcpy(hwt->state_buf, hwt->slot->plb_base_addr + 0x4000, hwt->state_size);
@@ -544,7 +545,7 @@ void reconos_delegate_thread(cyg_addrword_t data)
 \#ifdef UPBFUN_RECONOS_CACHE_BURST_RAM
                 // flush cache lines corresponding to burst RAM
                 // FIXME: memory offset is hardcoded!
-                XCache_FlushDCacheRange((unsigned int)(hwt->slot->plb_base_addr + 0x4000), hwt->state_size);
+                HAL_DCACHE_FLUSH((unsigned int)(hwt->slot->plb_base_addr + 0x4000), hwt->state_size);
 \#endif
             }
             // restore fsm state

@@ -15,10 +15,9 @@
 #include <cyg/kernel/kapi.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <xcache_l.h>
+#include <cyg/hal/hal_cache.h>
 #include <reconos/reconos.h>
 #include <reconos/resources.h>
-#include <xcache_l.h>
 #include "common.h"
 
 cyg_mutex_t mutex;
@@ -31,7 +30,7 @@ reconos_res_t thread_resources[2] =
 int main( int argc, char *argv[] )
 {
 	int i;
-	XCache_EnableDCache(0xF0000000);
+	HAL_DCACHE_ENABLE();
 
 	printf("begin mutex_test_ecos\n");
 

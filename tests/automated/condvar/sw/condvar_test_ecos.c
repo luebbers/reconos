@@ -15,10 +15,9 @@
 #include <cyg/kernel/kapi.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <xcache_l.h>
+#include <cyg/hal/hal_cache.h>
 #include <reconos/reconos.h>
 #include <reconos/resources.h>
-#include <xcache_l.h>
 #include "common.h"
 
 cyg_mutex_t mutex_a, mutex_b;
@@ -48,7 +47,7 @@ void wait_on_condvar(cyg_addrword_t arg){
 int main( int argc, char *argv[] )
 {
 	int i;
-	XCache_EnableDCache(0xF0000000);
+	HAL_DCACHE_ENABLE();
 
 	printf("begin condvar_test_ecos\n");
 

@@ -16,7 +16,7 @@
 #include <sys/stat.h>   // for mode constants
 #include <fcntl.h>
 #include <cyg/infra/diag.h>
-#include <xcache_l.h>
+#include <cyg/hal/hal_cache.h>
 #include "common.h"
 
 #define MEMSIZE 4
@@ -39,7 +39,7 @@ int main( int argc, char *argv[] )
 	volatile int * src = (volatile int*)(((int)mem/16 + 1)*16 + 4); // align to 8 + 4 bytes
 	volatile int * dst = src + MEMSIZE/4;
 	
-	XCache_DisableDCache();
+	HAL_DCACHE_DISABLE();
 	
 	args[0] = (int)src;
 	args[1] = (int)dst;

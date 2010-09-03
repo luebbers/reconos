@@ -16,7 +16,7 @@
 #include <sys/stat.h>   // for mode constants
 #include <fcntl.h>
 #include <cyg/infra/diag.h>
-#include <xcache_l.h>
+#include <cyg/hal/hal_cache.h>
 #include "common.h"
 
 // conditional variables
@@ -48,7 +48,7 @@ void * wait_on_condvar(void * arg){
 int main( int argc, char *argv[] )
 {
 	int i;
-	XCache_EnableDCache(0xF0000000);
+	HAL_DCACHE_ENABLE();
 	
 	printf("begin condvar_test_posix\n");
 	
