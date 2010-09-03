@@ -227,7 +227,8 @@
 		  "=&r"	(_cmp)							\
 		: "r" 	(_adr),							\
 		  "r"	(_hadr)							\
-	);
+	);                                                                      \
+        CYG_MACRO_END
 
 // Write dirty cache lines to memory for the given address range.
 #define HAL_DCACHE_STORE( _base_ , _size_ )
