@@ -66,9 +66,13 @@ def create_reconos_config():
     
     return cfg
 
-supportedBoards = ('xup', 'ml403')
+supportedBoards = ('xup', 'ml403', 'ml605')
 baseDesign = {'xup': os.environ["RECONOS"] + "/support/refdesigns/10.1/xup/xup_light",
-              'ml403': os.environ["RECONOS"] + "/support/refdesigns/12.2/ml403/ml403_light"}
+              'ml403': os.environ["RECONOS"] + "/support/refdesigns/12.2/ml403/ml403_light",
+              'ml605': os.environ["RECONOS"] + "/support/refdesigns/12.2/ml605/ml605_light"}
+arch = {'xup': 'ppc',
+        'ml403': 'ppc',
+        'ml605': 'mb'}
 tests = {}
 cfg = create_reconos_config()
 #cfg["verbose"] = True;
@@ -166,6 +170,10 @@ def parse_args(args):
                 print("Use one of " + str(supportedBoards))
                 return
                 
+        elif args[idx] == "--tty":
+            tty = args[idx + 1]
+            cfg["serial_port"]     = tty
+                
         elif args[idx] in ["-v", "--verbose"]:
             cfg["verbose"] = True
 
@@ -192,6 +200,8 @@ def parse_args(args):
         print "--pass <regex>     assume all tests that match <regex> to pass"
         print "--fail <regex>     assume all tests that match <regex> to fail"
         print "--board <xup|ml403>  use specified board for tests (default: XUP)"
+        print "--tty <tty_device>   use specified device for serial communications"
+        print "                     (default: /dev/ttyS0)"
         print
         print "The default behaviour is to perform all tests inclusive 'clean' and 'mrproper' targets."
         print "This can be overriden with the '-n' option."
@@ -220,6 +230,7 @@ def parse_args(args):
         # set environments that affect which board to use
         tests[t].environ['EDK_BASE_DIR'] = baseDesign[board]
         tests[t].environ['RECONOS_BOARD'] = board
+        tests[t].environ['ARCH'] = arch[board]
 
     if not os.path.exists("/tmp/test_results"):
         os.mkdir("/tmp/test_results")
