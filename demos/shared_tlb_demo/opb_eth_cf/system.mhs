@@ -30,9 +30,9 @@
  PORT fpga_0_SysACE_CompactFlash_SysACE_OEN_pin = fpga_0_SysACE_CompactFlash_SysACE_OEN, DIR = O
  PORT fpga_0_SysACE_CompactFlash_SysACE_WEN_pin = fpga_0_SysACE_CompactFlash_SysACE_WEN, DIR = O
  PORT fpga_0_SysACE_CompactFlash_SysACE_MPIRQ_pin = fpga_0_SysACE_CompactFlash_SysACE_MPIRQ, DIR = I
- #PORT fpga_0_LEDs_4Bit_GPIO_IO_pin = fpga_0_LEDs_4Bit_GPIO_IO, DIR = IO, VEC = [0:3]
- #PORT fpga_0_DIPSWs_4Bit_GPIO_IO_pin = fpga_0_DIPSWs_4Bit_GPIO_IO, DIR = IO, VEC = [0:3]
- #PORT fpga_0_PushButtons_5Bit_GPIO_IO_pin = fpga_0_PushButtons_5Bit_GPIO_IO, DIR = IO, VEC = [0:4]
+# PORT fpga_0_LEDs_4Bit_GPIO_IO_pin = fpga_0_LEDs_4Bit_GPIO_IO, DIR = IO, VEC = [0:3]
+# PORT fpga_0_DIPSWs_4Bit_GPIO_IO_pin = fpga_0_DIPSWs_4Bit_GPIO_IO, DIR = IO, VEC = [0:3]
+# PORT fpga_0_PushButtons_5Bit_GPIO_IO_pin = fpga_0_PushButtons_5Bit_GPIO_IO, DIR = IO, VEC = [0:4]
  PORT fpga_0_DDR_512MB_64Mx64_rank2_row13_col10_cl2_5_DDR_Clk_pin = fpga_0_DDR_512MB_64Mx64_rank2_row13_col10_cl2_5_DDR_Clk, DIR = O, VEC = [0:2]
  PORT fpga_0_DDR_512MB_64Mx64_rank2_row13_col10_cl2_5_DDR_Clkn_pin = fpga_0_DDR_512MB_64Mx64_rank2_row13_col10_cl2_5_DDR_Clkn, DIR = O, VEC = [0:2]
  PORT fpga_0_DDR_512MB_64Mx64_rank2_row13_col10_cl2_5_DDR_Addr_pin = fpga_0_DDR_512MB_64Mx64_rank2_row13_col10_cl2_5_DDR_Addr, DIR = O, VEC = [0:12]
@@ -49,47 +49,46 @@
  PORT fpga_0_PS2_Ports_IO_ADAPTER_ps2_mouse_data_pin = fpga_0_PS2_Ports_IO_ADAPTER_ps2_mouse_data, DIR = IO
  PORT fpga_0_PS2_Ports_IO_ADAPTER_ps2_keyb_clk_pin = fpga_0_PS2_Ports_IO_ADAPTER_ps2_keyb_clk, DIR = IO
  PORT fpga_0_PS2_Ports_IO_ADAPTER_ps2_keyb_data_pin = fpga_0_PS2_Ports_IO_ADAPTER_ps2_keyb_data, DIR = IO
- ##PORT fpga_0_VGA_FrameBuffer_TFT_LCD_CLK = fpga_0_VGA_FrameBuffer_TFT_LCD_CLK, DIR = O
- ##PORT fpga_0_VGA_FrameBuffer_TFT_LCD_HSYNC_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_HSYNC, DIR = O
- ##PORT fpga_0_VGA_FrameBuffer_TFT_LCD_VSYNC_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_VSYNC, DIR = O
- ##PORT fpga_0_VGA_FrameBuffer_TFT_LCD_BLNK_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_BLNK, DIR = O
+# #PORT fpga_0_VGA_FrameBuffer_TFT_LCD_CLK = fpga_0_VGA_FrameBuffer_TFT_LCD_CLK, DIR = O
+# #PORT fpga_0_VGA_FrameBuffer_TFT_LCD_HSYNC_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_HSYNC, DIR = O
+# #PORT fpga_0_VGA_FrameBuffer_TFT_LCD_VSYNC_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_VSYNC, DIR = O
+# #PORT fpga_0_VGA_FrameBuffer_TFT_LCD_BLNK_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_BLNK, DIR = O
  PORT fpga_0_net_gnd_pin = net_gnd, DIR = O
  PORT fpga_0_net_gnd_1_pin = net_gnd, DIR = O
  PORT fpga_0_net_gnd_2_pin = net_gnd, DIR = O
- ##PORT fpga_0_VGA_FrameBuffer_TFT_LCD_B_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_B, DIR = O, VEC = [5:0]
+# #PORT fpga_0_VGA_FrameBuffer_TFT_LCD_B_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_B, DIR = O, VEC = [5:0]
  PORT fpga_0_net_gnd_3_pin = net_gnd, DIR = O
  PORT fpga_0_net_gnd_4_pin = net_gnd, DIR = O
- ##PORT fpga_0_VGA_FrameBuffer_TFT_LCD_G_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_G, DIR = O, VEC = [5:0]
+# #PORT fpga_0_VGA_FrameBuffer_TFT_LCD_G_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_G, DIR = O, VEC = [5:0]
  PORT fpga_0_net_gnd_5_pin = net_gnd, DIR = O
  PORT fpga_0_net_gnd_6_pin = net_gnd, DIR = O
- ##PORT fpga_0_VGA_FrameBuffer_TFT_LCD_R_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_R, DIR = O, VEC = [5:0]
+# #PORT fpga_0_VGA_FrameBuffer_TFT_LCD_R_pin = fpga_0_VGA_FrameBuffer_TFT_LCD_R, DIR = O, VEC = [5:0]
  PORT fpga_0_DDR_CLK_FB = ddr_feedback_s, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
  PORT fpga_0_DDR_CLK_FB_OUT = ddr_clk_feedback_out_s, DIR = O
  PORT sys_clk_pin = dcm_clk_s, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
  PORT sys_rst_pin = sys_rst_s, DIR = I, RST_POLARITY = 0, SIGIS = RST
 
 
-##BEGIN plb_tft_cntlr_ref
-## PARAMETER INSTANCE = VGA_FrameBuffer
-## PARAMETER HW_VER = 1.00.e
-## PARAMETER C_DEFAULT_TFT_BASE_ADDR = 0x1EE00000
-## PARAMETER C_PIXCLK_IS_BUSCLK_DIVBY4 = 0b1
-## PARAMETER C_DCR_BASEADDR = 0b0000010100
-## PARAMETER C_DCR_HIGHADDR = 0b0000010101
-## PARAMETER C_ON_INIT = 0b1
-## BUS_INTERFACE MPLB = plb
-## BUS_INTERFACE SDCR = dcr_v29_0
-## PORT SYS_dcrClk = sys_clk_s
-## PORT SYS_plbClk = sys_clk_s
-## PORT TFT_LCD_CLK = fpga_0_VGA_FrameBuffer_TFT_LCD_CLK
-## PORT TFT_LCD_HSYNC = fpga_0_VGA_FrameBuffer_TFT_LCD_HSYNC
-## PORT TFT_LCD_VSYNC = fpga_0_VGA_FrameBuffer_TFT_LCD_VSYNC
-## PORT TFT_LCD_B = fpga_0_VGA_FrameBuffer_TFT_LCD_B
-## PORT TFT_LCD_G = fpga_0_VGA_FrameBuffer_TFT_LCD_G
-## PORT TFT_LCD_R = fpga_0_VGA_FrameBuffer_TFT_LCD_R
-## PORT TFT_LCD_BLNK = fpga_0_VGA_FrameBuffer_TFT_LCD_BLNK
-##END
-
+# #BEGIN plb_tft_cntlr_ref
+# # PARAMETER INSTANCE = VGA_FrameBuffer
+# # PARAMETER HW_VER = 1.00.e
+# # PARAMETER C_DEFAULT_TFT_BASE_ADDR = 0x1EE00000
+# # PARAMETER C_PIXCLK_IS_BUSCLK_DIVBY4 = 0b1
+# # PARAMETER C_DCR_BASEADDR = 0b0000010100
+# # PARAMETER C_DCR_HIGHADDR = 0b0000010101
+# # PARAMETER C_ON_INIT = 0b1
+# # BUS_INTERFACE MPLB = plb
+# # BUS_INTERFACE SDCR = dcr_v29_0
+# # PORT SYS_dcrClk = sys_clk_s
+# # PORT SYS_plbClk = sys_clk_s
+# # PORT TFT_LCD_CLK = fpga_0_VGA_FrameBuffer_TFT_LCD_CLK
+# # PORT TFT_LCD_HSYNC = fpga_0_VGA_FrameBuffer_TFT_LCD_HSYNC
+# # PORT TFT_LCD_VSYNC = fpga_0_VGA_FrameBuffer_TFT_LCD_VSYNC
+# # PORT TFT_LCD_B = fpga_0_VGA_FrameBuffer_TFT_LCD_B
+# # PORT TFT_LCD_G = fpga_0_VGA_FrameBuffer_TFT_LCD_G
+# # PORT TFT_LCD_R = fpga_0_VGA_FrameBuffer_TFT_LCD_R
+# # PORT TFT_LCD_BLNK = fpga_0_VGA_FrameBuffer_TFT_LCD_BLNK
+# #END
 BEGIN ppc405
  PARAMETER INSTANCE = ppc405_0
  PARAMETER HW_VER = 2.00.c
@@ -156,16 +155,14 @@ BEGIN opb_v20
  PORT OPB_Clk = sys_clk_s
 END
 
-
-#BEGIN opb_onewire
+# BEGIN opb_onewire
 # PARAMETER INSTANCE = onewire_0
 # PARAMETER HW_VER = 1.00.a
 # PARAMETER C_BASEADDR = 0x7a200000
 # PARAMETER C_HIGHADDR = 0x7a20ffff
 # BUS_INTERFACE SOPB = opb
 # PORT ONEWIRE_DQ = fpga_0_onewire_0_ONEWIRE_DQ
-#END
-
+# END
 BEGIN opb_uart16550
  PARAMETER INSTANCE = RS232_Uart_1
  PARAMETER HW_VER = 1.00.e
@@ -221,7 +218,7 @@ BEGIN opb_sysace
  PORT SysACE_IRQ = SysACE_CompactFlash_Irpt
 END
 
-#BEGIN opb_gpio
+# BEGIN opb_gpio
 # PARAMETER INSTANCE = LEDs_4Bit
 # PARAMETER HW_VER = 3.01.b
 # PARAMETER C_GPIO_WIDTH = 4
@@ -232,9 +229,8 @@ END
 # PARAMETER C_HIGHADDR = 0x4000ffff
 # BUS_INTERFACE SOPB = opb
 # PORT GPIO_IO = fpga_0_LEDs_4Bit_GPIO_IO
-#END
-
-#BEGIN opb_gpio
+# END
+# BEGIN opb_gpio
 # PARAMETER INSTANCE = DIPSWs_4Bit
 # PARAMETER HW_VER = 3.01.b
 # PARAMETER C_GPIO_WIDTH = 4
@@ -245,9 +241,8 @@ END
 # PARAMETER C_HIGHADDR = 0x4002ffff
 # BUS_INTERFACE SOPB = opb
 # PORT GPIO_IO = fpga_0_DIPSWs_4Bit_GPIO_IO
-#END
-
-#BEGIN opb_gpio
+# END
+# BEGIN opb_gpio
 # PARAMETER INSTANCE = PushButtons_5Bit
 # PARAMETER HW_VER = 3.01.b
 # PARAMETER C_INTERRUPT_PRESENT = 1
@@ -260,8 +255,7 @@ END
 # BUS_INTERFACE SOPB = opb
 # PORT IP2INTC_Irpt = PushButtons_5Bit_IP2INTC_Irpt
 # PORT GPIO_IO = fpga_0_PushButtons_5Bit_GPIO_IO
-#END
-
+# END
 BEGIN plb_ddr
  PARAMETER INSTANCE = DDR_512MB_64Mx64_rank2_row13_col10_cl2_5
  PARAMETER HW_VER = 2.00.a
@@ -349,10 +343,9 @@ BEGIN opb_intc
  BUS_INTERFACE SOPB = opb
  PORT Irq = EICC405EXTINPUTIRQ
  PORT Intr = PS2_Ports_Sys_Intr1&PS2_Ports_Sys_Intr2&RS232_Uart_1_IP2INTC_Irpt&SysACE_CompactFlash_Irpt&Ethernet_MAC_IP2INTC_Irpt&fpga_0_Ethernet_MAC_PHY_Mii_int_n & osif_0_interrupt & osif_1_interrupt
-#PORT Intr = PS2_Ports_Sys_Intr1&PS2_Ports_Sys_Intr2&PushButtons_5Bit_IP2INTC_Irpt&RS232_Uart_1_IP2INTC_Irpt&SysACE_CompactFlash_Irpt&Ethernet_MAC_IP2INTC_Irpt&fpga_0_Ethernet_MAC_PHY_Mii_int_n & osif_0_interrupt
-
 END
 
+# PORT Intr = PS2_Ports_Sys_Intr1&PS2_Ports_Sys_Intr2&PushButtons_5Bit_IP2INTC_Irpt&RS232_Uart_1_IP2INTC_Irpt&SysACE_CompactFlash_Irpt&Ethernet_MAC_IP2INTC_Irpt&fpga_0_Ethernet_MAC_PHY_Mii_int_n & osif_0_interrupt
 BEGIN dual_ps2_ioadapter
  PARAMETER INSTANCE = PS2_Ports_IO_ADAPTER
  PARAMETER HW_VER = 1.00.a
@@ -460,13 +453,14 @@ BEGIN opb_hwicap
  BUS_INTERFACE SOPB = opb
 END
 
-BEGIN plb_osif_mmu
+BEGIN plb_osif
  PARAMETER INSTANCE = osif_0
- PARAMETER HW_VER = 2.01.a
+ PARAMETER HW_VER = 2.03.a
  PARAMETER C_DCR_BASEADDR = 0b0000000000
  PARAMETER C_DCR_HIGHADDR = 0b0000000111
  PARAMETER C_BASEADDR = 0x20000000
  PARAMETER C_HIGHADDR = 0x2000FFFF
+ PARAMETER C_ENABLE_MMU = 1
  BUS_INTERFACE MSPLB = plb
  BUS_INTERFACE SDCR = dcr_v29_0
  BUS_INTERFACE OSIF = osif_0_OSIF
@@ -476,13 +470,14 @@ BEGIN plb_osif_mmu
  PORT interrupt = osif_0_interrupt
 END
 
-BEGIN plb_osif_mmu
+BEGIN plb_osif
  PARAMETER INSTANCE = osif_1
- PARAMETER HW_VER = 2.01.a
+ PARAMETER HW_VER = 2.03.a
  PARAMETER C_DCR_BASEADDR = 0b0010000000
  PARAMETER C_DCR_HIGHADDR = 0b0010000111
  PARAMETER C_BASEADDR = 0x20010000
  PARAMETER C_HIGHADDR = 0x2001FFFF
+ PARAMETER C_ENABLE_MMU = 1
  BUS_INTERFACE MSPLB = plb
  BUS_INTERFACE SDCR = dcr_v29_0
  BUS_INTERFACE OSIF = osif_1_OSIF
@@ -525,24 +520,21 @@ BEGIN hw_task
  BUS_INTERFACE OSIF = osif_1_OSIF
 END
 
-##BEGIN dcrfifo
-## PARAMETER INSTANCE = dcrfifo_0
-## PARAMETER HW_VER = 1.00.a
-## PARAMETER C_DCR_BASEADDR = 0b0000001000
-## PARAMETER C_DCR_HIGHADDR = 0b0000001001
-## BUS_INTERFACE SDCR = dcr_v29_0
-## PORT reset = sys_bus_reset
-## PORT clk = sys_clk_s
-##END
-
-##BEGIN dcr_timebase
-## PARAMETER INSTANCE = timebase_0
-## PARAMETER HW_VER = 1.00.b
-## PARAMETER C_DCR_BASEADDR = 0b0000001100
-## PARAMETER C_DCR_HIGHADDR = 0b0000001101
-## BUS_INTERFACE SDCR = dcr_v29_0
-## PORT i_reset = sys_bus_reset
-## PORT i_clk = sys_clk_s
-##END
-
-
+# #BEGIN dcrfifo
+# # PARAMETER INSTANCE = dcrfifo_0
+# # PARAMETER HW_VER = 1.00.a
+# # PARAMETER C_DCR_BASEADDR = 0b0000001000
+# # PARAMETER C_DCR_HIGHADDR = 0b0000001001
+# # BUS_INTERFACE SDCR = dcr_v29_0
+# # PORT reset = sys_bus_reset
+# # PORT clk = sys_clk_s
+# #END
+# #BEGIN dcr_timebase
+# # PARAMETER INSTANCE = timebase_0
+# # PARAMETER HW_VER = 1.00.b
+# # PARAMETER C_DCR_BASEADDR = 0b0000001100
+# # PARAMETER C_DCR_HIGHADDR = 0b0000001101
+# # BUS_INTERFACE SDCR = dcr_v29_0
+# # PORT i_reset = sys_bus_reset
+# # PORT i_clk = sys_clk_s
+# #END
