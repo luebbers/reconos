@@ -400,7 +400,14 @@ def build_hw(cfg, hwdir, target, environ):
         envstr = reduce(lambda a, b: a + " " + b, map(lambda x: x + "=" + environ[x], environ.keys()))
     else:
         envstr = ''
+
+    preload = os.environ["LD_PRELOAD"]
+    os.environ["LD_PRELOAD"] = ""
+
     result, output = command(envstr + " make " + target, cfg["hwbuild_timeout"])
+
+    if preload: os.environ["LD_PRELOAD"] = preload
+    
     if result != "TIMEOUT":
         if not result == 0 or xilinx_error(output) :
             return False, "hardware build failed (target = " + target + ")", output
