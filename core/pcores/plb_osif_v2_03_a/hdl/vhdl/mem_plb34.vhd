@@ -9,18 +9,22 @@
 -----------------------------------------------------------------------------
 -- %%%RECONOS_COPYRIGHT_BEGIN%%%
 -- 
--- This file is part of the ReconOS project <http://www.reconos.de>.
--- Copyright (c) 2008, Computer Engineering Group, University of
--- Paderborn. 
+-- This file is part of ReconOS (http://www.reconos.de).
+-- Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+-- All rights reserved.
 -- 
--- For details regarding licensing and redistribution, see COPYING.  If
--- you did not receive a COPYING file as part of the distribution package
--- containing this file, you can get it at http://www.reconos.de/COPYING.
+-- ReconOS is free software: you can redistribute it and/or modify it under
+-- the terms of the GNU General Public License as published by the Free
+-- Software Foundation, either version 3 of the License, or (at your option)
+-- any later version.
 -- 
--- This software is provided "as is" without express or implied warranty,
--- and with no claim as to its suitability for any particular purpose.
--- The copyright owner or the contributors shall not be liable for any
--- damages arising out of the use of this software.
+-- ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+-- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+-- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+-- details.
+-- 
+-- You should have received a copy of the GNU General Public License along
+-- with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
 -- 
 -- %%%RECONOS_COPYRIGHT_END%%%
 -----------------------------------------------------------------------------
@@ -39,15 +43,15 @@ use ieee.std_logic_unsigned.all;
 library reconos_v2_01_a;
 use reconos_v2_01_a.reconos_pkg.all;
 
-library plb_osif_mmu_v2_01_a;
-use plb_osif_mmu_v2_01_a.all;
+library plb_osif_v2_03_a;
+use plb_osif_v2_03_a.all;
 
 
 
 entity mem_plb34 is
     generic
         (
-            C_BASEADDR       :    std_logic_vector := X"FFFFFFFF";
+            C_SLAVE_BASEADDR :    std_logic_vector := X"FFFFFFFF";
             -- Bus protocol parameters
             C_AWIDTH         :    integer          := 32;
             C_DWIDTH         :    integer          := 32;
@@ -55,7 +59,8 @@ entity mem_plb34 is
             C_PLB_DWIDTH     :    integer          := 64;
             C_NUM_CE         :    integer          := 2;
             C_BURST_AWIDTH   :    integer          := 13;  -- 1024 x 64 Bit = 8192 Bytes = 2^13 Bytes
-            C_BURST_BASEADDR :    std_logic_vector := X"00004000"  -- system memory base address for burst ram access
+            C_BURST_BASEADDR :    std_logic_vector := X"00004000";  -- system memory base address for burst ram access
+            C_BURSTLEN_WIDTH :    integer          := 5
             );
     port
         (
@@ -90,7 +95,7 @@ entity mem_plb34 is
             -- burst transfer requests
             i_burstRdReq : in std_logic;
             i_burstWrReq : in std_logic;
-            i_burstLen   : in std_logic_vector(0 to 4);  -- number of burst beats (n x 64 bits)
+            i_burstLen   : in std_logic_vector(0 to C_BURSTLEN_WIDTH-1);  -- number of burst beats (n x 64 bits)
 
             -- status outputs
             o_busy   : out std_logic;
@@ -159,13 +164,14 @@ begin
     -- IPIF slave attachment and is therefore handled by bus_slave_regs
     -- or the bus2burst process.
     -----------------------------------------------------------------------
-    bus_master_inst : entity plb_osif_mmu_v2_01_a.bus_master
+    bus_master_inst : entity plb_osif_v2_03_a.bus_master
         generic map (
--- C_BASEADDR => C_BASEADDR,
--- C_OFFSET => X"0000000C",             -- slv_xxx_reg_shm
             C_AWIDTH          => C_AWIDTH,
             C_DWIDTH          => C_DWIDTH,
-            C_PLB_DWIDTH      => C_PLB_DWIDTH
+            C_PLB_DWIDTH      => C_PLB_DWIDTH,
+            C_SLAVE_BASEADDR  => C_SLAVE_BASEADDR,
+            C_BURST_BASEADDR  => C_BURST_BASEADDR,
+            C_BURSTLEN_WIDTH  => C_BURSTLEN_WIDTH
             )
         port map (
             clk               => clk,
@@ -205,7 +211,7 @@ begin
     -- Used for single word memory accesses
     -- (e.g. reconos_read() and reconos_write())
     -----------------------------------------------------------------------
-    bus_slave_regs_inst : entity plb_osif_mmu_v2_01_a.bus_slave_regs
+    bus_slave_regs_inst : entity plb_osif_v2_03_a.bus_slave_regs
         generic map (
             C_DWIDTH         => C_DWIDTH,
             C_NUM_REGS       => C_NUM_CE-1

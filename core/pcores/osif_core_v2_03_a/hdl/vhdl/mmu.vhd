@@ -10,13 +10,13 @@ use ieee.std_logic_unsigned.all;
 library reconos_v2_01_a;
 use reconos_v2_01_a.reconos_pkg.all;
 
-library osif_core_mmu_v2_01_a;
-use osif_core_mmu_v2_01_a.all;
+library osif_core_v2_03_a;
+use osif_core_v2_03_a.all;
 
 entity mmu is
 	generic
 	(
-		C_BASEADDR            : std_logic_vector := X"FFFFFFFF";
+		--C_BASEADDR            : std_logic_vector := X"FFFFFFFF";
 		C_AWIDTH              : integer          := 32;
 		C_DWIDTH              : integer          := 32;
 		C_DCR_AWIDTH          : integer          := 10;
@@ -129,7 +129,7 @@ begin
 	memory_interface_mux : process(active, busy, srrq, i_laddr, i_busy, i_rdone, i_wdone, request, data, i_data)
 	begin
 		if active = '1' then
-			o_laddr <= C_BASEADDR;
+			o_laddr <= (others => '0');--C_BASEADDR;
 			o_data  <= data;
 			o_busy  <= busy;
 			o_rdone <= '0';

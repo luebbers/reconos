@@ -1,0 +1,11 @@
+##############################################################################
+## Filename:          osif_core_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Wed Dec 10 14:02:46 2008 
+##############################################################################
+
+lib reconos_v2_01_a reconos_pkg vhdl
+lib osif_core_v2_03_a dcr_slave_regs vhdl
+lib osif_core_v2_03_a command_decoder vhdl
+lib osif_core_v2_03_a mmu vhdl
+lib osif_core_v2_03_a osif_core vhdl

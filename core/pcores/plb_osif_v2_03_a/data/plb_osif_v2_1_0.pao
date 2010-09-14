@@ -1,5 +1,5 @@
 ##############################################################################
-## Filename:          plb_osif_mmu_v2_1_0.pao
+## Filename:          plb_osif_v2_1_0.pao
 ## Description:       Peripheral Analysis Order
 ## Date:              Wed Nov 21 12:27:51 2007 
 ##############################################################################
@@ -53,9 +53,9 @@ lib plb_ipif_v2_01_a ipif_reset vhdl
 lib plb_ipif_v2_01_a plb_dma_sg vhdl
 lib plb_ipif_v2_01_a plb_ipif vhdl
 lib reconos_v2_01_a reconos_pkg vhdl
-lib osif_core_mmu_v2_01_a all
-lib plb_osif_mmu_v2_01_a bus_master vhdl
-lib plb_osif_mmu_v2_01_a bus_slave_regs vhdl
-lib plb_osif_mmu_v2_01_a fifo_mgr vhdl
-lib plb_osif_mmu_v2_01_a mem_plb34 vhdl
-lib plb_osif_mmu_v2_01_a plb_osif vhdl
+lib osif_core_v2_03_a all
+lib plb_osif_v2_03_a bus_master vhdl
+lib plb_osif_v2_03_a bus_slave_regs vhdl
+lib plb_osif_v2_03_a fifo_mgr vhdl
+lib plb_osif_v2_03_a mem_plb34 vhdl
+lib plb_osif_v2_03_a plb_osif vhdl

@@ -57,18 +57,22 @@
 -----------------------------------------------------------------------------
 -- %%%RECONOS_COPYRIGHT_BEGIN%%%
 -- 
--- This file is part of the ReconOS project <http://www.reconos.de>.
--- Copyright (c) 2008, Computer Engineering Group, University of
--- Paderborn. 
+-- This file is part of ReconOS (http://www.reconos.de).
+-- Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+-- All rights reserved.
 -- 
--- For details regarding licensing and redistribution, see COPYING.  If
--- you did not receive a COPYING file as part of the distribution package
--- containing this file, you can get it at http://www.reconos.de/COPYING.
+-- ReconOS is free software: you can redistribute it and/or modify it under
+-- the terms of the GNU General Public License as published by the Free
+-- Software Foundation, either version 3 of the License, or (at your option)
+-- any later version.
 -- 
--- This software is provided "as is" without express or implied warranty,
--- and with no claim as to its suitability for any particular purpose.
--- The copyright owner or the contributors shall not be liable for any
--- damages arising out of the use of this software.
+-- ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+-- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+-- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+-- details.
+-- 
+-- You should have received a copy of the GNU General Public License along
+-- with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
 -- 
 -- %%%RECONOS_COPYRIGHT_END%%%
 -----------------------------------------------------------------------------
@@ -99,13 +103,12 @@ use ieee.std_logic_unsigned.all;
 library reconos_v2_01_a;
 use reconos_v2_01_a.reconos_pkg.all;
 
-library osif_core_mmu_v2_01_a;
-use osif_core_mmu_v2_01_a.all;
+library osif_core_v2_03_a;
+use osif_core_v2_03_a.all;
 
 entity osif_core is
 	generic
 	(
-		C_BASEADDR            :     std_logic_vector := X"FFFFFFFF";
 		-- Bus protocol parameters
 		C_AWIDTH              :     integer          := 32;
 		C_DWIDTH              :     integer          := 32;
@@ -113,13 +116,16 @@ entity osif_core is
 		C_PLB_DWIDTH          :     integer          := 64;
 		C_NUM_CE              :     integer          := 2;
 		C_BURST_AWIDTH        :     integer          := 13;  -- 1024 x 64 Bit = 8192 Bytes = 2^13 Bytes
-		C_BURST_BASEADDR      :     std_logic_vector := X"00004000";  -- system memory base address for burst ram access
 		C_THREAD_RESET_CYCLES :     natural          := 10;  -- number of cycles the thread reset is held
 		C_FIFO_DWIDTH         :     integer          := 32;
+		C_BURSTLEN_WIDTH      :     integer          := 5;  -- max 16x64 bit bursts
 		C_DCR_BASEADDR        :     std_logic_vector := "1111111111";
 		C_DCR_HIGHADDR        :     std_logic_vector := "0000000000";
 		C_DCR_AWIDTH          :     integer          := 10;
 		C_DCR_DWIDTH          :     integer          := 32;
+		C_TLB_TAG_WIDTH       :     integer          := 20;
+		C_TLB_DATA_WIDTH      :     integer          := 21;
+		C_ENABLE_MMU          :     boolean          := true;
 		C_DCR_ILA             :     integer          := 0  -- 0: no debug ILA, 1: include debug chipscope ILA for DCR debugging
 	);
 	port
@@ -154,7 +160,7 @@ entity osif_core is
 		o_mem_singleWrReq : out std_logic;
 		o_mem_burstRdReq  : out std_logic;
 		o_mem_burstWrReq  : out std_logic;
-		o_mem_burstLen    : out std_logic_vector(0 to 4);
+		o_mem_burstLen    : out std_logic_vector(0 to C_BURSTLEN_WIDTH-1);
 		
 		i_mem_busy   : in std_logic;
 		i_mem_rdDone : in std_logic;
@@ -164,12 +170,14 @@ entity osif_core is
 		-- bus macro control
 		o_bm_enable : out std_logic;
 		
-		-- mmu configuration and state
-		o_mmu_setpgd                 : out std_logic;
-		o_mmu_repeat                 : out std_logic;
-		o_mmu_config_data            : out std_logic_vector(0 to 31); 
-		i_mmu_state_fault            : in std_logic;
-		i_mmu_state_access_violation : in std_logic;
+		-- tlb interface
+		i_tlb_rdata    : in  std_logic_vector(C_TLB_DATA_WIDTH - 1 downto 0);
+		o_tlb_wdata    : out std_logic_vector(C_TLB_DATA_WIDTH - 1 downto 0);
+		o_tlb_tag      : out std_logic_vector(C_TLB_TAG_WIDTH - 1 downto 0);
+		i_tlb_match    : in  std_logic;
+		o_tlb_we       : out std_logic;
+		i_tlb_busy     : in  std_logic;
+		o_tlb_request  : out std_logic;
 		
 		-- dcr bus protocol ports
 		o_dcrAck   : out std_logic;
@@ -264,58 +272,174 @@ architecture IMP of osif_core is
 	signal saved_step_enc : reconos_step_enc_t;
 	signal resume_state_enc : reconos_state_enc_t;
 	signal resume_step_enc : reconos_step_enc_t;
+	
+	-- mmu diagnosis
+	signal mmu_tlb_miss_count   : std_logic_vector(C_DCR_DWIDTH - 1 downto 0);
+	signal mmu_tlb_hit_count    : std_logic_vector(C_DCR_DWIDTH - 1 downto 0);
+	signal mmu_page_fault_count : std_logic_vector(C_DCR_DWIDTH - 1 downto 0);
+	
+	signal mmu_state_fault            : std_logic;
+	signal mmu_state_access_violation : std_logic;
+	
+	-- mmu configuration and state
+	signal mmu_setpgd                 : std_logic;
+	signal mmu_repeat                 : std_logic;
+	signal mmu_config_data            : std_logic_vector(0 to 31); 
+	
+	signal cdec_srrq : std_logic;
+	signal cdec_swrq : std_logic;
+	signal cdec_brrq : std_logic;
+	signal cdec_bwrq : std_logic;
+	signal cdec_laddr : std_logic_vector(31 downto 0);
+	signal cdec_raddr : std_logic_vector(31 downto 0);
+	
+	signal mmu_data   : std_logic_vector(31 downto 0);
+	signal mmu_busy   : std_logic;
+	signal mmu_wrDone : std_logic;
+	signal mmu_rdDone : std_logic;
 begin
 
-	mmu_exception <= i_mmu_state_fault or i_mmu_state_access_violation;
-
-	handle_mmu_exception : process(sys_clk, sys_reset, i_mmu_state_fault, mmu_exception)
-		variable step : integer range 0 to 1;
-	begin
-		if sys_reset = '1' then
-			mmu_post <= '0';
-			step := 0;
-		elsif rising_edge(sys_clk) then
-			case step is
-				when 0 =>
-					if mmu_exception = '1' then
-						mmu_post <= '1';
-						step := 1;
-					end if;
-
-				when 1 =>
-					mmu_post <= '0';
-					if mmu_exception = '0' then
-						step := 0;
-					end if;
-			end case;
-		end if;
-	end process;
+	enable_mmu : if C_ENABLE_MMU generate
+		handle_mmu_exception : process(sys_clk, sys_reset, mmu_exception)
+			variable step : integer range 0 to 1;
+		begin
+			if sys_reset = '1' then
+				mmu_post <= '0';
+				step := 0;
+			elsif rising_edge(sys_clk) then
+				case step is
+					when 0 =>
+						if mmu_exception = '1' then
+							mmu_post <= '1';
+							step := 1;
+						end if;
 	
-	post_mux : process(i_mmu_state_fault, mmu_exception,cdec_command, cdec_data, cdec_datax, i_mem_singleData, cdec_post, mmu_post)
-	begin
-		if mmu_exception = '0' then
-			slv_osif2bus_command <= cdec_command;
-			slv_osif2bus_data    <= cdec_data;
-			slv_osif2bus_datax   <= cdec_datax;
-			post_sw_request      <= cdec_post;
-		else
-			if i_mmu_state_fault = '1' then
-				slv_osif2bus_command <= OSIF_CMD_MMU_FAULT;
-			else
-				slv_osif2bus_command <= OSIF_CMD_MMU_ACCESS_VIOLATION;
+					when 1 =>
+						mmu_post <= '0';
+						if mmu_exception = '0' then
+							step := 0;
+						end if;
+				end case;
 			end if;
+		end process;
+		
+		post_mux : process(mmu_state_fault, mmu_exception,cdec_command, cdec_data, cdec_datax, mmu_data, cdec_post, mmu_post)
+		begin
+			if mmu_exception = '0' then
+				slv_osif2bus_command <= cdec_command;
+				slv_osif2bus_data    <= cdec_data;
+				slv_osif2bus_datax   <= cdec_datax;
+				post_sw_request      <= cdec_post;
+			else
+				if mmu_state_fault = '1' then
+					slv_osif2bus_command <= OSIF_CMD_MMU_FAULT;
+				else
+					slv_osif2bus_command <= OSIF_CMD_MMU_ACCESS_VIOLATION;
+				end if;
+				
+				slv_osif2bus_data    <= mmu_data;
+				slv_osif2bus_datax   <= X"22221111";
+				post_sw_request      <= mmu_post;
+						
+			end if;
+		end  process;
+		
+		mmu_exception <= mmu_state_fault or mmu_state_access_violation;
+		--post_sw_request <= cdec_post or mmu_post;
+		interrupt <= post_sw_request or cdec_post;
+		
+		i_mmu : entity osif_core_v2_03_a.mmu
+		generic map
+		(
+			--C_BASEADDR            => C_BASEADDR,
+			C_AWIDTH              => C_AWIDTH,
+			C_DWIDTH              => C_DWIDTH
+		)
+		
+		port map
+		(
+			clk               => sys_clk,
+			rst               => sys_reset,
 			
-			slv_osif2bus_data    <= i_mem_singleData;
-			slv_osif2bus_datax   <= X"22221111";
-			post_sw_request      <= mmu_post;
-					
-		end if;
-	end  process;
+			-- incoming memory interface
+			i_swrq            => cdec_swrq, --
+			i_srrq            => cdec_srrq, --
+			i_bwrq            => cdec_bwrq, --
+			i_brrq            => cdec_brrq, --
+			
+			i_addr            => cdec_raddr,--
+			i_laddr           => cdec_laddr,--
+			o_data            => mmu_data, --
+			
+			o_busy            => mmu_busy,--
+			o_rdone           => mmu_rdDone,--
+			o_wdone           => mmu_wrDone,--
+			
+			-- outgoing memory interface
+			o_swrq            => o_mem_singleWrReq,
+			o_srrq            => o_mem_singleRdReq,
+			o_bwrq            => o_mem_burstWrReq,
+			o_brrq            => o_mem_burstRdReq,
+				    
+			o_addr            => o_mem_targetAddr,
+			o_laddr           => o_mem_localAddr,
+			i_data            => i_mem_singleData,
+			
+			i_busy            => i_mem_busy,
+			i_rdone           => i_mem_rdDone,
+			i_wdone           => i_mem_wrDone,
+			
+			-- configuration interface
+			i_cfg             => mmu_config_data,
+			i_setpgd          => mmu_setpgd,
+			i_repeat          => mmu_repeat,
+			
+			-- interrupts
+			o_state_fault            => mmu_state_fault,
+			o_state_access_violation => mmu_state_access_violation,
 	
-	--post_sw_request <= cdec_post or mmu_post;
+			-- tlb interface
+			i_tlb_match       => i_tlb_match,
+			i_tlb_busy        => i_tlb_busy,
+			--i_tlb_wdone       => i_tlb_wdone,
+			o_tlb_we          => o_tlb_we,
+			i_tlb_data        => i_tlb_rdata,
+			o_tlb_data        => o_tlb_wdata,
+			o_tlb_tag         => o_tlb_tag,
+			o_tlb_request     => o_tlb_request,
+		
+			-- diagnosis
+			o_tlb_miss_count    => mmu_tlb_miss_count,
+			o_tlb_hit_count     => mmu_tlb_hit_count,
+			o_page_fault_count  => mmu_page_fault_count
+		);
+	end generate;
 	
-	
-	
+	disable_mmu : if not C_ENABLE_MMU generate
+		interrupt <= cdec_post;
+		o_mem_singleWrReq <= cdec_swrq;
+		o_mem_singleRdReq <= cdec_srrq;
+		o_mem_burstWrReq  <= cdec_bwrq;
+		o_mem_burstRdReq  <= cdec_brrq;
+		o_mem_targetAddr  <= cdec_raddr;
+		o_mem_localAddr   <= cdec_laddr;
+		mmu_data          <= i_mem_singleData;
+		mmu_busy          <= i_mem_busy;
+		mmu_rdDone        <= i_mem_rdDone;
+		mmu_wrDone        <= i_mem_wrDone;
+		mmu_config_data            <= (others => '0');
+		mmu_setpgd                 <= '0';
+		mmu_repeat                 <= '0';
+		mmu_state_fault            <= '0';
+		mmu_state_access_violation <= '0';
+		mmu_tlb_miss_count         <= (others => '0');
+		mmu_tlb_hit_count          <= (others => '0');
+		mmu_page_fault_count       <= (others => '0');
+		o_tlb_we                   <= '0';
+		o_tlb_wdata                <= (others => '0');
+		o_tlb_tag                  <= (others => '0');
+		o_tlb_request              <= '0';
+	end generate;
 	-- ################### MODULE INSTANTIATIONS ####################
 	
 	
@@ -328,13 +452,14 @@ begin
 	--       is complete (busy goes low for s/w OS requests or the shm bus
 	--       bus master transaction completes).
 	-----------------------------------------------------------------------
-	dcr_slave_regs_inst : entity osif_core_mmu_v2_01_a.dcr_slave_regs
+	dcr_slave_regs_inst : entity osif_core_v2_03_a.dcr_slave_regs
 	generic map (
 		C_DCR_BASEADDR       => C_DCR_BASEADDR,
 		C_DCR_HIGHADDR       => C_DCR_HIGHADDR,
 		C_DCR_AWIDTH         => C_DCR_AWIDTH,
 		C_DCR_DWIDTH         => C_DCR_DWIDTH,
 		C_NUM_REGS           => 4,
+		C_ENABLE_MMU         => C_ENABLE_MMU,
 		C_INCLUDE_ILA        => C_DCR_ILA
 	)
 	port map (
@@ -348,21 +473,26 @@ begin
 		i_dcrWrite           => i_dcrWrite,
 		i_dcrICON            => i_dcrICON,
 		-- user registers
-		slv_osif2bus_command => slv_osif2bus_command,
-		slv_osif2bus_flags   => slv_osif2bus_flags,
-		slv_osif2bus_saved_state_enc =>  slv_osif2bus_saved_state_enc,
-		slv_osif2bus_saved_step_enc =>  slv_osif2bus_saved_step_enc,
-		slv_osif2bus_data    => slv_osif2bus_data,
-		slv_osif2bus_datax   => slv_osif2bus_datax,
-		slv_osif2bus_signature => slv_osif2bus_signature,
-		slv_bus2osif_command => slv_bus2osif_command,
-		slv_bus2osif_data    => slv_bus2osif_data,
-		slv_bus2osif_done    => slv_bus2osif_done,
+		i_osif2bus_command => slv_osif2bus_command,
+		i_osif2bus_flags   => slv_osif2bus_flags,
+		i_osif2bus_saved_state_enc =>  slv_osif2bus_saved_state_enc,
+		i_osif2bus_saved_step_enc =>  slv_osif2bus_saved_step_enc,
+		i_osif2bus_data    => slv_osif2bus_data,
+		i_osif2bus_datax   => slv_osif2bus_datax,
+		i_osif2bus_signature => slv_osif2bus_signature,
+		o_bus2osif_command => slv_bus2osif_command,
+		o_bus2osif_data    => slv_bus2osif_data,
+		o_bus2osif_done    => slv_bus2osif_done,
+		
+		i_tlb_miss_count   => mmu_tlb_miss_count,
+		i_tlb_hit_count    => mmu_tlb_hit_count,
+		i_page_fault_count => mmu_page_fault_count,
+		
 		-- additional user interface
 		o_newcmd             => os2task_newcmd,
 		i_post               => post_sw_request,
-		o_busy               => slv_busy,
-		o_interrupt          => interrupt
+		o_busy               => slv_busy
+		--o_interrupt          => interrupt
 	);
 	
 	-----------------------------------------------------------------------
@@ -373,16 +503,15 @@ begin
 	--       handles the setting and releasing of the osif_os2task.busy
 	--       and .blocking signals.
 	-----------------------------------------------------------------------
-	command_decoder_inst : entity osif_core_mmu_v2_01_a.command_decoder
+	command_decoder_inst : entity osif_core_v2_03_a.command_decoder
 	generic map (
-		C_BASEADDR             => C_BASEADDR,
 		C_AWIDTH               => C_AWIDTH,
 		C_DWIDTH               => C_DWIDTH,
 		C_PLB_AWIDTH           => C_PLB_AWIDTH,
 		C_PLB_DWIDTH           => C_PLB_DWIDTH,
 		C_BURST_AWIDTH         => C_BURST_AWIDTH,
-		C_BURST_BASEADDR       => C_BURST_BASEADDR,
-		C_FIFO_DWIDTH          => C_FIFO_DWIDTH
+		C_FIFO_DWIDTH          => C_FIFO_DWIDTH,
+		C_BURSTLEN_WIDTH       => C_BURSTLEN_WIDTH
 	)
 	port map (
 		i_clk                  => sys_clk,
@@ -393,20 +522,20 @@ begin
 		i_request_blocking     => request_blocking,
 		i_release_blocking     => request_unblocking,
 		i_init_data            => thread_init_data,
-		o_bm_my_addr           => o_mem_localAddr,
-		o_bm_target_addr       => o_mem_targetAddr,
-		o_bm_read_req          => o_mem_singleRdReq,
-		o_bm_write_req         => o_mem_singleWrReq,
-		o_bm_burst_read_req    => o_mem_burstRdReq,
-		o_bm_burst_write_req   => o_mem_burstWrReq,
+		o_bm_my_addr           => cdec_laddr,
+		o_bm_target_addr       => cdec_raddr,
+		o_bm_read_req          => cdec_srrq,
+		o_bm_write_req         => cdec_swrq,
+		o_bm_burst_read_req    => cdec_brrq,
+		o_bm_burst_write_req   => cdec_bwrq,
 		o_bm_burst_length      => o_mem_burstLen,
-		i_bm_busy              => i_mem_busy,
-		i_bm_read_done         => i_mem_rdDone,
-		i_bm_write_done        => i_mem_wrDone,
+		i_bm_busy              => mmu_busy,
+		i_bm_read_done         => mmu_rdDone,
+		i_bm_write_done        => mmu_wrDone,
 		i_slv_busy             => slv_busy,
 		i_slv_bus2osif_command => slv_bus2osif_command,
 		i_slv_bus2osif_data    => slv_bus2osif_data,
-		i_slv_bus2osif_shm     => i_mem_singleData,
+		i_slv_bus2osif_shm     => mmu_data,
 		o_slv_osif2bus_command => cdec_command,
 		o_slv_osif2bus_data    => cdec_data,
 		o_slv_osif2bus_datax   => cdec_datax,
@@ -502,8 +631,8 @@ begin
 			request_blocking   <= '0';
 			request_unblocking <= '0';
 			request_reset      <= '0';
-			o_mmu_setpgd       <= '0';
-			o_mmu_repeat       <= '0';
+			mmu_setpgd       <= '0';
+			mmu_repeat       <= '0';
 			
 			if os2task_newcmd = '1' then
 				case slv_bus2osif_command(0 to C_OSIF_CMD_WIDTH-1) is
@@ -548,11 +677,11 @@ begin
 						yield_request <= '0';
 					
 					when OSIF_CMD_MMU_SETPGD =>
-						o_mmu_setpgd <= '1';
-						o_mmu_config_data <= slv_bus2osif_data;
+						mmu_setpgd <= '1';
+						mmu_config_data <= slv_bus2osif_data;
 						
 					when OSIF_CMD_MMU_REPEAT =>
-						o_mmu_repeat <= '1';
+						mmu_repeat <= '1';
 						
 					when others =>
 					

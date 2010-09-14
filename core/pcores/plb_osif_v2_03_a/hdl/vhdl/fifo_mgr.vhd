@@ -10,18 +10,22 @@
 -----------------------------------------------------------------------------
 -- %%%RECONOS_COPYRIGHT_BEGIN%%%
 -- 
--- This file is part of the ReconOS project <http://www.reconos.de>.
--- Copyright (c) 2008, Computer Engineering Group, University of
--- Paderborn. 
+-- This file is part of ReconOS (http://www.reconos.de).
+-- Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+-- All rights reserved.
 -- 
--- For details regarding licensing and redistribution, see COPYING.  If
--- you did not receive a COPYING file as part of the distribution package
--- containing this file, you can get it at http://www.reconos.de/COPYING.
+-- ReconOS is free software: you can redistribute it and/or modify it under
+-- the terms of the GNU General Public License as published by the Free
+-- Software Foundation, either version 3 of the License, or (at your option)
+-- any later version.
 -- 
--- This software is provided "as is" without express or implied warranty,
--- and with no claim as to its suitability for any particular purpose.
--- The copyright owner or the contributors shall not be liable for any
--- damages arising out of the use of this software.
+-- ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+-- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+-- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+-- details.
+-- 
+-- You should have received a copy of the GNU General Public License along
+-- with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
 -- 
 -- %%%RECONOS_COPYRIGHT_END%%%
 -----------------------------------------------------------------------------

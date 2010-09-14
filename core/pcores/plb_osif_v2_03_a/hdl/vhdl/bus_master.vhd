@@ -9,18 +9,22 @@
 -----------------------------------------------------------------------------
 -- %%%RECONOS_COPYRIGHT_BEGIN%%%
 -- 
--- This file is part of the ReconOS project <http://www.reconos.de>.
--- Copyright (c) 2008, Computer Engineering Group, University of
--- Paderborn. 
+-- This file is part of ReconOS (http://www.reconos.de).
+-- Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+-- All rights reserved.
 -- 
--- For details regarding licensing and redistribution, see COPYING.  If
--- you did not receive a COPYING file as part of the distribution package
--- containing this file, you can get it at http://www.reconos.de/COPYING.
+-- ReconOS is free software: you can redistribute it and/or modify it under
+-- the terms of the GNU General Public License as published by the Free
+-- Software Foundation, either version 3 of the License, or (at your option)
+-- any later version.
 -- 
--- This software is provided "as is" without express or implied warranty,
--- and with no claim as to its suitability for any particular purpose.
--- The copyright owner or the contributors shall not be liable for any
--- damages arising out of the use of this software.
+-- ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+-- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+-- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+-- details.
+-- 
+-- You should have received a copy of the GNU General Public License along
+-- with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
 -- 
 -- %%%RECONOS_COPYRIGHT_END%%%
 -----------------------------------------------------------------------------
@@ -44,12 +48,12 @@ use reconos_v2_01_a.reconos_pkg.all;
 
 entity bus_master is
     generic (
--- C_BASEADDR : std_logic_vector := X"FFFFFFFF";
--- C_OFFSET : std_logic_vector := X"0000000C";
--- C_BURST_OFFSET : std_logic_vector := X"00001000";
         C_AWIDTH          :     integer := 32;
         C_DWIDTH          :     integer := 32;
-        C_PLB_DWIDTH      :     integer := 64
+        C_PLB_DWIDTH      :     integer := 64;
+        C_SLAVE_BASEADDR  :     std_logic_vector := X"FFFFFFFF";
+        C_BURST_BASEADDR  :     std_logic_vector := X"FFFFFFFF";
+        C_BURSTLEN_WIDTH  :     integer := 5
         );
     port (
         clk               : in  std_logic;
@@ -90,13 +94,14 @@ architecture behavioral of bus_master is
     signal plb_master_state : plb_master_state_t := IDLE;
     signal mst_sm_rd_req    : std_logic;
     signal mst_sm_wr_req    : std_logic;
+    signal mst_ip2ip_addr   : std_logic_vector(0 to C_AWIDTH-1);
 
 
 begin
 
     -- connect common bus signalling
     IP2Bus_Addr       <= i_target_addr;
-    IP2IP_Addr        <= i_my_addr;
+    IP2IP_Addr        <= mst_ip2ip_addr;
     IP2Bus_MstBusLock <= '0';           -- FIXME: no atomic (locked) transactions
     IP2Bus_MstRdReq   <= mst_sm_rd_req;
     IP2Bus_MstWrReq   <= mst_sm_wr_req;
@@ -129,6 +134,7 @@ begin
             IP2Bus_MstBE     <= "00000000";  -- 0 Bit
             IP2Bus_MstBurst  <= '0';         -- no burst
             IP2Bus_MstNum    <= "00001";     -- single beat transaction
+            mst_ip2ip_addr   <= (others => '0');
 
         elsif rising_edge(clk) then
 
@@ -148,6 +154,7 @@ begin
                         end if;
                         IP2Bus_MstBurst  <= '0';  -- no burst
                         IP2Bus_MstNum    <= "00001";  -- single beat transaction
+                        mst_ip2ip_addr   <= i_my_addr OR C_SLAVE_BASEADDR;
                     elsif i_write_req = '1' then
                         plb_master_state <= WRITE;
                         mst_sm_wr_req    <= '1';
@@ -159,22 +166,25 @@ begin
                         end if;
                         IP2Bus_MstBurst  <= '0';  -- no burst
                         IP2Bus_MstNum    <= "00001";  -- single beat transaction
+                        mst_ip2ip_addr   <= i_my_addr OR C_SLAVE_BASEADDR;
                     elsif i_burst_read_req = '1' then
                         plb_master_state <= READ;
                         mst_sm_rd_req    <= '1';
                         -- burst
                         IP2Bus_MstBE     <= "11111111";  -- 64 Bit
                         IP2Bus_MstBurst  <= '1';  -- burst
---            IP2Bus_MstNum    <= "11111";  -- 16x64 Bit burst
-                        IP2Bus_MstNum    <= i_burst_length;  -- n x 64 Bit burst, max 16
+                        IP2Bus_MstNum    <= "11111";  -- 16x64 Bit burst
+--                        IP2Bus_MstNum    <= i_burst_length;  -- n x 64 Bit burst, max 16
+                        mst_ip2ip_addr   <= i_my_addr OR C_BURST_BASEADDR;
                     elsif i_burst_write_req = '1' then
                         plb_master_state <= WRITE;
                         mst_sm_wr_req    <= '1';
                         -- burst
                         IP2Bus_MstBE     <= "11111111";  -- 64 Bit
                         IP2Bus_MstBurst  <= '1';  -- burst
---            IP2Bus_MstNum    <= "11111";  -- 16x64 Bit burst
-                        IP2Bus_MstNum    <= i_burst_length;  -- n x 64 Bit burst, max 16
+                        mst_ip2ip_addr   <= i_my_addr OR C_BURST_BASEADDR;
+                        IP2Bus_MstNum    <= "11111";  -- 16x64 Bit burst
+--                        IP2Bus_MstNum    <= i_burst_length;  -- n x 64 Bit burst, max 16
                     end if;
 
                 when READ =>

@@ -9,18 +9,22 @@
 -----------------------------------------------------------------------------
 -- %%%RECONOS_COPYRIGHT_BEGIN%%%
 -- 
--- This file is part of the ReconOS project <http://www.reconos.de>.
--- Copyright (c) 2008, Computer Engineering Group, University of
--- Paderborn. 
+-- This file is part of ReconOS (http://www.reconos.de).
+-- Copyright (c) 2006-2010 The ReconOS Project and contributors (see AUTHORS).
+-- All rights reserved.
 -- 
--- For details regarding licensing and redistribution, see COPYING.  If
--- you did not receive a COPYING file as part of the distribution package
--- containing this file, you can get it at http://www.reconos.de/COPYING.
+-- ReconOS is free software: you can redistribute it and/or modify it under
+-- the terms of the GNU General Public License as published by the Free
+-- Software Foundation, either version 3 of the License, or (at your option)
+-- any later version.
 -- 
--- This software is provided "as is" without express or implied warranty,
--- and with no claim as to its suitability for any particular purpose.
--- The copyright owner or the contributors shall not be liable for any
--- damages arising out of the use of this software.
+-- ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+-- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+-- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+-- details.
+-- 
+-- You should have received a copy of the GNU General Public License along
+-- with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
 -- 
 -- %%%RECONOS_COPYRIGHT_END%%%
 -----------------------------------------------------------------------------
@@ -65,15 +69,14 @@ use reconos_v2_01_a.reconos_pkg.all;
 
 entity command_decoder is
     generic (
-        C_BASEADDR       :    std_logic_vector := X"FFFFFFFF";
         -- Bus protocol parameters
         C_AWIDTH         :    integer          := 32;
         C_DWIDTH         :    integer          := 32;
         C_PLB_AWIDTH     :    integer          := 32;
         C_PLB_DWIDTH     :    integer          := 64;
         C_BURST_AWIDTH   :    integer          := 13;  -- 1024 x 64 Bit = 8192 Bytes = 2^13 Bytes
-        C_BURST_BASEADDR :    std_logic_vector := X"FFFFFFFF";
-        C_FIFO_DWIDTH    :    integer          := 32
+        C_FIFO_DWIDTH    :    integer          := 32;
+        C_BURSTLEN_WIDTH :    integer          := 12
         );
     port (
         i_clk            : in std_logic;
@@ -94,7 +97,7 @@ entity command_decoder is
         o_bm_write_req       : out std_logic;  -- single word
         o_bm_burst_read_req  : out std_logic;  -- n x 64Bit burst
         o_bm_burst_write_req : out std_logic;  -- n x 64Bit burst
-        o_bm_burst_length    : out std_logic_vector(0 to 4);  -- number of burst beats (n)
+        o_bm_burst_length    : out std_logic_vector(0 to C_BURSTLEN_WIDTH-1);  -- number of burst beats (n)
         i_bm_busy            : in  std_logic;
         i_bm_read_done       : in  std_logic;
         i_bm_write_done      : in  std_logic;
@@ -394,7 +397,7 @@ begin
                         case step is
                             when 0     =>
                                 o_bm_read_req    <= '1';
-                                o_bm_my_addr     <= C_BASEADDR;
+--                                o_bm_my_addr     <= C_BASEADDR;
                                 o_bm_target_addr <= i_osif.data;
                                 busy             <= '1';  -- busy until read completion
                                 step             <= 1;
@@ -413,7 +416,7 @@ begin
                     when OSIF_CMD_WRITE =>
                         case step is
                             when 0      =>
-                                o_bm_my_addr     <= C_BASEADDR;
+--                                o_bm_my_addr     <= C_BASEADDR;
                                 o_bm_target_addr <= i_osif.data;
                                 step             <= 1;
 
@@ -433,7 +436,7 @@ begin
                     when OSIF_CMD_READ_BURST =>
                         case step is
                             when 0           =>
-                                o_bm_my_addr <= C_BURST_BASEADDR(0 to C_PLB_AWIDTH-C_BURST_AWIDTH-1) & i_osif.data(C_PLB_AWIDTH-C_BURST_AWIDTH to C_PLB_AWIDTH-1);
+                                o_bm_my_addr <= i_osif.data;
                                 step         <= 1;
 
                             when 1 =>
@@ -442,7 +445,7 @@ begin
 
                             when 2 =>
                                 o_bm_burst_read_req <= '1';
-                                o_bm_burst_length   <= i_osif.data(C_OSIF_DATA_WIDTH-5 to C_OSIF_DATA_WIDTH-1);
+                                o_bm_burst_length   <= i_osif.data(C_OSIF_DATA_WIDTH-C_BURSTLEN_WIDTH to C_OSIF_DATA_WIDTH-1);
                                 busy                <= '1';  -- busy until read completion
                                 step                <= 0;
 
@@ -455,7 +458,7 @@ begin
                     when OSIF_CMD_WRITE_BURST =>
                         case step is
                             when 0            =>
-                                o_bm_my_addr <= C_BURST_BASEADDR(0 to C_PLB_AWIDTH-C_BURST_AWIDTH-1) & i_osif.data(C_PLB_AWIDTH-C_BURST_AWIDTH to C_PLB_AWIDTH-1);
+                                o_bm_my_addr <= i_osif.data;
                                 step         <= 1;
 
                             when 1 =>
@@ -464,7 +467,7 @@ begin
 
                             when 2 =>
                                 o_bm_burst_write_req <= '1';
-                                o_bm_burst_length    <= i_osif.data(C_OSIF_DATA_WIDTH-5 to C_OSIF_DATA_WIDTH-1);
+                                o_bm_burst_length    <= i_osif.data(C_OSIF_DATA_WIDTH-C_BURSTLEN_WIDTH to C_OSIF_DATA_WIDTH-1);
                                 busy                 <= '1';  -- busy until write completion
                                 step                 <= 0;
 
