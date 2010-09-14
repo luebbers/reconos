@@ -84,83 +84,83 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity ram_single is
-	generic (
-		-- address and data widths, THREAD-side and OSIF-side
-		G_PORTA_AWIDTH : integer := 10;
-		G_PORTA_DWIDTH : integer := 32;			-- this is fixed!
-		G_PORTB_AWIDTH   : integer := 10;
-		G_PORTB_DWIDTH   : integer := 64;		-- this is fixed!
+    generic (
+        -- address and data widths, THREAD-side and OSIF-side
+        G_PORTA_AWIDTH : integer := 10;
+        G_PORTA_DWIDTH : integer := 32;			-- this is fixed!
+        G_PORTB_AWIDTH   : integer := 10;
+        G_PORTB_DWIDTH   : integer := 64;		-- this is fixed!
                 G_PORTB_USE_BE   : integer := 0         -- use BEs on port B
-	);
-	port (
-		-- A is thread-side, AX is secondary thread-side, B is OSIF-side
-		addra : in  std_logic_vector(G_PORTA_AWIDTH-1 downto 0);
-		addrb : in  std_logic_vector(G_PORTB_AWIDTH-1 downto 0);
-		clka  : in  std_logic;
-		clkb  : in  std_logic;
-		dina  : in  std_logic_vector(G_PORTA_DWIDTH-1 downto 0);		-- these widths are fixed
-		dinb  : in  std_logic_vector(G_PORTB_DWIDTH-1 downto 0);		--
-		douta : out std_logic_vector(G_PORTA_DWIDTH-1 downto 0);		--
-		doutb : out std_logic_vector(G_PORTB_DWIDTH-1 downto 0);		--
-		wea   : in  std_logic;
-		web   : in  std_logic;
-		ena   : in  std_logic;
-		enb   : in  std_logic;
+    );
+    port (
+        -- A is thread-side, AX is secondary thread-side, B is OSIF-side
+        addra : in  std_logic_vector(G_PORTA_AWIDTH-1 downto 0);
+        addrb : in  std_logic_vector(G_PORTB_AWIDTH-1 downto 0);
+        clka  : in  std_logic;
+        clkb  : in  std_logic;
+        dina  : in  std_logic_vector(G_PORTA_DWIDTH-1 downto 0);		-- these widths are fixed
+        dinb  : in  std_logic_vector(G_PORTB_DWIDTH-1 downto 0);		--
+        douta : out std_logic_vector(G_PORTA_DWIDTH-1 downto 0);		--
+        doutb : out std_logic_vector(G_PORTB_DWIDTH-1 downto 0);		--
+        wea   : in  std_logic;
+        web   : in  std_logic;
+        ena   : in  std_logic;
+        enb   : in  std_logic;
                 beb   : in std_logic_vector(G_PORTB_DWIDTH/8-1 downto 0)
-	);
+    );
 
 end ram_single;
 
 architecture Behavioral of ram_single is
 
-	--== DERIVED CONSTANTS ==--
-	-- RAM size derived from Port A
-	constant C_PORTA_SIZE_BYTES : natural := 2**G_PORTA_AWIDTH * (G_PORTA_DWIDTH/8);
-	-- RAM size derived from Port B
-	constant C_PORTB_SIZE_BYTES : natural := 2**G_PORTB_AWIDTH * (G_PORTB_DWIDTH/8);
-	
-	constant C_RAM_SIZE_KB : natural := C_PORTA_SIZE_BYTES / 1024;
-	
-	-- number of BRAM blocks
-	constant C_NUM_BRAMS : natural := C_RAM_SIZE_KB / 2;
-	-- thread-side data width of a single BRAM block
-	constant C_PORTA_BRAM_DWIDTH : natural := G_PORTA_DWIDTH / C_NUM_BRAMS;
-	constant C_PORTB_BRAM_DWIDTH : natural := G_PORTB_DWIDTH / C_NUM_BRAMS;
+    --== DERIVED CONSTANTS ==--
+    -- RAM size derived from Port A
+    constant C_PORTA_SIZE_BYTES : natural := 2**G_PORTA_AWIDTH * (G_PORTA_DWIDTH/8);
+    -- RAM size derived from Port B
+    constant C_PORTB_SIZE_BYTES : natural := 2**G_PORTB_AWIDTH * (G_PORTB_DWIDTH/8);
+    
+    constant C_RAM_SIZE_KB : natural := C_PORTA_SIZE_BYTES / 1024;
+    
+    -- number of BRAM blocks
+    constant C_NUM_BRAMS : natural := C_RAM_SIZE_KB / 2;
+    -- thread-side data width of a single BRAM block
+    constant C_PORTA_BRAM_DWIDTH : natural := G_PORTA_DWIDTH / C_NUM_BRAMS;
+    constant C_PORTB_BRAM_DWIDTH : natural := G_PORTB_DWIDTH / C_NUM_BRAMS;
 
-	-- ratio of data widths
-	constant C_BRAM_DWIDTH_RATIO : natural := C_PORTB_BRAM_DWIDTH / C_PORTA_BRAM_DWIDTH;		-- always 2
+    -- ratio of data widths
+    constant C_BRAM_DWIDTH_RATIO : natural := C_PORTB_BRAM_DWIDTH / C_PORTA_BRAM_DWIDTH;		-- always 2
 
-	-- BRAM wrapper component
-	component bram_wrapper is
-		generic (
-			G_PORTA_DWIDTH : natural := 8;
-			G_PORTB_DWIDTH : natural := 16;
-			G_PORTA_AWIDTH : natural := 11;
-			G_PORTB_AWIDTH : natural := 10
-		);
-		port (
-			DOA : out std_logic_vector(G_PORTA_DWIDTH-1 downto 0);
-			DOB : out std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
-			ADDRA : in std_logic_vector(G_PORTA_AWIDTH-1 downto 0);
-			ADDRB : in std_logic_vector(G_PORTB_AWIDTH-1 downto 0);
-			CLKA : in std_logic;
-			CLKB : in std_logic;
-			DIA : in std_logic_vector(G_PORTA_DWIDTH-1 downto 0);
-			DIB : in std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
-			ENA : in std_logic;
-			ENB : in std_logic;
-			SSRA : in std_logic;
-			SSRB : in std_logic;
-			WEA : in std_logic;
-			WEB : in std_logic
-		);
-	end component;
+    -- BRAM wrapper component
+    component bram_wrapper is
+        generic (
+            G_PORTA_DWIDTH : natural := 8;
+            G_PORTB_DWIDTH : natural := 16;
+            G_PORTA_AWIDTH : natural := 11;
+            G_PORTB_AWIDTH : natural := 10
+        );
+        port (
+            DOA : out std_logic_vector(G_PORTA_DWIDTH-1 downto 0);
+            DOB : out std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
+            ADDRA : in std_logic_vector(G_PORTA_AWIDTH-1 downto 0);
+            ADDRB : in std_logic_vector(G_PORTB_AWIDTH-1 downto 0);
+            CLKA : in std_logic;
+            CLKB : in std_logic;
+            DIA : in std_logic_vector(G_PORTA_DWIDTH-1 downto 0);
+            DIB : in std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
+            ENA : in std_logic;
+            ENB : in std_logic;
+            SSRA : in std_logic;
+            SSRB : in std_logic;
+            WEA : in std_logic;
+            WEB : in std_logic
+        );
+    end component;
 
-	subtype bram_vec_array_t is std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
+    subtype bram_vec_array_t is std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
 
-	-- helper signals for BRAM connection
-	signal dina_tmp     : bram_vec_array_t;
-	signal douta_tmp    : bram_vec_array_t;
+    -- helper signals for BRAM connection
+    signal dina_tmp     : bram_vec_array_t;
+    signal douta_tmp    : bram_vec_array_t;
         signal ena_tmp      : std_logic_vector(C_NUM_BRAMS-1 downto 0);
         signal wea_tmp      : std_logic_vector(C_NUM_BRAMS-1 downto 0);
         signal enb_tmp      : std_logic_vector(C_NUM_BRAMS-1 downto 0);
@@ -169,36 +169,36 @@ architecture Behavioral of ram_single is
         signal sel          : std_logic;   -- selector for PORTA BRAM multiplexer
 
 begin
-	-- check generics for feasibility
-	assert G_PORTA_DWIDTH = 32
-		report "thread-side (PORTA) data width must be 32"
-		severity failure;
-		
-	assert G_PORTB_DWIDTH = 64
-		report "OSIF-side (PORTB) data width must be 64"
-		severity failure;
-		
-	-- this will not catch two-port/14 bit, which is not supported)
-	assert (G_PORTA_AWIDTH >= 10) and (G_PORTA_AWIDTH <= 14)
-		report "PORTA must have address width between 10 and 14 bits"
-		severity failure;
+    -- check generics for feasibility
+    assert G_PORTA_DWIDTH = 32
+        report "thread-side (PORTA) data width must be 32"
+        severity failure;
+        
+    assert G_PORTB_DWIDTH = 64
+        report "OSIF-side (PORTB) data width must be 64"
+        severity failure;
+        
+    -- this will not catch two-port/14 bit, which is not supported)
+    assert (G_PORTA_AWIDTH >= 10) and (G_PORTA_AWIDTH <= 14)
+        report "PORTA must have address width between 10 and 14 bits"
+        severity failure;
 
-	-- this will not catch two-port/9 bit, which is not supported)
-	assert (G_PORTB_AWIDTH >= 9) and (G_PORTA_AWIDTH <= 13)
-		report "PORTB must have address width between 9 and 13 bits"
-		severity failure;
+    -- this will not catch two-port/9 bit, which is not supported)
+    assert (G_PORTB_AWIDTH >= 9) and (G_PORTA_AWIDTH <= 13)
+        report "PORTB must have address width between 9 and 13 bits"
+        severity failure;
 
         assert (G_PORTB_AWIDTH = G_PORTA_AWIDTH-1)
                 report "PORTB must have an address width one greater than that of PORTA"
                 severity failure;
-		
-	assert C_PORTA_SIZE_BYTES = C_PORTB_SIZE_BYTES
-		report "combination of data and address widths impossible"
-		severity failure;
+        
+    assert C_PORTA_SIZE_BYTES = C_PORTB_SIZE_BYTES
+        report "combination of data and address widths impossible"
+        severity failure;
 
-	assert (G_PORTB_USE_BE = 0) or (C_PORTB_BRAM_DWIDTH <= 8)
-		report "port B byte enables cannot be used with this memory size"
-		severity failure;
+    assert (G_PORTB_USE_BE = 0) or (C_PORTB_BRAM_DWIDTH <= 8)
+        report "port B byte enables cannot be used with this memory size"
+        severity failure;
 
         -- generate enable signals from byte enables for PORTB
         WITH_BE: if G_PORTB_USE_BE /= 0 generate
@@ -238,35 +238,35 @@ begin
         dina_tmp((G_PORTA_DWIDTH*2)-1 downto G_PORTA_DWIDTH) <= dina;
         dina_tmp( G_PORTA_DWIDTH   -1 downto              0) <= dina;
 
-	-- instantiate RAMs
-	rams: for i in C_NUM_BRAMS-1 downto 0 generate
-		bram_inst : bram_wrapper
-			generic map (
-				G_PORTA_DWIDTH => C_PORTB_BRAM_DWIDTH,
-				G_PORTA_AWIDTH => G_PORTB_AWIDTH,
-				G_PORTB_DWIDTH => C_PORTB_BRAM_DWIDTH,
-				G_PORTB_AWIDTH => G_PORTB_AWIDTH
-			)
-			port map (
-				DOA => douta_tmp((i+1)*C_PORTB_BRAM_DWIDTH-1 downto i*C_PORTB_BRAM_DWIDTH),
+    -- instantiate RAMs
+    rams: for i in C_NUM_BRAMS-1 downto 0 generate
+        bram_inst : bram_wrapper
+            generic map (
+                G_PORTA_DWIDTH => C_PORTB_BRAM_DWIDTH,
+                G_PORTA_AWIDTH => G_PORTB_AWIDTH,
+                G_PORTB_DWIDTH => C_PORTB_BRAM_DWIDTH,
+                G_PORTB_AWIDTH => G_PORTB_AWIDTH
+            )
+            port map (
+                DOA => douta_tmp((i+1)*C_PORTB_BRAM_DWIDTH-1 downto i*C_PORTB_BRAM_DWIDTH),
 --                                    douta((i+1)*C_PORTA_BRAM_DWIDTH-1 downto i*C_PORTA_BRAM_DWIDTH),
-				DOB => doutb((i+1)*C_PORTB_BRAM_DWIDTH-1 downto i*C_PORTB_BRAM_DWIDTH),
-				ADDRA => addra(G_PORTA_AWIDTH-1 downto 1),
-				ADDRB => addrb,
-				CLKA => clka,
-				CLKB => clkb,
-				DIA => dina_tmp((i+1)*C_PORTB_BRAM_DWIDTH-1 downto i*C_PORTB_BRAM_DWIDTH),
+                DOB => doutb((i+1)*C_PORTB_BRAM_DWIDTH-1 downto i*C_PORTB_BRAM_DWIDTH),
+                ADDRA => addra(G_PORTA_AWIDTH-1 downto 1),
+                ADDRB => addrb,
+                CLKA => clka,
+                CLKB => clkb,
+                DIA => dina_tmp((i+1)*C_PORTB_BRAM_DWIDTH-1 downto i*C_PORTB_BRAM_DWIDTH),
                                     -- dina((i+1)*C_PORTA_BRAM_DWIDTH-1 downto i*C_PORTA_BRAM_DWIDTH),
-				DIB => dinb((i+1)*C_PORTB_BRAM_DWIDTH-1 downto i*C_PORTB_BRAM_DWIDTH),
-				ENA => ena_tmp(i),
-				ENB => enb_tmp(i),
-				SSRA => '0',
-				SSRB => '0',
-				WEA => wea_tmp(i),
-				WEB => web_tmp(i)
-			);
-			
-	end generate; -- rams
+                DIB => dinb((i+1)*C_PORTB_BRAM_DWIDTH-1 downto i*C_PORTB_BRAM_DWIDTH),
+                ENA => ena_tmp(i),
+                ENB => enb_tmp(i),
+                SSRA => '0',
+                SSRB => '0',
+                WEA => wea_tmp(i),
+                WEB => web_tmp(i)
+            );
+            
+    end generate; -- rams
 
 end Behavioral;
 

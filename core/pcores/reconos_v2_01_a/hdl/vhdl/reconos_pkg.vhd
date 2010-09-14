@@ -646,7 +646,7 @@ package body reconos_pkg is
   procedure reconos_begin (signal osif_task2os : out osif_task2os_t;
                            osif_os2task        : in  osif_os2task_t) is
   begin
-	  osif_task2os.request <= '0';
+      osif_task2os.request <= '0';
           osif_task2os.yield   <= '0';
   end;
 
@@ -1303,13 +1303,13 @@ package body reconos_pkg is
 
     case osif_os2task.step is
       when 0 => osif_task2os.data <= handle;
-		
-		when 1 => null;
+        
+        when 1 => null;
 
       when 2 =>
         completed := true;
 --        if osif_os2task.data = C_RECONOS_FAILURE then
-	if osif_os2task.valid = '0' then
+    if osif_os2task.valid = '0' then
           success := false;
         else
           success := true;
@@ -1394,8 +1394,8 @@ package body reconos_pkg is
 
     case osif_os2task.step is
       when 0 => osif_task2os.data <= handle;
-		
-		when 1 => null;		-- wait state for hardware FIFO access
+        
+        when 1 => null;		-- wait state for hardware FIFO access
 
       when 2 =>
         completed := true;
@@ -1484,7 +1484,7 @@ package body reconos_pkg is
       when 2 =>
         completed := true;
 --        if osif_os2task.data = C_RECONOS_FAILURE then
-	if osif_os2task.valid = '0' then
+    if osif_os2task.valid = '0' then
           success := false;
         else
           success := true;
@@ -1535,8 +1535,8 @@ package body reconos_pkg is
 
       when 2 =>
         completed := true;
-	length := osif_os2task.data;
-	if osif_os2task.valid = '0' then
+    length := osif_os2task.data;
+    if osif_os2task.valid = '0' then
           success := false;
         else
           success := true;
@@ -1587,7 +1587,7 @@ package body reconos_pkg is
 
       when 2 =>
         completed := true;
-	if osif_os2task.valid = '0' then
+    if osif_os2task.valid = '0' then
           success := false;
         else
           success := true;
@@ -1674,27 +1674,27 @@ package body reconos_pkg is
   begin
     osif_task2os.command <= OSIF_CMD_MBOX_TRYGET_LOCAL;
     osif_task2os.request <= '1';
-	 success := false;
-	 data := X"AFFEDEAD";
-	 completed := false;
-	 
-	 case osif_os2task.step is
-		when 0 => null;
-		
-		when 1 => null;
-			
-		when 2 =>
-			if osif_os2task.valid = '1' then
-				success              := true;
-			else
-				success              := false;
-			end if;
-			data                 := osif_os2task.data;
-			completed := true;
+     success := false;
+     data := X"AFFEDEAD";
+     completed := false;
+     
+     case osif_os2task.step is
+        when 0 => null;
+        
+        when 1 => null;
+            
+        when 2 =>
+            if osif_os2task.valid = '1' then
+                success              := true;
+            else
+                success              := false;
+            end if;
+            data                 := osif_os2task.data;
+            completed := true;
 
       when others => osif_task2os.error <= '1';  -- this shouldn't happen
 
-	 end case;
+     end case;
 
   end;  -- reconos_mbox_tryget_local
 
@@ -1726,7 +1726,7 @@ package body reconos_pkg is
                                   signal   data         : out std_logic_vector(0 to C_OSIF_DATA_WIDTH-1)) is
     variable tmp         : std_logic_vector(0 to C_OSIF_DATA_WIDTH-1);
     variable success_tmp : boolean;
-	 variable done : boolean;
+     variable done : boolean;
   begin
     
     reconos_mbox_tryget_local(done, success_tmp, osif_task2os, osif_os2task, handle, tmp);
@@ -1765,23 +1765,23 @@ package body reconos_pkg is
     osif_task2os.command <= OSIF_CMD_MBOX_TRYPUT_LOCAL;
     osif_task2os.data <= data;
     osif_task2os.request <= '1';
-	 success := false;
-	 completed := false;
-	 
-	 case osif_os2task.step is
-		when 0 => 
-			
-		when 1 =>
-			if osif_os2task.valid = '1' then
-				success              := true;
-			else
-				success              := false;
-			end if;
-			completed := true;
+     success := false;
+     completed := false;
+     
+     case osif_os2task.step is
+        when 0 => 
+            
+        when 1 =>
+            if osif_os2task.valid = '1' then
+                success              := true;
+            else
+                success              := false;
+            end if;
+            completed := true;
 
       when others => osif_task2os.error <= '1';  -- this shouldn't happen
 
-	 end case;
+     end case;
   end;  -- reconos_mbox_tryput_local
 
 

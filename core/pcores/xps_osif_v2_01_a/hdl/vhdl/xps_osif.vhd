@@ -406,7 +406,7 @@ architecture IMP of xps_osif is
   --USER_LOGIC needs this parameter
   --constant BURST_BASEADDR : std_logic_vector := C_BASEADDR or X"00004000";
   --constant BURST_HIGHADDR : std_logic_vector := C_BASEADDR or X"00007FFF";
-	 
+     
   --constant IPIF_ARD_ADDR_RANGE_ARRAY      : SLV64_ARRAY_TYPE     := 
     --(
       --ZERO_ADDR_PAD & USER_MST_BASEADDR,  -- user logic master space base address
@@ -587,10 +587,10 @@ task_clk <= task_clk_internal;
 task_reset <= task_reset_internal;
 
  		--------------------------------------
-		-- memory bus controller core
-		--
-		-- PLBv46
-		---------------------------------------
+        -- memory bus controller core
+        --
+        -- PLBv46
+        ---------------------------------------
     mem_plb46_i : entity xps_osif_v2_01_a.mem_plb46
         generic map
         (

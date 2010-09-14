@@ -183,15 +183,15 @@ begin
    
    --CPU read process
     readreg: process (cpu_readCE, i_dcrABus, toCPU_debugreg, os2cpu_datareg, os2cpu_donereg, toCPU_newcommand)
-	 variable test: std_logic_vector(C_DCR_DWIDTH-4 downto 0):= (others => '0');    begin      case cpu_readCE(0 to 3) is
+     variable test: std_logic_vector(C_DCR_DWIDTH-4 downto 0):= (others => '0');    begin      case cpu_readCE(0 to 3) is
           when "1000"  =>   --debugreg
-			 o_dcrDBus <= toCPU_debugreg;
+             o_dcrDBus <= toCPU_debugreg;
           when "0100"  =>   --datareg
              o_dcrDBus <= os2cpu_datareg;
           when "0010"  =>   --donereg
              o_dcrDBus <= (others => '0');
-		    when "0001" => --newcommandreg
-		       o_dcrDBus <= X"0000000" & "000" & toCPU_newcommand;
+            when "0001" => --newcommandreg
+               o_dcrDBus <= X"0000000" & "000" & toCPU_newcommand;
           when others => NULL;
        end case;    end process;
    

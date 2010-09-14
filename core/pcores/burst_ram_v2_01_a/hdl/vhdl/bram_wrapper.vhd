@@ -69,134 +69,134 @@ library UNISIM;
 use UNISIM.VComponents.all;
 
 entity bram_wrapper is
-	generic (
-		G_PORTA_DWIDTH : natural := 8;
-		G_PORTB_DWIDTH : natural := 16;
-		G_PORTA_AWIDTH : natural := 11;
-		G_PORTB_AWIDTH : natural := 10
-	);
-	port (
-		DOA : out std_logic_vector(G_PORTA_DWIDTH-1 downto 0);
-		DOB : out std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
-		ADDRA : in std_logic_vector(G_PORTA_AWIDTH-1 downto 0);
-		ADDRB : in std_logic_vector(G_PORTB_AWIDTH-1 downto 0);
-		CLKA : in std_logic;
-		CLKB : in std_logic;
-		DIA : in std_logic_vector(G_PORTA_DWIDTH-1 downto 0);
-		DIB : in std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
-		ENA : in std_logic;
-		ENB : in std_logic;
-		SSRA : in std_logic;
-		SSRB : in std_logic;
-		WEA : in std_logic;
-		WEB : in std_logic
-	);
+    generic (
+        G_PORTA_DWIDTH : natural := 8;
+        G_PORTB_DWIDTH : natural := 16;
+        G_PORTA_AWIDTH : natural := 11;
+        G_PORTB_AWIDTH : natural := 10
+    );
+    port (
+        DOA : out std_logic_vector(G_PORTA_DWIDTH-1 downto 0);
+        DOB : out std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
+        ADDRA : in std_logic_vector(G_PORTA_AWIDTH-1 downto 0);
+        ADDRB : in std_logic_vector(G_PORTB_AWIDTH-1 downto 0);
+        CLKA : in std_logic;
+        CLKB : in std_logic;
+        DIA : in std_logic_vector(G_PORTA_DWIDTH-1 downto 0);
+        DIB : in std_logic_vector(G_PORTB_DWIDTH-1 downto 0);
+        ENA : in std_logic;
+        ENB : in std_logic;
+        SSRA : in std_logic;
+        SSRB : in std_logic;
+        WEA : in std_logic;
+        WEB : in std_logic
+    );
 end bram_wrapper;
 
 architecture Behavioral of bram_wrapper is
 
-	-- derived constants
-	constant C_PORTA_DWIDTH : natural := 2**(14-G_PORTA_AWIDTH);
-	constant C_PORTB_DWIDTH : natural := 2**(14-G_PORTB_AWIDTH);
+    -- derived constants
+    constant C_PORTA_DWIDTH : natural := 2**(14-G_PORTA_AWIDTH);
+    constant C_PORTB_DWIDTH : natural := 2**(14-G_PORTB_AWIDTH);
 
 begin
-	-- check generics
-	assert C_PORTA_DWIDTH = G_PORTA_DWIDTH
-		report "PORTA parameters don't match"
-		severity failure;
+    -- check generics
+    assert C_PORTA_DWIDTH = G_PORTA_DWIDTH
+        report "PORTA parameters don't match"
+        severity failure;
 
-	assert C_PORTB_DWIDTH = G_PORTB_DWIDTH
-		report "PORTB parameters don't match"
-		severity failure;
+    assert C_PORTB_DWIDTH = G_PORTB_DWIDTH
+        report "PORTB parameters don't match"
+        severity failure;
 
-	-- instantiate BRAM
-	s1_s2: if (G_PORTA_DWIDTH = 1) and (G_PORTB_DWIDTH = 2) generate
-		bram_inst : RAMB16_S1_S2
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB );
-	end generate;
+    -- instantiate BRAM
+    s1_s2: if (G_PORTA_DWIDTH = 1) and (G_PORTB_DWIDTH = 2) generate
+        bram_inst : RAMB16_S1_S2
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB );
+    end generate;
 
-	s2_s4: if (G_PORTA_DWIDTH = 2) and (G_PORTB_DWIDTH = 4) generate
-		bram_inst : RAMB16_S2_S4
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB );
-	end generate;
+    s2_s4: if (G_PORTA_DWIDTH = 2) and (G_PORTB_DWIDTH = 4) generate
+        bram_inst : RAMB16_S2_S4
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB );
+    end generate;
 
-	s4_s9: if (G_PORTA_DWIDTH = 4) and (G_PORTB_DWIDTH = 8) generate
-		bram_inst : RAMB16_S4_S9
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB, DIPB => "0" );
-	end generate;
+    s4_s9: if (G_PORTA_DWIDTH = 4) and (G_PORTB_DWIDTH = 8) generate
+        bram_inst : RAMB16_S4_S9
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB, DIPB => "0" );
+    end generate;
 
-	s9_s18: if (G_PORTA_DWIDTH = 8) and (G_PORTB_DWIDTH = 16) generate
-		bram_inst : RAMB16_S9_S18
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB, DIPA => "0", DIPB => "00" );
-	end generate;
+    s9_s18: if (G_PORTA_DWIDTH = 8) and (G_PORTB_DWIDTH = 16) generate
+        bram_inst : RAMB16_S9_S18
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB, DIPA => "0", DIPB => "00" );
+    end generate;
 
-	s18_s36: if (G_PORTA_DWIDTH = 16) and (G_PORTB_DWIDTH = 32) generate
-		bram_inst : RAMB16_S18_S36
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB, DIPA => "00", DIPB => "0000" );
-	end generate;
+    s18_s36: if (G_PORTA_DWIDTH = 16) and (G_PORTB_DWIDTH = 32) generate
+        bram_inst : RAMB16_S18_S36
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB, DIPA => "00", DIPB => "0000" );
+    end generate;
 
-	s1_s1: if (G_PORTA_DWIDTH = 1) and (G_PORTB_DWIDTH = 1) generate
-		bram_inst : RAMB16_S1_S1
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB );
-	end generate;
+    s1_s1: if (G_PORTA_DWIDTH = 1) and (G_PORTB_DWIDTH = 1) generate
+        bram_inst : RAMB16_S1_S1
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB );
+    end generate;
 
-	s2_s2: if (G_PORTA_DWIDTH = 2) and (G_PORTB_DWIDTH = 2) generate
-		bram_inst : RAMB16_S2_S2
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB );
-	end generate;
+    s2_s2: if (G_PORTA_DWIDTH = 2) and (G_PORTB_DWIDTH = 2) generate
+        bram_inst : RAMB16_S2_S2
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB );
+    end generate;
 
-	s4_s4: if (G_PORTA_DWIDTH = 4) and (G_PORTB_DWIDTH = 4) generate
-		bram_inst : RAMB16_S4_S4
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB );
-	end generate;
+    s4_s4: if (G_PORTA_DWIDTH = 4) and (G_PORTB_DWIDTH = 4) generate
+        bram_inst : RAMB16_S4_S4
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB );
+    end generate;
 
-	s9_s9: if (G_PORTA_DWIDTH = 8) and (G_PORTB_DWIDTH = 8) generate
-		bram_inst : RAMB16_S9_S9
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB, DIPA => "0", DIPB => "0" );
-	end generate;
+    s9_s9: if (G_PORTA_DWIDTH = 8) and (G_PORTB_DWIDTH = 8) generate
+        bram_inst : RAMB16_S9_S9
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB, DIPA => "0", DIPB => "0" );
+    end generate;
 
-	s18_s18: if (G_PORTA_DWIDTH = 16) and (G_PORTB_DWIDTH = 16) generate
-		bram_inst : RAMB16_S18_S18
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB, DIPA => "00", DIPB => "00" );
-	end generate;
+    s18_s18: if (G_PORTA_DWIDTH = 16) and (G_PORTB_DWIDTH = 16) generate
+        bram_inst : RAMB16_S18_S18
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB, DIPA => "00", DIPB => "00" );
+    end generate;
 
-	s36_s36: if (G_PORTA_DWIDTH = 32) and (G_PORTB_DWIDTH = 32) generate
-		bram_inst : RAMB16_S36_S36
-			port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
-			          CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
-						 ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
-						 WEA => WEA, WEB => WEB, DIPA => "0000", DIPB => "0000" );
-	end generate;
+    s36_s36: if (G_PORTA_DWIDTH = 32) and (G_PORTB_DWIDTH = 32) generate
+        bram_inst : RAMB16_S36_S36
+            port map (DOA => DOA, DOB => DOB, ADDRA => ADDRA, ADDRB => ADDRB,
+                      CLKA => CLKA, CLKB => CLKB, DIA => DIA, DIB => DIB,
+                         ENA => ENA, ENB => ENB, SSRA => SSRA, SSRB => SSRB,
+                         WEA => WEA, WEB => WEB, DIPA => "0000", DIPB => "0000" );
+    end generate;
 
 end Behavioral;
 

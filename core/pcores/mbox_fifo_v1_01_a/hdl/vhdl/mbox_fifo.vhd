@@ -48,21 +48,21 @@ use mbox_fifo_v1_01_a.all;
 
 entity mbox_fifo is
   generic (
-	ADDRESS_WIDTH	: integer := 9;
-	DATA_WIDTH	: integer := 32
-	);
+    ADDRESS_WIDTH	: integer := 9;
+    DATA_WIDTH	: integer := 32
+    );
   port (
-	readClk		: in std_logic;
-	readRst		: in std_logic;
-	writeClk		: in std_logic;
-	writeRst		: in std_logic;
-	write		: in std_logic;
-	read		: in std_logic;
-	dataIn		: in std_logic_vector(0 to DATA_WIDTH-1);
-	dataOut		: out std_logic_vector(0 to DATA_WIDTH-1);
-	clearToWrite	: out std_logic;
-	clearToRead	: out std_logic	
-	);
+    readClk		: in std_logic;
+    readRst		: in std_logic;
+    writeClk		: in std_logic;
+    writeRst		: in std_logic;
+    write		: in std_logic;
+    read		: in std_logic;
+    dataIn		: in std_logic_vector(0 to DATA_WIDTH-1);
+    dataOut		: out std_logic_vector(0 to DATA_WIDTH-1);
+    clearToWrite	: out std_logic;
+    clearToRead	: out std_logic	
+    );
 
   attribute SIGIS : string;
   attribute SIGIS of readClk       : signal is "Clk";
@@ -77,10 +77,10 @@ end entity mbox_fifo;
 
 architecture IMP of mbox_fifo is
 
-	-- Component Declaration for the "guts" of the fifo core
+    -- Component Declaration for the "guts" of the fifo core
 component fifo_async
 
-	port (
+    port (
         din: IN std_logic_VECTOR(31 downto 0);
         rd_clk: IN std_logic;
         rd_en: IN std_logic;
@@ -91,14 +91,14 @@ component fifo_async
         empty: OUT std_logic;
         full: OUT std_logic;
         valid: OUT std_logic
-	);
+    );
 
 end component;
 
-	signal empty : std_logic;
-	signal full : std_logic;
-	signal valid : std_logic;
-	signal reset : std_logic;
+    signal empty : std_logic;
+    signal full : std_logic;
+    signal valid : std_logic;
+    signal reset : std_logic;
 
 begin
 
@@ -115,11 +115,11 @@ begin
                         dout => dataOut,
                         empty => empty,
                         full => full,
-			               valid => valid);
+                           valid => valid);
 
   reset <= readRst or writeRst;
-	clearToRead <= (not empty) or valid;
-	clearToWrite <= not full;
+    clearToRead <= (not empty) or valid;
+    clearToWrite <= not full;
 
 
 end IMP;
