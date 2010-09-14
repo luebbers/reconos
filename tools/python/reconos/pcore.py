@@ -37,8 +37,10 @@ import shutil
 def createPCore(user_logic_name,task_number,vhdl_files,task_name,netlist_files,header=""):
         
         pcore_name = (task_name + "_v1_%02i_b") % task_number
-        reconos_version = "v2_01_a"
-        ram_version = "v2_01_a"
+	
+        reconos_version = os.environ["RECONOS_VER"] #"v2_01_a"
+	osif_version    = os.environ["OSIF_VER"]
+        ram_version     = reconos_version
 
         #################
 

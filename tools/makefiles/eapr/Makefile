@@ -50,12 +50,12 @@ PAROPTS ?= -ol high -w
 RECONOS_VER ?= v2_01_a
 
 # osif and library versions
-PCORE_OSIF=$(RECONOS)/core/pcores/xps_osif_$(RECONOS_VER) $(RECONOS)/core/pcores/plb_osif_$(RECONOS_VER) $(RECONOS)/core/pcores/osif_core_$(RECONOS_VER)
-PCORE_RECONOS=$(RECONOS)/core/pcores/reconos_$(RECONOS_VER)
+PCORE_OSIF=$(RECONOS)/core/pcores/xps_osif_$(OSIF_VER) $(RECONOS)/core/pcores/plb_osif_$(OSIF_VER) $(RECONOS)/core/pcores/osif_core_$(OSIF_VER)
+PCORE_RECONOS=$(RECONOS)/core/pcores/reconos_*
 # fifo cores
 PCORE_FIFO=$(RECONOS)/core/pcores/mbox_fifo_v1_01_a
 # burst ram cores
-PCORE_BURSTRAM=$(RECONOS)/core/pcores/burst_ram_$(RECONOS_VER)
+PCORE_BURSTRAM=$(RECONOS)/core/pcores/burst_ram_*
 # MGT protector (for V4FX engineering samples)
 PCORE_MGTPROTECTOR=$(RECONOS)/support/pcores/v4_mgt_protector_v1_00_a
 # the number of reconos osifs/slots that are dynamic

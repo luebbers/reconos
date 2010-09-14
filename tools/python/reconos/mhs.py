@@ -33,11 +33,28 @@
 
 import string
 import sys
+import os
+
+def get_reconos_ip_version():
+	ver = os.environ["RECONOS_VER"]
+	ver = ver[1:]
+	ver = ver.replace("_",".")
+	return ver
+
+def get_osif_ip_version():
+	ver = os.environ["OSIF_VER"]
+	if ver == None:
+		return get_reconos_ip_version()
+	ver = ver[1:]
+	ver = ver.replace("_",".")
+	return ver
+
 
 plb_if_types     = {'46' : 'MPLB', '34' : 'MSPLB'}
 osif_ip_core = "plb_osif"
 osif_inst_name = "osif"
-reconos_ip_version = "2.01.a"
+osif_ip_version = get_osif_ip_version()
+reconos_ip_version = get_reconos_ip_version()
 reconos_base_addr = 0x20000000
 reconos_size      = 0x10000
 reconos_dcr_base_addr = 0
@@ -219,12 +236,13 @@ fields: self.pcores   : list of MHSPCore objects
                 self.pcores.remove(pcore)
 
                                         
-def createReconosSlot(num, plb_name = "plb", dcr_name = "dcr", clock = "sys_clk_s", reset = "sys_bus_reset", ip_core = osif_ip_core, inst_name = osif_inst_name, ip_version = reconos_ip_version, plb_ver = '34', connect = True):
+def createReconosSlot(num, plb_name = "plb", dcr_name = "dcr", clock = "sys_clk_s", reset = "sys_bus_reset", ip_core = osif_ip_core, inst_name = osif_inst_name, ip_version = osif_ip_version, plb_ver = '34', connect = True):
         """create a reconos slot instance"""
-        
+        sys.stderr.write("reconos_ip_version = %s\n" % reconos_ip_version)
+	sys.stderr.write("osif_ip_version    = %s\n" % osif_ip_version)
         pcore = MHSPCore(ip_core)
         pcore.instance_name = inst_name + "_%i" % num
-        pcore.addEntry("PARAMETER","HW_VER",reconos_ip_version)
+        pcore.addEntry("PARAMETER","HW_VER",ip_version)
         pcore.addEntry("PARAMETER","C_DCR_BASEADDR","0b%s" % ntob(num*reconos_dcr_size + reconos_dcr_base_addr, 10))
         pcore.addEntry("PARAMETER","C_DCR_HIGHADDR","0b%s" % ntob((num + 1)*reconos_dcr_size + reconos_dcr_base_addr - 1, 10))
         if plb_ver in ('34'):      # only when we have a plb slave interface
