@@ -394,15 +394,16 @@ def build_hw(cfg, hwdir, target, environ):
         os.chdir(hwdir)
     except OSError:
         return False,"Cannot chdir to directory '" + hwdir + "'", None
-    
+ 
+    preload = os.environ["LD_PRELOAD"]
+    os.environ["LD_PRELOAD"] = ""
+    environ["LD_PRELOAD"] = ""
+   
     # prepend additional environment (see build_sw for elaboration)
     if len(environ) > 0:
         envstr = reduce(lambda a, b: a + " " + b, map(lambda x: x + "=" + environ[x], environ.keys()))
     else:
         envstr = ''
-
-    preload = os.environ["LD_PRELOAD"]
-    os.environ["LD_PRELOAD"] = ""
 
     result, output = command(envstr + " make " + target, cfg["hwbuild_timeout"])
 
