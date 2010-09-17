@@ -126,6 +126,7 @@ entity osif_core is
         C_TLB_TAG_WIDTH       :     integer          := 20;
         C_TLB_DATA_WIDTH      :     integer          := 21;
         C_ENABLE_MMU          :     boolean          := true;
+        C_MMU_STAT_REGS       :     boolean          := false;
         C_DCR_ILA             :     integer          := 0  -- 0: no debug ILA, 1: include debug chipscope ILA for DCR debugging
     );
     port
@@ -353,7 +354,8 @@ begin
         (
             --C_BASEADDR            => C_BASEADDR,
             C_AWIDTH              => C_AWIDTH,
-            C_DWIDTH              => C_DWIDTH
+            C_DWIDTH              => C_DWIDTH,
+            C_MMU_STAT_REGS       => C_MMU_STAT_REGS
         )
         
         port map

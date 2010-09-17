@@ -21,6 +21,7 @@ entity mmu is
         C_DWIDTH              : integer          := 32;
         C_DCR_AWIDTH          : integer          := 10;
         C_DCR_DWIDTH          : integer          := 32;
+        C_MMU_STAT_REGS       : boolean          := false;
         C_TLB_TAG_WIDTH       : integer          := 20;
         C_TLB_DATA_WIDTH      : integer          := 21 
     );
@@ -89,7 +90,6 @@ architecture imp of mmu is
         STATE_FETCH_REQUEST,
         STATE_TLB_LOOKUP_1,
         STATE_TLB_LOOKUP_2,
-        STATE_TLB_LOOKUP_3,
         STATE_READ_PGDE,
         STATE_SAVE_PGDE,
         STATE_READ_PTE,
@@ -115,14 +115,20 @@ architecture imp of mmu is
     signal tlb_miss_count   : std_logic_vector(C_DCR_DWIDTH - 1 downto 0);
     signal tlb_hit_count    : std_logic_vector(C_DCR_DWIDTH - 1 downto 0);
     signal page_fault_count : std_logic_vector(C_DCR_DWIDTH - 1 downto 0);
-    
-    signal debug : std_logic_vector(C_DCR_DWIDTH - 1 downto 0);
 
 begin
 
-    o_tlb_miss_count   <= tlb_miss_count;
-    o_tlb_hit_count    <= tlb_hit_count;
-    o_page_fault_count <= page_fault_count;
+    enable_mmu_stat_regs : if C_MMU_STAT_REGS generate
+        o_tlb_miss_count   <= tlb_miss_count;
+        o_tlb_hit_count    <= tlb_hit_count;
+        o_page_fault_count <= page_fault_count;
+    end generate;
+    
+    disable_mmu_stat_regs : if not C_MMU_STAT_REGS generate
+        o_tlb_miss_count   <= (others => '0');
+        o_tlb_hit_count    <= (others => '0');
+        o_page_fault_count <= (others => '0');
+    end generate;
     
     rq      <= i_swrq or i_srrq or i_bwrq or i_brrq;
     
@@ -163,13 +169,9 @@ begin
     end process;
     
     handle_rq : process(clk, rst, rq)
-        --variable step  : integer range 0 to 6;
         variable vaddr : std_logic_vector(31 downto 0);
-        variable pgdep : std_logic_vector(31 downto 0);
-        variable pgde  : std_logic_vector(31 downto 0);
-        variable ptep  : std_logic_vector(31 downto 0);
         variable pte   : std_logic_vector(31 downto 0);
-        variable paddr : std_logic_vector(31 downto 0);
+        variable writable   : std_logic;
         variable waiting   : std_logic;
     begin
         if rst = '1' then
@@ -187,38 +189,28 @@ begin
             page_fault_count <= (others => '0');
             o_tlb_we <= '0';
             o_tlb_request <= '0';
-            debug <= X"AFFEABBA";
         elsif rising_edge(clk) then
             if rq = '1' or waiting = '1' then
                 case step is
                     when STATE_FETCH_REQUEST => -- 0
-                        debug <= X"00000001";
                         request <= i_srrq & i_swrq & i_brrq & i_bwrq;
                         vaddr := i_addr; -- save virtual address
                         busy <= '1';
                         waiting := '1';
-                        --step <= STATE_READ_PGDE;
                         o_tlb_request <= '1';
                         step <= STATE_TLB_LOOKUP_1;
                         
                     when STATE_TLB_LOOKUP_1 =>
-                        debug <= X"00000002";
                         o_tlb_tag <= vaddr(31 downto 12);
                         if i_tlb_busy = '0' then
                             step <= STATE_TLB_LOOKUP_2;
                         end if;
                         
                     when STATE_TLB_LOOKUP_2 =>
-                        debug <= X"00000003";
-                        step <= STATE_TLB_LOOKUP_3;
-                        
-                    when STATE_TLB_LOOKUP_3 =>
-                        debug <= X"00000004";
                         o_tlb_request <= '0';
                         if i_tlb_match = '1' then
-                            paddr := i_tlb_data(20 downto 1) & vaddr(11 downto 0);
-                            o_addr <= paddr;
-                            tlb_hit_count <= tlb_hit_count + 1;
+                            o_addr <= i_tlb_data(20 downto 1) & vaddr(11 downto 0);
+                            if C_MMU_STAT_REGS then tlb_hit_count <= tlb_hit_count + 1; end if;
                             if i_tlb_data(0) = '0' and (request(0) = '1' or request(2) = '1') then
                                 step <= STATE_ACCESS_VIOLATION;
                             else
@@ -226,82 +218,65 @@ begin
                                 step <= STATE_WAIT_FOR_BUSY;
                             end if;
                         else
-                            tlb_miss_count <= tlb_miss_count + 1;
+                            if C_MMU_STAT_REGS then tlb_miss_count <= tlb_miss_count + 1; end if;
                             step <= STATE_READ_PGDE;
                         end if;
                             
                         
                     when STATE_READ_PGDE =>
-                        debug <= X"00000005";
-
                         -- read pgd entry
-                        pgdep := pgd(31 downto 12) & vaddr(31 downto 22) & b"00"; 
                         srrq  <= '1';
-                        o_addr  <= pgdep;
+                        o_addr  <= pgd(31 downto 12) & vaddr(31 downto 22) & b"00";
                         step <= STATE_SAVE_PGDE;
                     
                     when STATE_SAVE_PGDE => --1
-                        debug <= X"00000006";
-
                         -- save pgd entry
                         srrq <= '0';
                         if i_rdone = '1' then
-                            pgde := i_data;
-                            if pgde(10) = '0' then
+                            --pgde := i_data;
+                            if i_data(10) = '0' then
                                 --page_fault_count <= page_fault_count + 1;
                                 step <= STATE_FAULT;
                             else
+                                o_addr <= i_data(31 downto 12) & vaddr(21 downto 12) & b"00";
                                 step <= STATE_READ_PTE;
                             end if;
                         end if;
                         
                     when STATE_READ_PTE => -- 2
-                        debug <= X"00000007";
-
                         -- read pte
-                        ptep := pgde(31 downto 12) & vaddr(21 downto 12) & b"00";
                         srrq <= '1';
-                        o_addr <= ptep;
                         step <= STATE_SAVE_PTE;
                                                 
                     when STATE_SAVE_PTE => -- 3
-                        debug <= X"00000008";
-
                         -- save pte
                         srrq <= '0';
                         if i_rdone = '1' then
                             pte := i_data;
-                            paddr := pte(31 downto 12) & vaddr(11 downto 0);
-                            o_addr <= paddr;
+                            writable := pte(8);
+                            o_addr <= pte(31 downto 12) & vaddr(11 downto 0);
                             if pte(1) = '0' then -- page not present
-                                --page_fault_count <= page_fault_count + 1;
                                 step <= STATE_FAULT;
-                            elsif pte(8) = '0' and (request(0) = '1' or request(2) = '1') then
+                            elsif writable = '0' and (request(0) = '1' or request(2) = '1') then
                                 step <= STATE_ACCESS_VIOLATION;
                             else
-                                --active <= '0'; -- release memory interface
-                                --step <= STATE_WAIT_FOR_BUSY;
                                 o_tlb_request <= '1';
                                 step <= STATE_TLB_STORE_1;
                             end if;
                         end if;
                         
                     when STATE_TLB_STORE_1 =>
-                        debug <= X"00000009";
-
                         if i_tlb_busy = '0' then
                             o_tlb_we <= '1';
                             o_tlb_tag <= vaddr(31 downto 12);
-                            o_tlb_data <= paddr(31 downto 12) & pte(8);
+                            o_tlb_data <= pte(31 downto 12) & writable;
                             step <= STATE_TLB_STORE_2;
                         end if;
                         
                     when STATE_TLB_STORE_2 =>
-                        debug <= X"0000000A";
-
                         o_tlb_we <= '0';
                         o_tlb_request <= '0';
-                        if pte(8) = '0' and (request(0) = '1' or request(2) = '1') then
+                        if writable = '0' and (request(0) = '1' or request(2) = '1') then
                             step <= STATE_ACCESS_VIOLATION;
                         else
                             active <= '0';
@@ -309,8 +284,6 @@ begin
                         end if;
                         
                     when STATE_WAIT_FOR_BUSY => -- 4
-                        debug <= X"0000000B";
-
                         request <= (others => '0');
                         if i_busy = '1' then
                             busy <= '0'; -- at this point o_busy is generated by the memory controller
@@ -318,9 +291,6 @@ begin
                         end if;
                         
                     when STATE_DONE => -- 5
-                        debug <= b"000" & i_busy & b"000" & i_rdone & b"000" & i_wdone & X"0000C";
-                        --page_fault_count <= paddr; -- remove me: debug
-
                         if i_busy = '0' and (i_rdone = '1' or i_wdone = '1') then -- i_done stays '1' for exactly one clock cycle after request finishes
                             data <= i_data;
                             active <= '1'; -- claim memory interface
@@ -329,26 +299,22 @@ begin
                         end if;
                     
                     when STATE_FAULT => -- 6
-                        debug <= X"0000000D";
-
                         if i_repeat = '1' then
                             o_state_fault <= '0';
-                            page_fault_count <= page_fault_count + 1;
+                            if C_MMU_STAT_REGS then page_fault_count <= page_fault_count + 1; end if;
                             step <= STATE_READ_PGDE;
                         else
                             o_state_fault <= '1';
                             data <= vaddr;
                         end if;
                         
-                    -- when a writable page is first mapped into ram it's PTE may be marked read-only in
-                    -- order to create a page fault at the first write access. the page can then be marked dirty.
-                    -- thats why we may recover from an access violation...
+                    -- when a writable page is first mapped into ram its PTE may be marked read-only in
+                    -- order to create a page fault at the first write access (the page can then be marked dirty.
+                    -- by the OS). If that is the case, we repeat the address lookup.
                     when STATE_ACCESS_VIOLATION =>
-                        debug <= X"0000000E";
-
                         if i_repeat = '1' then
                             o_state_access_violation <= '0';
-                            page_fault_count <= page_fault_count + 1;
+                            if C_MMU_STAT_REGS then page_fault_count <= page_fault_count + 1; end if;
                             step <= STATE_READ_PGDE;
                         else
                             o_state_access_violation <= '1';

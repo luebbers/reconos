@@ -217,7 +217,8 @@ entity plb_osif is
         C_DCR_AWIDTH      :     integer          := 10;
         C_DCR_DWIDTH      :     integer          := 32;
         C_DCR_ILA         :     integer          := 0;  -- 0: no debug ILA, 1: include debug chipscope ILA for DCR debugging
-
+        C_ENABLE_MMU      :     boolean          := true;
+        C_MMU_STAT_REGS   :     boolean          := false;
         C_TLB_DATA_WIDTH  :     integer          := 21;
         C_TLB_TAG_WIDTH   :     integer          := 20
     );
@@ -851,11 +852,13 @@ begin
         C_PLB_DWIDTH => C_PLB_DWIDTH,
         C_NUM_CE     => USER_NUM_CE,
         
-        C_DCR_BASEADDR => C_DCR_BASEADDR,
-        C_DCR_HIGHADDR => C_DCR_HIGHADDR,
-        C_DCR_AWIDTH   => C_DCR_AWIDTH,
-        C_DCR_DWIDTH   => C_DCR_DWIDTH,
-        C_DCR_ILA      => C_DCR_ILA
+        C_DCR_BASEADDR  => C_DCR_BASEADDR,
+        C_DCR_HIGHADDR  => C_DCR_HIGHADDR,
+        C_DCR_AWIDTH    => C_DCR_AWIDTH,
+        C_DCR_DWIDTH    => C_DCR_DWIDTH,
+        C_ENABLE_MMU    => C_ENABLE_MMU,
+        C_MMU_STAT_REGS => C_MMU_STAT_REGS,
+        C_DCR_ILA       => C_DCR_ILA
         
     )
     port map

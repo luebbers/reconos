@@ -41,6 +41,7 @@ PARAMETER C_DCR_HIGHADDR = 0b0000000000, DT = std_logic_vector, BUS = SDCR
 PARAMETER C_DCR_AWIDTH = 10, DT = integer, BUS = SDCR
 PARAMETER C_DCR_DWIDTH = 32, DT = integer, BUS = SDCR
 PARAMETER C_ENABLE_MMU = 0, DT = INTEGER, RANGE = (0:1), DESC = Include virtual memory support via hardware MMU, VALUES = (0=FALSE, 1=TRUE)
+PARAMETER C_MMU_STAT_REGS = 1, DT = INTEGER, RANGE = (0:1), DESC = Include MMU statistics registers, VALUES = (0=FALSE, 1=TRUE)
 PARAMETER C_DCR_ILA = 0, DT = INTEGER, RANGE = (0:1), DESC = Include ChipScope ILA core for DCR debugging, VALUES = (0=FALSE , 1=TRUE)
 
 
