@@ -47,6 +47,8 @@
 static const struct of_device_id __devinitconst osif_of_match[] = {
         { .compatible = "xlnx,osif-2.01.a", .data = NULL },
         { .compatible = "xlnx,plb-osif-2.01.a", .data = NULL},
+ 	{ .compatible = "xlnx,osif-2.03.a", .data = NULL},
+	{ .compatible = "xlnx,plb-osif-2.03.a", .data = NULL},
 	{},
 };
 
