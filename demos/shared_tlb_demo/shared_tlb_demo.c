@@ -60,11 +60,14 @@
 #include "reconos.h"
 #include "resources.h"
 
+// Number of HWTs in the system:
+#define NUM_HWTS 2
+
 // message queues + attributes
-mqd_t mbox00, mbox01, mbox10, mbox11;     // mbox0: main->thread, mbox1: thread->main
-struct mq_attr mbox00_attr, mbox01_attr, mbox10_attr, mbox11_attr;
-static rthread_attr_t rattr[2];
-static pthread_t posix_thread[2];
+mqd_t mbox0[NUM_HWTS], mbox1[NUM_HWTS]; // mbox0: main->thread, mbox1: thread->main
+struct mq_attr mbox0_attr[NUM_HWTS], mbox1_attr[NUM_HWTS];
+static rthread_attr_t rattr[NUM_HWTS];
+static pthread_t posix_thread[NUM_HWTS];
 static unsigned long pgd;
 
 static inline int posix_hwt_create(int nslot, void * init_data, reconos_res_t * res, int nres)
@@ -80,204 +83,204 @@ static inline int posix_hwt_create(int nslot, void * init_data, reconos_res_t * 
 }
 
 
-reconos_res_t thread_resources0[2] =
-{
-	{&mbox00, PTHREAD_MQD_T},
-	{&mbox01, PTHREAD_MQD_T}
-};
-
-reconos_res_t thread_resources1[2] =
-{
-	{&mbox10, PTHREAD_MQD_T},
-	{&mbox11, PTHREAD_MQD_T}
-};
+reconos_res_t thread_resources[NUM_HWTS][2];
 
 void put_msg(int slot, unsigned long msg){
-	int retval;
-	
-	if(slot == 0){
-		retval = mq_send(mbox00, (char*)&msg, 4, 10);
-	} else {
-		retval = mq_send(mbox10, (char*)&msg, 4, 10);
-	}
-	if (retval < 0) {
-		perror("mq_send");
-		exit(5);
-	}
+    int retval;
+    
+    retval = mq_send(mbox0[slot], (char*)&msg, 4, 10);
+    if (retval < 0) {
+        perror("mq_send");
+        exit(5);
+    }
 }
 
 
 unsigned long get_msg(int slot){
-	unsigned long result;
-	int retval;
-	
-	if(slot == 0){
-		retval = mq_receive(mbox01, (char*)&result, 4, NULL);
-	} else {
-		retval = mq_receive(mbox11, (char*)&result, 4, NULL);
-	}
-	if (retval < 0) {
-		perror("mq_receive");
-		exit(6);
-	}
+    unsigned long result;
+    int retval;
+    
+    retval = mq_receive(mbox1[slot], (char*)&result, 4, NULL);
+    if (retval < 0) {
+        perror("mq_receive");
+        exit(6);
+    }
 
-	return result;
+    return result;
 }
 
 #define DCACHE_SIZE (1024*1024*40)
 int flushmem[3*DCACHE_SIZE/4];
 void flush_dcache(void){
-	int i;
-	for(i = 0; i < 3*DCACHE_SIZE/4; i++){
-		flushmem[i]++;
-	}
-	for(i = 0; i < DCACHE_SIZE/4; i++){
-		flushmem[i+DCACHE_SIZE/4]++;
-	}
+    int i;
+    for(i = 0; i < 3*DCACHE_SIZE/4; i++){
+        flushmem[i]++;
+    }
+    for(i = 0; i < DCACHE_SIZE/4; i++){
+        flushmem[i+DCACHE_SIZE/4]++;
+    }
 }
 
 unsigned int * allocate_memory(int num_pages){
-	unsigned int * mem;
-	int i;
+    unsigned int * mem;
+    int i;
 
-	if(posix_memalign(&mem, 4096, 4096*num_pages)){
-		fprintf(stderr,"memory allocation failed\n");
-		exit(2);
-	}	
+    if(posix_memalign(&mem, 4096, 4096*num_pages)){
+        fprintf(stderr,"memory allocation failed\n");
+        exit(2);
+    }	
 
-	for(i = 0; i < 1024*num_pages; i++){
-		mem[i] = 0;
-	}
+    for(i = 0; i < 1024*num_pages; i++){
+        mem[i] = 0;
+    }
 
-	return mem;
+    return mem;
 }
 
 void exit_usage(const char * progname)
 {
-	fprintf(stderr,"Usage : %s <n> [seed]\n", progname);
-	fprintf(stderr,"\tn    : number of iterations\n");
-	fprintf(stderr,"\tseed : random seed\n");
-	exit(2);
+    fprintf(stderr,"Usage : %s <n> [seed]\n", progname);
+    fprintf(stderr,"\tn    : number of iterations\n");
+    fprintf(stderr,"\tseed : random seed\n");
+    exit(2);
 }
 
-unsigned int lfsr(unsigned int state)
+unsigned int lfsr_iterate(unsigned int state)
 {
-	return (state >> 1) ^ (-(state & 1u) & 0xB400u);
+    return (state >> 1) ^ (-(state & 1u) & 0xB400u);
 }
 
 // set message queue attributes to non-blocking, 10 messages with 4 bytes each
 void setup_mbox(mqd_t *mbox, struct mq_attr * attr, const char * name)
 {
-	attr->mq_flags = 0;
-	attr->mq_maxmsg = 10;
-	attr->mq_msgsize = 4;
-	attr->mq_curmsgs = 0;
-	
-	*mbox = mq_open(name, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, attr);
-	if (*mbox == (mqd_t)-1) {
-		perror("mq_open");
-		fprintf(stderr,"-- unable to create mbox '%s'", name);
-	}
-	mq_getattr(*mbox, attr);
+    attr->mq_flags = 0;
+    attr->mq_maxmsg = 10;
+    attr->mq_msgsize = 4;
+    attr->mq_curmsgs = 0;
+    
+    *mbox = mq_open(name, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, attr);
+    if (*mbox == (mqd_t)-1) {
+        perror("mq_open");
+        fprintf(stderr,"-- unable to create mbox '%s'", name);
+    }
+    mq_getattr(*mbox, attr);
 }
 
 // This must be the same number the hardware thread uses
 #define NUM_PAGES 64
 
 int main(int argc, char **argv) {
-	int error, i;
-	int num_iterations;
-	int seed = 12345;
-	unsigned int lfsr0 = 0;
-	unsigned int lfsr1 = 0;
-	unsigned int index0 = 0;
-	unsigned int index1 = 0;
-	unsigned int result0 = 0;
-	unsigned int result1 = 0;
-	unsigned int *mem;
+    int error, i,j;
+    int num_iterations;
+    int seed = 12345;
+    unsigned int lfsr[NUM_HWTS];
+    unsigned int index[NUM_HWTS];
+    unsigned int result[NUM_HWTS];
+    unsigned int *mem;
 
-	if(argc < 2 || argc > 3) exit_usage(argv[0]);
+    if(argc < 2 || argc > 3) exit_usage(argv[0]);
 
-	num_iterations = atoi(argv[1]);
-	
-	if(argc == 3) seed = atoi(argv[2]);
+    num_iterations = atoi(argv[1]);
+    
+    if(argc == 3) seed = atoi(argv[2]);
+    
+    fprintf(stderr,"Allocating %d pages. Accessing memory %d times.\n", NUM_PAGES, num_iterations);
+    fprintf(stderr,"Using %d hardware threads\n",NUM_HWTS);
+    
+    mem = allocate_memory(NUM_PAGES);
 
-	fprintf(stderr,"Allocating %d pages. Accessing memory %d times.\n", NUM_PAGES, num_iterations);
+    for(i = 0; i < NUM_HWTS; i++){
+        char name[32];
+        snprintf(name,32,"/mbox0%d",i);
+        setup_mbox(&mbox0[i],&mbox0_attr[i],name);
+        snprintf(name,32,"/mbox1%d",i);
+        setup_mbox(&mbox1[i],&mbox1_attr[i],name);
+    }
+    //setup_mbox(&mbox00,&mbox00_attr,"/mbox00");
+    //setup_mbox(&mbox01,&mbox01_attr,"/mbox01");
+    //setup_mbox(&mbox10,&mbox10_attr,"/mbox10");
+    //setup_mbox(&mbox11,&mbox11_attr,"/mbox11");
 
-	mem = allocate_memory(NUM_PAGES);
+    //fprintf(stderr,"-- creating hw thread... ");
 
-	setup_mbox(&mbox00,&mbox00_attr,"/mbox00");
-	setup_mbox(&mbox01,&mbox01_attr,"/mbox01");
-	setup_mbox(&mbox10,&mbox10_attr,"/mbox10");
-	setup_mbox(&mbox11,&mbox11_attr,"/mbox11");
+    fprintf(stderr,"Creating delegate threads...\n");
 
-	//fprintf(stderr,"-- creating hw thread... ");
-
-	fprintf(stderr,"Creating delegate thread 0...\n");
-
-	error = posix_hwt_create(0,(void*)pgd, thread_resources0, 2);
-	if(error){
-		perror("pthread_create (slot 0)");
-		exit(2);
-	}
-		
-	fprintf(stderr,"Creating delegate thread 1...\n");
-
-	error = posix_hwt_create(1,(void*)pgd, thread_resources1, 2);
-	if(error){
-		perror("pthread_create (slot 1)");
-		exit(2);
-	}
-	
+    for(i = 0; i < NUM_HWTS; i++){
+        thread_resources[i][0].ptr = &mbox0[i];
+        thread_resources[i][0].type = PTHREAD_MQD_T;
+        thread_resources[i][1].ptr = &mbox1[i];
+        thread_resources[i][1].type = PTHREAD_MQD_T;
+        error = posix_hwt_create(i,(void*)pgd, thread_resources[i], 2);
+        if(error){
+            perror("pthread_create");
+            exit(2);
+        }
+    }
+        
 // ------------------------------------------------------------------------------------------	
 
-	srand(seed);
-	
-	fprintf(stderr,"initializing memory...\n");
+    srand(seed);
+    
+    fprintf(stderr,"initializing memory...\n");
 
-	for(i = 0; i < NUM_PAGES; i++){
-		mem[i*1024 + 0] = rand();
-		mem[i*1024 + 1] = rand();	
-	}	
+    for(i = 0; i < NUM_PAGES; i++){
+        for(j = 0; j < NUM_HWTS; j++){
+            mem[i*1024 + j] = rand();
+        }
+    }	
 
 
-	fprintf(stderr,"flushing cache...\n");
-	flush_dcache();
+    fprintf(stderr,"flushing cache...\n");
+    flush_dcache();
 
-	fprintf(stderr,"starting threads...\n");
+    fprintf(stderr,"starting threads...\n");
 
-	put_msg(0,num_iterations);
-	put_msg(1,num_iterations);
+    for(i = 0; i < NUM_HWTS; i++){
+        put_msg(i,num_iterations);
+    }
 
-	//put_msg(0,0x00001000);
+    //put_msg(0,0x00001000);
 
-	put_msg(0,(unsigned int)(mem + 0));
-	put_msg(1,(unsigned int)(mem + 1));
+    for(i = 0; i < NUM_HWTS; i++){
+        put_msg(i,(unsigned int)(mem + i));
+    }
 
-	fprintf(stderr,"running simulation...\n");
+    fprintf(stderr,"running simulation...\n");
 
-	fprintf(stderr,"lfsr0 = 0x%08X\n",lfsr0);
-	fprintf(stderr,"lfsr1 = 0x%08X\n",lfsr1);
+    for(i = 0; i < NUM_HWTS; i++){
+        lfsr[i] = index[i] = result[i] = 0;
+    }
 
-	for(i = 0; i < num_iterations; i++){
-		lfsr0 = lfsr(lfsr0 ^ (0x0000FFFF & mem[index0*1024 + 0]));
-		lfsr1 = lfsr(lfsr1 ^ (0x0000FFFF & mem[index1*1024 + 1]));
-		index0 = 0x3F & lfsr0;
-		index1 = 0x3F & lfsr1;
-		//fprintf(stderr,"lfsr0 = 0x%08X\n",lfsr0);
-		//fprintf(stderr,"lfsr1 = 0x%08X\n",lfsr1);
-	}
+    for(i = 0; i < num_iterations; i++){
+        for(j = 0; j < NUM_HWTS; j++){
+            lfsr[j] = lfsr_iterate(lfsr[j] ^ (0x0000FFFF & mem[index[j]*1024 + j]));
+            index[j] = 0x3F & lfsr[j];
+        }
 
-	result0 = get_msg(0) & 0x0000FFFF;
-	result1 = get_msg(1) & 0x0000FFFF;
+    }
+    
+    for(i = 0; i < NUM_HWTS; i++){
+        result[i] = get_msg(i) & 0x0000FFFF;
+    }
 
-	fprintf(stderr,"           Thread 0  |  Thread 1\n");
-	fprintf(stderr,"target : 0x%08X  |  0x%08X\n", lfsr0, lfsr1);
-	fprintf(stderr,"actual : 0x%08X  |  0x%08X\n", result0, result1);
+    fprintf(stderr,"       ");
+    for(i = 0; i < NUM_HWTS; i++){
+        fprintf(stderr,"|  Thread %d    ",i);
+    }
+    fprintf(stderr,"\ntarget ");
+    for(i = 0; i < NUM_HWTS; i++){
+        fprintf(stderr,"|  0x%08X  ",lfsr[i]);
+    }
+    fprintf(stderr,"\nactual ");
+    for(i = 0; i < NUM_HWTS; i++){
+        fprintf(stderr,"|  0x%08X  ",result[i]);
+    }
+    fprintf(stderr,"\n");
 
-	if(lfsr0 != result0) fprintf(stderr,"Test FAILED for thread 0.\n");
-	if(lfsr1 != result1) fprintf(stderr,"Test FAILED for thread 1.\n");
+    for(i = 0; i < NUM_HWTS; i++){
+        if(lfsr[i] != result[i]) fprintf(stderr,"Test FAILED for thread %d.\n",i);
+    }
 
-	return 0;
+    return 0;
 }
 
