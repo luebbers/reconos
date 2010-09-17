@@ -18,14 +18,16 @@ OPTION CORE_STATE = DEVELOPMENT
 
 
 ## Bus Interfaces
-BUS_INTERFACE BUS = TLB_A, BUS_TYPE = TARGET,    BUS_STD = TLB_STD
-BUS_INTERFACE BUS = TLB_B, BUS_TYPE = TARGET,    BUS_STD = TLB_STD
+BUS_INTERFACE BUS = TLB_A, BUS_TYPE = TARGET,    BUS_STD = TLB_STD, ISVALID = (C_TLBARB_NUM_PORTS > 0)
+BUS_INTERFACE BUS = TLB_B, BUS_TYPE = TARGET,    BUS_STD = TLB_STD, ISVALID = (C_TLBARB_NUM_PORTS > 1)
+BUS_INTERFACE BUS = TLB_C, BUS_TYPE = TARGET,    BUS_STD = TLB_STD, ISVALID = (C_TLBARB_NUM_PORTS > 2)
+BUS_INTERFACE BUS = TLB_D, BUS_TYPE = TARGET,    BUS_STD = TLB_STD, ISVALID = (C_TLBARB_NUM_PORTS > 3)
 BUS_INTERFACE BUS = TLB,   BUS_TYPE = INITIATOR, BUS_STD = TLB_STD
 
 
 ## Generics for VHDL or Parameters for Verilog
 PARAMETER C_FAMILY = virtex2p, DT = STRING
-
+PARAMETER C_TLBARB_NUM_PORTS = 2, DT = INTEGER, RANGE = (1:4), DESC = Number of OSIF-MMU ports that connect to the arbiter
 
 ## Ports
 
@@ -50,6 +52,24 @@ PORT o_match_b = "tlb_match", DIR = O, BUS = TLB_B
 PORT i_we_b = "tlb_we", DIR = I, BUS = TLB_B
 PORT i_request_b = "tlb_request", DIR = I, BUS = TLB_B
 PORT o_busy_b = "tlb_busy", DIR = O, BUS = TLB_B
+
+# TLB interface C
+PORT o_data_c = "tlb_rdata", DIR = O, VEC = [0:20], BUS = TLB_C
+PORT i_data_c = "tlb_wdata", DIR = I, VEC = [0:20], BUS = TLB_C
+PORT i_tag_c = "tlb_tag", DIR = I, VEC = [0:19], BUS = TLB_C
+PORT o_match_c = "tlb_match", DIR = O, BUS = TLB_C
+PORT i_we_c = "tlb_we", DIR = I, BUS = TLB_C
+PORT i_request_c = "tlb_request", DIR = I, BUS = TLB_C
+PORT o_busy_c = "tlb_busy", DIR = O, BUS = TLB_C
+
+# TLB interface D
+PORT o_data_d = "tlb_rdata", DIR = O, VEC = [0:20], BUS = TLB_D
+PORT i_data_d = "tlb_wdata", DIR = I, VEC = [0:20], BUS = TLB_D
+PORT i_tag_d = "tlb_tag", DIR = I, VEC = [0:19], BUS = TLB_D
+PORT o_match_d = "tlb_match", DIR = O, BUS = TLB_D
+PORT i_we_d = "tlb_we", DIR = I, BUS = TLB_D
+PORT i_request_d = "tlb_request", DIR = I, BUS = TLB_D
+PORT o_busy_d = "tlb_busy", DIR = O, BUS = TLB_D
 
 # TLB interface
 PORT i_tlb_data = "tlb_rdata", DIR = I, VEC = [0:20], BUS = TLB
