@@ -1,0 +1,8 @@
+##############################################################################
+## Filename:          dcr_timebase_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Thu Nov 22 13:28:33 2007 
+##############################################################################
+
+lib dcr_timebase_v1_00_b dcr_timebase vhdl
+
