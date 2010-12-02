@@ -234,8 +234,13 @@ def command(cmd, timeout):
     
 
 # download 'bitstream_file' to the FPGA
-def download_bitstream(cfg, bitstream_file, timeout = 20.0):
-    return command(cfg["download_bitstream"] + " " + bitstream_file, timeout)
+def download_bitstream(cfg, bitstream_file, timeout = 20.0, environ = {}):
+    # prepend additional environment (see build_sw for elaboration)
+    if len(environ) > 0:
+        envstr = reduce(lambda a, b: a + " " + b, map(lambda x: x + "=" + environ[x], environ.keys()))
+    else:
+        envstr = ''
+    return command(envstr + " " + cfg["download_bitstream"] + " " + bitstream_file, timeout)
 
 # download the elf executable
 def download_executable(cfg, elf_file, timeout = 20.0):
@@ -264,7 +269,7 @@ def strip_junk(s):
 #     - 'why' contains a short description of the error, in case an error occured, 'why' is None otherwise
 #     - 'details' contains the complete output of the command that failed. 'details' is None if no error occured.
 #
-def download_and_execute(cfg, bitfile, elffile, expect):
+def download_and_execute(cfg, bitfile, elffile, expect, environ):
     if cfg["verbose"]:
         print "Unlocking cable..."
     
@@ -272,24 +277,24 @@ def download_and_execute(cfg, bitfile, elffile, expect):
     
     if cfg["verbose"]:
         print "Downloading bitstream '" + bitfile + "'"
-    result, output = download_bitstream(cfg, bitfile, cfg["impact_timeout"])
+    result, output = download_bitstream(cfg, bitfile, cfg["impact_timeout"], environ)
     if result != "TIMEOUT":
         if not result == 0:
             return False, "bitstream download failed", output
     else:
         return False, "bitstream download timed out (> " + str(cfg["impact_timeout"]) + " seconds)", output
 
-        # set serial parameters (baud rate etc.)
-        if cfg["verbose"]:
-                print "Setting up serial port with '" + cfg["setup_serial_port"] + "'"
-        result, output = setup_serial_port(cfg)
-        if result != None:
-                if not result == 0:
-                        return False, "setting serial parameters failed", output
-        else:
-                return False, "setting serial parameters timed out", output
+    # set serial parameters (baud rate etc.)
+    if cfg["verbose"]:
+        print "Setting up serial port with '" + cfg["setup_serial_port"] + "'"
+    result, output = setup_serial_port(cfg)
+    if result != None:
+        if not result == 0:
+            return False, "setting serial parameters failed", output
+    else:
+        return False, "setting serial parameters timed out", output
     
-    pipe = Pipe("/dev/ttyS0")
+    pipe = Pipe(cfg["serial_port"])
     pipe.timeout = cfg["executable_timeout"]
     pipe.max_lines = len(expect)
     pipe.start()
@@ -310,7 +315,7 @@ def download_and_execute(cfg, bitfile, elffile, expect):
     result = pipe.result
     
     if result == "TIMEOUT":
-        return False, "Program timed out", reduce(lambda x,y: x + y,pipe.output_lines,"")
+        return False, "Program timed out, result: " + str(pipe.output_lines), reduce(lambda x,y: x + y,pipe.output_lines,"")
     
     v = Verifier()
     v.lines = pipe.output_lines
@@ -546,7 +551,7 @@ class Test(object):
         if self.bitfile and self.elffile:
             if self.cfg["verbose"]:
                 print "performing program test"
-            self.result, self.why, self.details = download_and_execute(self.cfg,self.bitfile,self.elffile,self.output)
+            self.result, self.why, self.details = download_and_execute(self.cfg,self.bitfile,self.elffile,self.output, self.environ)
             if not self.result: return self.result
 
         if self.shellcmd:

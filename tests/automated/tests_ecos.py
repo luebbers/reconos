@@ -69,7 +69,7 @@ def create_reconos_config():
 supportedBoards = ('xup', 'ml403', 'ml605')
 baseDesign = {'xup': os.environ["RECONOS"] + "/support/refdesigns/10.1/xup/xup_light",
               'ml403': os.environ["RECONOS"] + "/support/refdesigns/12.2/ml403/ml403_light",
-              'ml605': os.environ["RECONOS"] + "/support/refdesigns/12.2/ml605/ml605_light"}
+              'ml605': os.environ["RECONOS"] + "/support/refdesigns/12.3/ml605/ml605_light"}
 arch = {'xup': 'ppc',
         'ml403': 'ppc',
         'ml605': 'mb'}
@@ -173,6 +173,10 @@ def parse_args(args):
         elif args[idx] == "--tty":
             tty = args[idx + 1]
             cfg["serial_port"]     = tty
+            # FIXME: ugly hack below
+            # the command to set up the serial port:
+            cfg["setup_serial_port"]   = "stty -F " + cfg["serial_port"] + " speed 57600 raw"
+
                 
         elif args[idx] in ["-v", "--verbose"]:
             cfg["verbose"] = True

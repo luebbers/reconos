@@ -37,8 +37,8 @@ fi
 
 
 if [ -e "$XILINX_EDK/bin/lin64/xmd" ] ; then
-        echo -e  | $XILINX_EDK/bin/lin64/xmd
+        echo -e $DOWCMD | $XILINX_EDK/bin/lin64/xmd
 else
-        echo -e "ppccon\ndow $ELF\nrun\n" | $XILINX_EDK/bin/lin/xmd
+        echo -e $DOWCMD | $XILINX_EDK/bin/lin/xmd
 fi
 	
