@@ -337,6 +337,16 @@ externC void hal_idle_thread_action(cyg_uint32 loop_count);
 #define CYGARC_HAL_SAVE_GP()
 #define CYGARC_HAL_RESTORE_GP()
 
+//--------------------------------------------------------------------------
+// Artificially increas stack size to account for the data saved by the
+// compiler on function calls (e.g. return address, among others). These
+// are saved by the compiler in memory addresses _before_ the stack pointer,
+// which causes trouble when calling the entry function of a thread
+#define HAL_THREAD_STACK_OFFSET 64
+#define HAL_THREAD_ATTACH_STACK(stack_ptr, stack_base, stack_size) \
+    stack_ptr = stack_base + stack_size - HAL_THREAD_STACK_OFFSET;                          
+
+
 //-----------------------------------------------------------------------------
 #endif // CYGONCE_HAL_ARCH_H
 // End of hal_arch.h
