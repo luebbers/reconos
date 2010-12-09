@@ -19,8 +19,22 @@ cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
         implements      RECONOS_HW_SUPPORT
 	define_header	hal_microblaze_platform.h
 	include_dir	cyg/hal
-	description	"Xilinx ml605 HAL package"
+	description	"Xilinx ml605 HAL package
+                        Supports all ReconOS ml605_light* reference designs."
 	define_proc {
 		puts $::cdl_header "#include <pkgconf/hal_microblaze_generic.h>"
 	}
+    cdl_component UPBHWR_VIRTEX4_ICAP {
+        display       "ICAP hardware support"
+        default_value 0
+        description   "Enables functions for easy partial reconfiguration"
+
+        cdl_option UPBHWR_VIRTEX4_ICAP_XILINX {
+            display "Xilinx ICAP drivers"
+            default_value 0
+            description "Uses Xilinx XPS_HWICAP core"
+            implements UPBHWR_ICAP
+            compile       icap_xilinx.c
+        }
+
 }
