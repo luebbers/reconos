@@ -1890,6 +1890,7 @@ cdl_option CYGHWR_MEMORY_LAYOUT_H {
 # <
 # Xilinx ML605 Light
 # Xilinx ml605 HAL package
+# Supports all ReconOS ml605_light* reference designs.
 #
 cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
     # Packages cannot be added or removed, nor can their version be changed,
@@ -1907,6 +1908,47 @@ cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
     #   --> 1
 };
 
+# >
+# ICAP hardware support
+# Enables functions for easy partial reconfiguration
+#
+cdl_component UPBHWR_VIRTEX4_ICAP {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+
+    # The following properties are affected by this value
+    # option UPBSEM_INIT_ICAP
+    #     Requires: UPBHWR_VIRTEX4_ICAP
+    # option UPBSEM_INIT_ICAP
+    #     ActiveIf: UPBHWR_VIRTEX4_ICAP
+    # component UPBFUN_RECONOS_PARTIAL
+    #     Requires: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
+    # component UPBFUN_RECONOS_PARTIAL
+    #     ActiveIf: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
+    # component UPBFUN_RECONOS_ECAP_NET
+    #     Requires: ! UPBHWR_VIRTEX4_ICAP
+};
+
+# >
+# Xilinx ICAP drivers
+# Uses Xilinx XPS_HWICAP core
+#
+cdl_option UPBHWR_VIRTEX4_ICAP_XILINX {
+    # This option is not active
+    # The parent UPBHWR_VIRTEX4_ICAP is disabled
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+};
+
+# <
+# <
 # <
 # <
 # I/O sub-system
@@ -3575,7 +3617,7 @@ cdl_option UPBSEM_INIT_RECONOS_SLOTS {
 cdl_option UPBSEM_INIT_ICAP {
     # This option is not active
     # ActiveIf constraint: UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 0
 
     # Flavor: bool
@@ -3584,7 +3626,7 @@ cdl_option UPBSEM_INIT_ICAP {
     # value_source default
     # Default value: 0
     # Requires: UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 0
 };
 
@@ -12330,7 +12372,7 @@ cdl_option UPBFUN_RECONOS_CACHE_BURST_RAM {
 cdl_component UPBFUN_RECONOS_PARTIAL {
     # This option is not active
     # ActiveIf constraint: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #     UPBFUN_RECONOS_ECAP_NET == 0
     #   --> 0
 
@@ -12340,7 +12382,7 @@ cdl_component UPBFUN_RECONOS_PARTIAL {
     # value_source default
     # Default value: 0
     # Requires: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #     UPBFUN_RECONOS_ECAP_NET == 0
     #   --> 0
 
@@ -12386,7 +12428,7 @@ cdl_component UPBFUN_RECONOS_ECAP_NET {
     # value_source default
     # Default value: 0
     # Requires: ! UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 1
     # Requires: UPBFUN_RECONOS_PARTIAL
     #     UPBFUN_RECONOS_PARTIAL == 0

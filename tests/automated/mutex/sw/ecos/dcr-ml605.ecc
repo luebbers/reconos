@@ -1890,6 +1890,7 @@ cdl_option CYGHWR_MEMORY_LAYOUT_H {
 # <
 # Xilinx ML605 Light
 # Xilinx ml605 HAL package
+# Supports all ReconOS ml605_light* reference designs.
 #
 cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
     # Packages cannot be added or removed, nor can their version be changed,
@@ -1907,6 +1908,47 @@ cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
     #   --> 1
 };
 
+# >
+# ICAP hardware support
+# Enables functions for easy partial reconfiguration
+#
+cdl_component UPBHWR_VIRTEX4_ICAP {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+
+    # The following properties are affected by this value
+    # option UPBSEM_INIT_ICAP
+    #     Requires: UPBHWR_VIRTEX4_ICAP
+    # option UPBSEM_INIT_ICAP
+    #     ActiveIf: UPBHWR_VIRTEX4_ICAP
+    # component UPBFUN_RECONOS_PARTIAL
+    #     Requires: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
+    # component UPBFUN_RECONOS_PARTIAL
+    #     ActiveIf: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
+    # component UPBFUN_RECONOS_ECAP_NET
+    #     Requires: ! UPBHWR_VIRTEX4_ICAP
+};
+
+# >
+# Xilinx ICAP drivers
+# Uses Xilinx XPS_HWICAP core
+#
+cdl_option UPBHWR_VIRTEX4_ICAP_XILINX {
+    # This option is not active
+    # The parent UPBHWR_VIRTEX4_ICAP is disabled
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+};
+
+# <
+# <
 # <
 # <
 # I/O sub-system
@@ -3107,7 +3149,7 @@ cdl_package CYGPKG_INFRA {
 #
 cdl_component CYGPKG_INFRA_DEBUG {
     # Flavor: bool
-    user_value 0
+    user_value 1
     # value_source user
     # Default value: 0
 
@@ -3137,17 +3179,14 @@ cdl_component CYGPKG_INFRA_DEBUG {
 # object code and no checking of the asserted conditions.
 #
 cdl_component CYGDBG_USE_ASSERTS {
-    # This option is not active
-    # The parent CYGPKG_INFRA_DEBUG is disabled
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 1
     # value_source default
     # Default value: 1
     # Requires:  1 == CYGINT_INFRA_DEBUG_TRACE_IMPL 
-    #     CYGINT_INFRA_DEBUG_TRACE_IMPL == 0
-    #   --> 0
+    #     CYGINT_INFRA_DEBUG_TRACE_IMPL == 1
+    #   --> 1
 
     # The following properties are affected by this value
     # component CYGFUN_KERNEL_THREADS_STACK_CHECKING
@@ -3168,9 +3207,6 @@ cdl_component CYGDBG_USE_ASSERTS {
 # The function is CYG_PRECONDITION(condition,msg).
 #
 cdl_option CYGDBG_INFRA_DEBUG_PRECONDITIONS {
-    # This option is not active
-    # The parent CYGDBG_USE_ASSERTS is not active
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 1
@@ -3185,9 +3221,6 @@ cdl_option CYGDBG_INFRA_DEBUG_PRECONDITIONS {
 # The function is CYG_POSTCONDITION(condition,msg).
 #
 cdl_option CYGDBG_INFRA_DEBUG_POSTCONDITIONS {
-    # This option is not active
-    # The parent CYGDBG_USE_ASSERTS is not active
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 1
@@ -3204,9 +3237,6 @@ cdl_option CYGDBG_INFRA_DEBUG_POSTCONDITIONS {
 # The function is CYG_LOOP_INVARIANT(condition,msg).
 #
 cdl_option CYGDBG_INFRA_DEBUG_LOOP_INVARIANTS {
-    # This option is not active
-    # The parent CYGDBG_USE_ASSERTS is not active
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 1
@@ -3228,9 +3258,6 @@ cdl_option CYGDBG_INFRA_DEBUG_LOOP_INVARIANTS {
 # triggered.
 #
 cdl_option CYGDBG_INFRA_DEBUG_ASSERT_MESSAGE {
-    # This option is not active
-    # The parent CYGDBG_USE_ASSERTS is not active
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 1
@@ -3251,16 +3278,13 @@ cdl_option CYGDBG_INFRA_DEBUG_ASSERT_MESSAGE {
 # object code and no trace information.
 #
 cdl_component CYGDBG_USE_TRACING {
-    # This option is not active
-    # The parent CYGPKG_INFRA_DEBUG is disabled
-
     # Flavor: bool
-    user_value 1
+    user_value 0
     # value_source user
     # Default value: 0
     # Requires:  1 == CYGINT_INFRA_DEBUG_TRACE_IMPL 
-    #     CYGINT_INFRA_DEBUG_TRACE_IMPL == 0
-    #   --> 0
+    #     CYGINT_INFRA_DEBUG_TRACE_IMPL == 1
+    #   --> 1
 
     # The following properties are affected by this value
     # option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_SIZE
@@ -3289,7 +3313,7 @@ cdl_component CYGDBG_USE_TRACING {
 #
 cdl_option CYGDBG_INFRA_DEBUG_FUNCTION_REPORTS {
     # This option is not active
-    # The parent CYGDBG_USE_TRACING is not active
+    # The parent CYGDBG_USE_TRACING is disabled
 
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
@@ -3312,7 +3336,7 @@ cdl_option CYGDBG_INFRA_DEBUG_FUNCTION_REPORTS {
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_MESSAGE {
     # This option is not active
-    # The parent CYGDBG_USE_TRACING is not active
+    # The parent CYGDBG_USE_TRACING is disabled
 
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
@@ -3325,16 +3349,13 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_MESSAGE {
 # Trace output implementations
 #
 cdl_interface CYGINT_INFRA_DEBUG_TRACE_IMPL {
-    # Implemented by CYGDBG_INFRA_DEBUG_TRACE_ASSERT_NULL, inactive, disabled
-    # Implemented by CYGDBG_INFRA_DEBUG_TRACE_ASSERT_SIMPLE, inactive, disabled
-    # Implemented by CYGDBG_INFRA_DEBUG_TRACE_ASSERT_FANCY, inactive, enabled
-    # Implemented by CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER, inactive, disabled
-    # This option is not active
-    # The parent CYGPKG_INFRA_DEBUG is disabled
-
+    # Implemented by CYGDBG_INFRA_DEBUG_TRACE_ASSERT_NULL, active, disabled
+    # Implemented by CYGDBG_INFRA_DEBUG_TRACE_ASSERT_SIMPLE, active, disabled
+    # Implemented by CYGDBG_INFRA_DEBUG_TRACE_ASSERT_FANCY, active, enabled
+    # Implemented by CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER, active, disabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 0
+    # Current_value: 1
 
     # The following properties are affected by this value
     # component CYGDBG_USE_ASSERTS
@@ -3350,9 +3371,6 @@ cdl_interface CYGINT_INFRA_DEBUG_TRACE_IMPL {
 # 'print' something.
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_ASSERT_NULL {
-    # This option is not active
-    # The parent CYGPKG_INFRA_DEBUG is disabled
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 0
@@ -3365,9 +3383,6 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_ASSERT_NULL {
 # from tracing and assertion events.
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_ASSERT_SIMPLE {
-    # This option is not active
-    # The parent CYGPKG_INFRA_DEBUG is disabled
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 0
@@ -3384,9 +3399,6 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_ASSERT_SIMPLE {
 # from tracing and assertion events.
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_ASSERT_FANCY {
-    # This option is not active
-    # The parent CYGPKG_INFRA_DEBUG is disabled
-
     # Flavor: bool
     user_value 1
     # value_source user
@@ -3408,9 +3420,6 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_ASSERT_FANCY {
 # is enabled above.
 #
 cdl_component CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER {
-    # This option is not active
-    # The parent CYGPKG_INFRA_DEBUG is disabled
-
     # Flavor: bool
     user_value 0
     # value_source user
@@ -3425,7 +3434,6 @@ cdl_component CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER {
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_SIZE {
     # This option is not active
-    # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is not active
     # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is disabled
     # ActiveIf constraint: CYGDBG_USE_TRACING
     #     CYGDBG_USE_TRACING == 0
@@ -3447,7 +3455,6 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_SIZE {
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_WRAP {
     # This option is not active
-    # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is not active
     # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is disabled
     # ActiveIf constraint: CYGDBG_USE_TRACING
     #     CYGDBG_USE_TRACING == 0
@@ -3468,7 +3475,6 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_WRAP {
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_HALT {
     # This option is not active
-    # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is not active
     # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is disabled
     # ActiveIf constraint: CYGDBG_USE_TRACING
     #     CYGDBG_USE_TRACING == 0
@@ -3488,7 +3494,6 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_HALT {
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_PRINT {
     # This option is not active
-    # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is not active
     # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is disabled
     # ActiveIf constraint: CYGDBG_USE_TRACING
     #     CYGDBG_USE_TRACING == 0
@@ -3507,7 +3512,6 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_PRINT {
 #
 cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_PRINT_ON_ASSERT {
     # This option is not active
-    # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is not active
     # The parent CYGDBG_INFRA_DEBUG_TRACE_ASSERT_BUFFER is disabled
     # ActiveIf constraint: CYGDBG_USE_TRACING
     #     CYGDBG_USE_TRACING == 0
@@ -3534,9 +3538,6 @@ cdl_option CYGDBG_INFRA_DEBUG_TRACE_BUFFER_PRINT_ON_ASSERT {
 # possibly only filenames and line numbers.
 #
 cdl_option CYGDBG_INFRA_DEBUG_FUNCTION_PSEUDOMACRO {
-    # This option is not active
-    # The parent CYGPKG_INFRA_DEBUG is disabled
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 1
@@ -3616,7 +3617,7 @@ cdl_option UPBSEM_INIT_RECONOS_SLOTS {
 cdl_option UPBSEM_INIT_ICAP {
     # This option is not active
     # ActiveIf constraint: UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 0
 
     # Flavor: bool
@@ -3625,7 +3626,7 @@ cdl_option UPBSEM_INIT_ICAP {
     # value_source default
     # Default value: 0
     # Requires: UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 0
 };
 
@@ -3706,10 +3707,9 @@ cdl_option CYGFUN_INFRA_EMPTY_DELETE_FUNCTIONS {
 # an empty delete function. 
 #
 cdl_option CYGNUM_INFRA_EMPTY_DELETE_THRESHOLD {
-    # This option is not active
     # ActiveIf constraint: CYGPKG_INFRA_DEBUG
-    #     CYGPKG_INFRA_DEBUG == 0
-    #   --> 0
+    #     CYGPKG_INFRA_DEBUG == 1
+    #   --> 1
 
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
@@ -4267,8 +4267,8 @@ cdl_option CYGDBG_KERNEL_TRACE_TIMESLICE {
     #     CYGDBG_INFRA_DEBUG_TRACE_ASSERT_SIMPLE == 0
     #   --> 1
     # Requires: !CYGDBG_INFRA_DEBUG_TRACE_ASSERT_FANCY
-    #     CYGDBG_INFRA_DEBUG_TRACE_ASSERT_FANCY == 0
-    #   --> 1
+    #     CYGDBG_INFRA_DEBUG_TRACE_ASSERT_FANCY == 1
+    #   --> 0
 };
 
 # <
@@ -4865,16 +4865,15 @@ cdl_option CYGFUN_KERNEL_THREADS_STACK_LIMIT {
 # which are asserted for correctness whenever a thread switches.
 #
 cdl_component CYGFUN_KERNEL_THREADS_STACK_CHECKING {
-    # This option is not active
     # ActiveIf constraint: CYGPKG_INFRA_DEBUG
-    #     CYGPKG_INFRA_DEBUG == 0
-    #   --> 0
+    #     CYGPKG_INFRA_DEBUG == 1
+    #   --> 1
     # ActiveIf constraint: CYGDBG_USE_ASSERTS
-    #     CYGDBG_USE_ASSERTS == 0
-    #   --> 0
+    #     CYGDBG_USE_ASSERTS == 1
+    #   --> 1
 
     # Flavor: bool
-    user_value 0
+    user_value 1
     # value_source user
     # Default value: 1
 };
@@ -4890,10 +4889,6 @@ cdl_component CYGFUN_KERNEL_THREADS_STACK_CHECKING {
 # hard to find can be detected this way, saving debug time.
 #
 cdl_option CYGFUN_KERNEL_ALL_THREADS_STACK_CHECKING {
-    # This option is not active
-    # The parent CYGFUN_KERNEL_THREADS_STACK_CHECKING is not active
-    # The parent CYGFUN_KERNEL_THREADS_STACK_CHECKING is disabled
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 0
@@ -4912,10 +4907,6 @@ cdl_option CYGFUN_KERNEL_ALL_THREADS_STACK_CHECKING {
 # this value will make the overflow more, not less likely, of course.
 #
 cdl_option CYGNUM_KERNEL_THREADS_STACK_CHECK_DATA_SIZE {
-    # This option is not active
-    # The parent CYGFUN_KERNEL_THREADS_STACK_CHECKING is not active
-    # The parent CYGFUN_KERNEL_THREADS_STACK_CHECKING is disabled
-
     # Flavor: data
     # No user value, uncomment the following line to provide one.
     # user_value 32
@@ -4938,11 +4929,11 @@ cdl_option CYGNUM_KERNEL_THREADS_STACK_CHECK_DATA_SIZE {
 cdl_component CYGFUN_KERNEL_THREADS_STACK_MEASUREMENT {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
     # Default value:  0 != CYGPKG_INFRA_DEBUG 
-    #     CYGPKG_INFRA_DEBUG == 0
-    #   --> 0
+    #     CYGPKG_INFRA_DEBUG == 1
+    #   --> 1
 };
 
 # >
@@ -4951,9 +4942,6 @@ cdl_component CYGFUN_KERNEL_THREADS_STACK_MEASUREMENT {
 # output when a thread exits.
 #
 cdl_option CYGDBG_KERNEL_THREADS_STACK_MEASUREMENT_VERBOSE_EXIT {
-    # This option is not active
-    # The parent CYGFUN_KERNEL_THREADS_STACK_MEASUREMENT is disabled
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 0
@@ -6005,7 +5993,7 @@ cdl_option CYGPKG_KERNEL_TESTS {
     #                     . ((!CYGINT_HAL_TESTS_NO_CACHES && CYGFUN_KERNEL_API_C) ? " tests/kcache1 tests/kcache2" : "")
     #                 
     #     CYGFUN_KERNEL_API_C == 1
-    #     CYGPKG_INFRA_DEBUG == 0
+    #     CYGPKG_INFRA_DEBUG == 1
     #     CYGPKG_KERNEL_INSTRUMENT == 1
     #     CYGFUN_KERNEL_API_C == 1
     #     CYGPKG_KERNEL_SMP_SUPPORT == 0
@@ -6146,14 +6134,14 @@ cdl_component CYGPKG_MEMALLOC_ALLOCATOR_DLMALLOC {
 cdl_option CYGDBG_MEMALLOC_ALLOCATOR_DLMALLOC_DEBUG {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
     # Default value:  0 != CYGDBG_USE_ASSERTS 
-    #     CYGDBG_USE_ASSERTS == 0
-    #   --> 0
+    #     CYGDBG_USE_ASSERTS == 1
+    #   --> 1
     # Requires: CYGDBG_USE_ASSERTS
-    #     CYGDBG_USE_ASSERTS == 0
-    #   --> 0
+    #     CYGDBG_USE_ASSERTS == 1
+    #   --> 1
 };
 
 # Make thread safe
@@ -9551,8 +9539,8 @@ cdl_option CYGSEM_LIBC_SIGNALS_BAD_SIGNAL_FATAL {
     # value_source default
     # Default value: 0
     # Requires: CYGDBG_USE_ASSERTS
-    #     CYGDBG_USE_ASSERTS == 0
-    #   --> 0
+    #     CYGDBG_USE_ASSERTS == 1
+    #   --> 1
 };
 
 # raise() sets errno
@@ -12384,7 +12372,7 @@ cdl_option UPBFUN_RECONOS_CACHE_BURST_RAM {
 cdl_component UPBFUN_RECONOS_PARTIAL {
     # This option is not active
     # ActiveIf constraint: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #     UPBFUN_RECONOS_ECAP_NET == 0
     #   --> 0
 
@@ -12394,7 +12382,7 @@ cdl_component UPBFUN_RECONOS_PARTIAL {
     # value_source default
     # Default value: 0
     # Requires: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #     UPBFUN_RECONOS_ECAP_NET == 0
     #   --> 0
 
@@ -12440,7 +12428,7 @@ cdl_component UPBFUN_RECONOS_ECAP_NET {
     # value_source default
     # Default value: 0
     # Requires: ! UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 1
     # Requires: UPBFUN_RECONOS_PARTIAL
     #     UPBFUN_RECONOS_PARTIAL == 0
