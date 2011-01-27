@@ -36,5 +36,6 @@ cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
             implements UPBHWR_ICAP
             compile       icap_xilinx.c
         }
+    }
 
 }

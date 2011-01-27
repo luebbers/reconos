@@ -76,6 +76,13 @@ void icap_init(void){
             }
             CYG_FAIL("failed to initialize icap\naborting\n");
         }
+
+        // Run self test
+        Status = XHwIcap_SelfTest(&HwIcap);
+        if (Status != XST_SUCCESS) {
+            CYG_FAIL("HWICAP: self-test failed\n");
+        }
+
         cyg_mutex_init(&icap_mutex);
 
         CYG_REPORT_RETURN();
@@ -94,13 +101,35 @@ void icap_load(unsigned char * bitstream, size_t length){
         if (!cyg_mutex_lock(&icap_mutex)) {
             CYG_FAIL("mutex lock failed, aborting thread\n");
         } else {
-            status = XHwIcap_DeviceWrite(&HwIcap, (Xuint32*)bitstream, length);
+
+            // wait until ICAP is ready
+            while (HwIcap.IsTransferInProgress) {
+                diag_printf("icap_load(): transfer in progress, waiting...\n");
+                cyg_thread_delay(1);
+            }
+            while (! (XHwIcap_GetStatusReg(&HwIcap) & XHI_SR_DONE_MASK)) {
+                diag_printf("icap_load(): device busy, waiting...\n");
+                cyg_thread_delay(1);
+            }
+
+            status = XHwIcap_DeviceWrite(&HwIcap, (Xuint32*)bitstream, length/4);
             if (status != XST_SUCCESS)
             {
                 if(status == XST_DEVICE_BUSY) diag_printf("HWICAP: device busy\n");
                 if(status == XST_INVALID_PARAM) diag_printf("HWICAP: invalid parameter\n");
                 CYG_FAIL("failed to load bitstream\naborting\n");
             }
+
+            // wait until ICAP is ready
+            while (HwIcap.IsTransferInProgress) {
+                diag_printf("icap_load(): transfer in progress, waiting...\n");
+                cyg_thread_delay(1);
+            }
+            while (! (XHwIcap_GetStatusReg(&HwIcap) & XHI_SR_DONE_MASK)) {
+                diag_printf("icap_load(): device busy, waiting...\n");
+                cyg_thread_delay(1);
+            }
+
             cyg_mutex_unlock(&icap_mutex);
         }
 }
