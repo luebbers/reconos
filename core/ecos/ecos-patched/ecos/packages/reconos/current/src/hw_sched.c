@@ -307,14 +307,16 @@ void reconos_hw_scheduler(cyg_addrword_t data) {
 
                 if ( s_f != NULL) {     // if we found a free slot
                     // one way or the other
-#ifdef UPBDBG_RECONOS_DEBUG
-                    diag_printf("hw_sched: configuring thread @ 0x%08X into slot %d\n", (uint32)t_r, s_f->num);
-#endif
+
                     // get bitstream for t_r in s_f
                     t_r_bit = get_bit_for_slot( t_r, s_f );
 
                     CYG_ASSERT( t_r_bit, "no bitstream" );
                     CYG_ASSERT( s_f->state == FREE || s_f->thread->flags & RTHREAD_ATTR_IS_DYNAMIC, "slot not free or present thread is static" );
+
+#ifdef UPBDBG_RECONOS_DEBUG
+                    diag_printf("hw_sched: configuring thread @ 0x%08X into slot %d using bitstream '%s'\n", (uint32)t_r, s_f->num, t_r_bit->filename);
+#endif
 
                     // configure t_r into s_f
                     // NOTE: we don't need to synchronize this with the
