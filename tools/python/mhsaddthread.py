@@ -86,11 +86,13 @@ def main(argv):
     
     # we need at least one slot
     if num_slots == 0:
-        raise "error: no reconos slot in file '%s'" % mhs_orig
+		print "error: no reconos slot in file '%s'" % mhs_orig
+		sys.exit(2)
     
     # abort if there are already hw_tasks in the design
     if len(a.getPcores("hw_task")) > 0:
-        raise "error: file '%s' already contains %i hw_task instances" % (mhs_orig,len(a.getPcores("hw_task")))
+		print "error: file '%s' already contains %i hw_task instances" % (mhs_orig,len(a.getPcores("hw_task")))
+		sys.exit(3)
     
     # add tasks
     # if current_task_num < 0:
@@ -107,7 +109,7 @@ def main(argv):
         
         
 if __name__ == "__main__":
-    main(sys.argv[1:])
+	main(sys.argv[1:])
     
     
     
