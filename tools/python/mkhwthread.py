@@ -42,12 +42,32 @@ import getopt
 task_name = "hw_task"
 
 def exitUsage():
-    sys.stderr.write("Usage: %s user_logic_entity thread_num [ vhdl_files... ] [-v netlist1 -v netlist2 ...]\n" % os.path.basename(sys.argv[0]))
+    sys.stderr.write("Usage: %s user_logic_entity [ -g \"SOME_GENERIC => 42\" ] thread_num [ vhdl_files... ] [ netlist_files... ]\n" % os.path.basename(sys.argv[0]))
     sys.stderr.write("\nNOTE: thread numbers start at 1!\n")
+    sys.stderr.write("        If your generic's value includes quotes (e.g. X\"DEADBEEF\"),\n")
+    sys.stderr.write("        you need to escape it twice: '-g SOME_GENERIC => X\\\\\\\"DEADBEEF\\\\\\\"'\n")
     sys.exit(1)
 
-def main(args):
+def main(arguments):
+    
+    try:
+        opts, args = getopt.getopt(arguments, "g:", ["generic="])
+    except getopt.GetoptError, err:
+        print str(err)
+        usage()
+        sys.exit(2)
 
+    generics = []
+
+    for o, a in opts:
+        if o in ("-g", "--generic"):
+            # parse generic statement, e.g.
+            # addthread -g "C_THREAD_NUM : integer := 2" ...
+            # TODO: catch invalid generics?
+            generics.append(a)
+        else:
+            assert False, "unhandled option"
+        
     if len(args) < 2: exitUsage()
     
     if os.environ["RECONOS"] == "":
@@ -68,7 +88,7 @@ def main(args):
         header = header + " " + n
     header = header + "'" 
     
-    reconos.pcore.createPCore(user_logic_name,task_number,vhdl_files,task_name,[os.environ["RECONOS"] + "/support/templates/coregen/burst_ram/burst_ram.edn"] + netlist_files,header)
+    reconos.pcore.createPCore(user_logic_name,task_number,vhdl_files,task_name,[os.environ["RECONOS"] + "/support/templates/coregen/burst_ram/burst_ram.edn"] + netlist_files,header,generics)
 
     print "pcore generated."
     print "Don't forget to put any additional user logic files into the %s directory." % (pcore_name + "/hdl/vhdl")

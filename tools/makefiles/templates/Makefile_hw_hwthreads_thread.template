@@ -8,7 +8,8 @@ NETLIST_FILES=
 USER_LOGIC_ENTITY=$template:user_logic_entity$
 # Target architecture
 ARCHITECTURE=$template:architecture$
-
+# HW thread generics
+GENERICS=$template:generics$
 
 ######### NO CHANGES NECESSARY BEYOND THIS LINE ###########
 
@@ -28,6 +29,12 @@ ifeq ($(NUM_DYNAMIC_OSIFS),)
     $(error Number of dynamic OSIFs unknown. Specify NUM_DYNAMIC_OSIFS)
 endif
 
+ifeq ($(GENERICS),"")
+	GENERIC_STMT=
+else
+	GENERIC_STMT=-g $(GENERICS)
+endif
+
 all: hwthread
 
 clean:
@@ -37,7 +44,7 @@ clean:
 	$(Q)rm -f hw_task_*.ngc
 
 $(THREAD_PCORE_PREFIX)%$(THREAD_PCORE_SUFFIX): 
-	$(Q)$($(QQ)MKHWTHREAD) $(USER_LOGIC_ENTITY) $(subst $(THREAD_PCORE_SUFFIX),,$(subst $(THREAD_PCORE_PREFIX),,$@)) $(VHDL_FILES) $(NETLIST_FILES) >> make.log
+	$(Q)$($(QQ)MKHWTHREAD) $(GENERIC_STMT) $(USER_LOGIC_ENTITY) $(subst $(THREAD_PCORE_SUFFIX),,$(subst $(THREAD_PCORE_PREFIX),,$@)) $(VHDL_FILES) $(NETLIST_FILES) >> make.log
 
 hwthread: clean $(THREAD_PCORE)
 	$(Q)mkdir pcores

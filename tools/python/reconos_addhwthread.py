@@ -33,21 +33,43 @@ Creates a new hardware thread inside a ReconOS project
 #
 # \file reconos_addhwthread.py
 
-import reconos.tools, sys, os, string, shutil
+import reconos.tools, sys, os, string, shutil, getopt
 
+def usage():
+    sys.stderr.write('USAGE: ' + os.path.basename(sys.argv[0]) + '<hwthread_name> <user_logic_entity> [<first_file> <second_file> ...]\n')
+    sys.stderr.write('If you don\'t specify any files, you\'ll have to manually copy them\ninto the created directory and add them to the top of the Makefile.\n')
+    sys.stderr.write('Actually, that is what you have to do if you want to add netlists (.ngc/.edn) to your hardware thread.\n')
+	
 
+def main(arguments):
+	
+    try:
+        opts, args = getopt.getopt(arguments, "g:", ["generic="])
+    except getopt.GetoptError, err:
+        print str(err)
+        usage()
+        sys.exit(2)
 
-if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        sys.stderr.write('USAGE: ' + os.path.basename(sys.argv[0]) + '<hwthread_name> <user_logic_entity> [<first_file> <second_file> ...]\n')
-        sys.stderr.write('If you don\'t specify any files, you\'ll have to manually copy them\ninto the created directory and add them to the top of the Makefile.\n')
-        sys.stderr.write('Actually, that is what you have to do if you want to add netlists (.ngc/.edn) to your hardware thread.\n')
-        sys.exit(1)
+    generics = []
+
+    for o, a in opts:
+        if o in ("-g", "--generic"):
+            # parse generic statement, e.g.
+            # addthread -g "C_THREAD_NUM : integer := 2" ...
+            # TODO: catch invalid generics?
+            generics.append(a)
+        else:
+            assert False, "unhandled option"
+			
+    if len(args) < 2:
+        print "not enough arguments"
+        usage()
+        sys.exit(2)
 
     # unpack cmd line arguments
-    hwthread_name, user_logic_entity = sys.argv[1:3]
-    if len(sys.argv) > 3:
-        files = sys.argv[3:]
+    hwthread_name, user_logic_entity = args[0:2]
+    if len(args) > 2:
+        files = args[2:]
     else:
         files = []
 
@@ -62,9 +84,13 @@ if __name__ == '__main__':
     subst = [ 
         ('\$template:vhdl_files\$', string.join([ os.path.basename(f) for f in files ], ' ')),
         ('\$template:user_logic_entity\$', user_logic_entity),
-        ('\$template:architecture\$', 'virtex2p')
+        ('\$template:architecture\$', 'virtex2p'),
+		('\$template:generics\$', "\"" + ",".join(generics) + "\"")
     ]
     templ_name = os.environ['RECONOS'] + '/tools/makefiles/templates/Makefile_hw_hwthreads_thread.template'
     makefile_name = os.path.join(hwthread_name, 'Makefile')
     reconos.tools.make_file_from_template(templ_name, makefile_name, subst)
 
+
+if __name__ == '__main__':
+	main(sys.argv[1:])
