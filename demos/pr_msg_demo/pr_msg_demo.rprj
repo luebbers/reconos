@@ -1,0 +1,12 @@
+# ReconOS project file (format v1.00.a)
+EDK_BASE_DIR = $(RECONOS)/support/refdesigns/12.3/ml605/ml605_light_pr
+LAYOUT = pr_msg_demo.lyt
+HW_THREAD_DIR = hwthreads
+PAROPTS = -ol high -w
+MAPOPTS = -ol high -timing
+STATIC_THREADS=
+DYNAMIC_THREADS=thread_1 thread_2 thread_3 thread_4
+#ADDTHREAD_OPTS = -c dcm_0_CLKDV
+#ADDTHREAD_OPTS = -o sys_clk_s
+MAKETOP_OPTS = --no-slot-bufg
+
