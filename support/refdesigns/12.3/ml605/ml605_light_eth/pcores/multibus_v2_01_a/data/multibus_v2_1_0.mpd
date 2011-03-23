@@ -1,0 +1,66 @@
+###################################################################
+##
+## Name     : multibus 
+## Desc     : Microprocessor Peripheral Description
+##
+###################################################################
+
+BEGIN multibus 
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE 
+OPTION HDL = VHDL
+OPTION STYLE = HDL 
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION DESC =MULTIBIS 
+## Ports
+PORT i_grant_0 = "grant_0", DIR = I, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+PORT i_grant_1 = "grant_1", DIR = I, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+PORT i_grant_2 = "grant_2", DIR = I, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+
+PORT o_busdata_0 = "busdata_0", DIR = O, VEC = [0:32 -1], ASSIGNMENT=REQUIRE
+PORT o_busdata_1 = "busdata_1", DIR = O, VEC = [0:32 -1], ASSIGNMENT=REQUIRE
+PORT o_busdata_2 = "busdata_2", DIR = O, VEC = [0:32 -1], ASSIGNMENT=REQUIRE
+
+PORT o_bussof_0 = "bussof_0", DIR = O, ASSIGNMENT=REQUIRE
+PORT o_bussof_1 = "bussof_1", DIR = O, ASSIGNMENT=REQUIRE
+PORT o_bussof_2 = "bussof_2", DIR = O, ASSIGNMENT=REQUIRE
+
+PORT o_buseof_0 = "buseof_0", DIR = O, ASSIGNMENT=REQUIRE
+PORT o_buseof_1 = "buseof_1", DIR = O, ASSIGNMENT=REQUIRE
+PORT o_buseof_2 = "buseof_2", DIR = O, ASSIGNMENT=REQUIRE
+
+PORT i_data_0 = "data_0", DIR = I, VEC = [0:32 * 3 -1], ASSIGNMENT=REQUIRE
+PORT i_data_1 = "data_1", DIR = I, VEC = [0:32 * 3 -1], ASSIGNMENT=REQUIRE
+PORT i_data_2 = "data_2", DIR = I, VEC = [0:32 * 3 -1], ASSIGNMENT=REQUIRE
+
+PORT i_sof_0 = "sof_0", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+PORT i_sof_1 = "sof_1", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+PORT i_sof_2 = "sof_2", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+
+PORT i_eof_0 = "eof_0", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+PORT i_eof_1 = "eof_1", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+PORT i_eof_2 = "eof_2", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+
+PORT i_src_rdy_0 = "src_rdy_0", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+PORT i_src_rdy_1 = "src_rdy_1", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+PORT i_src_rdy_2 = "src_rdy_2", DIR = I, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+	
+PORT o_dst_rdy_0 = "dst_rdy_0", DIR = O, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+PORT o_dst_rdy_1 = "dst_rdy_1", DIR = O, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+PORT o_dst_rdy_2 = "dst_rdy_2", DIR = O, VEC = [0: 3 -1], ASSIGNMENT=REQUIRE
+
+PORT i_bus_dst_rdy_0 = "bus_dst_rdy_0", DIR = I, ASSIGNMENT=REQUIRE
+PORT i_bus_dst_rdy_1 = "bus_dst_rdy_1", DIR = I, ASSIGNMENT=REQUIRE
+PORT i_bus_dst_rdy_2 = "bus_dst_rdy_2", DIR = I, ASSIGNMENT=REQUIRE
+
+PORT o_bus_src_rdy_0 = "bus_src_rdy_0", DIR = O, ASSIGNMENT=REQUIRE
+PORT o_bus_src_rdy_1 = "bus_src_rdy_1", DIR = O, ASSIGNMENT=REQUIRE
+PORT o_bus_src_rdy_2 = "bus_src_rdy_2", DIR = O, ASSIGNMENT=REQUIRE
+
+PORT clk      = "sys_clk_s",       DIR = I, SIGIS = Clk
+PORT reset    = "sys_rst_s",     DIR = I, SIGIS = Rst
+
+
+END
