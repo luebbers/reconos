@@ -1,0 +1,57 @@
+#
+# Makefile.posix
+# eCos/POSIX-specific makefile for sorting demo.
+#
+# Author:     Enno Luebbers   <luebbers@reconos.de>
+# Date:       17.04.2007
+#
+# This file is part of the ReconOS project <http://www.reconos.de>.
+# University of Paderborn, Computer Engineering Group.
+#
+# (C) Copyright University of Paderborn 2007.
+#
+
+include config.make
+
+TARGETS = sort_posix_st_sw.elf sort_posix_st_hw.elf sort_posix_mt_sw.elf sort_posix_mt_hw.elf
+
+CC=powerpc-eabi-gcc
+CFLAGS=-O3 -g -Wall -ffunction-sections -fdata-sections -I../shared -I$(ECOS_INSTALL)/include \
+ -I$(HW_DESIGN)/ppc405_0/include -Iinclude -msoft-float -I$(RECONOS)/core/ecos/include -DUSE_ECOS -D__RECONOS__ -D__POSIX__
+LDFLAGS=-g -nostartfiles --gc-sections -L$(HW_DESIGN)/ppc405_0/lib -L$(ECOS_INSTALL)/lib -Ttarget.ld -nostdlib -msoft-float
+
+all: $(TARGETS)
+
+mrproper: clean
+	rm -rf $(ECOS_INSTALL) $(ECOS_BUILD)
+
+sort_posix_st_sw.elf: sort_posix_st_sw.o merge.o data.o timing.o bubblesort.o
+	$(CC) $^ $(LDFLAGS) -o $@
+	powerpc-eabi-size -A $@
+	cp $@ /tmp/.
+
+sort_posix_mt_sw.elf: sort_posix_mt_sw.o merge.o sort8k.o data.o timing.o bubblesort.o
+	$(CC) $^ $(LDFLAGS) -o $@
+	powerpc-eabi-size -A $@
+	cp $@ /tmp/.
+
+sort_posix_st_hw.elf: sort_posix_st_hw.o merge.o data.o timing.o
+	$(CC) $^ $(LDFLAGS) -o $@
+	powerpc-eabi-size -A $@
+	cp $@ /tmp/.
+
+sort_posix_mt_hw.elf: sort_posix_mt_hw.o merge.o sort8k.o data.o timing.o bubblesort.o
+	$(CC) $^ $(LDFLAGS) -o $@
+	powerpc-eabi-size -A $@
+	cp $@ /tmp/.
+
+deps:
+	$(CC) -MM *.c  $(CFLAGS) > .deps
+
+include .deps
+
+.PHONY: clean deps mrproper
+
+clean:
+	rm -f *.o $(TARGETS)
+

@@ -1,0 +1,41 @@
+#
+# Makefile.ecos.mb
+# eCos-specific makefile for sorting demo.
+#
+# Author:     Enno Luebbers   <luebbers@reconos.de>
+# Date:       28.09.2007
+#
+# This file is part of the ReconOS project <http://www.reconos.de>.
+# University of Paderborn, Computer Engineering Group.
+#
+# (C) Copyright University of Paderborn 2007.
+#
+
+include config.make
+
+TARGETS = controller.elf 
+
+CC=mb-gcc
+CFLAGS=-O3 -g -Wall -ffunction-sections -fdata-sections -I../shared -I$(ECOS_INSTALL)/include \
+ -I$(HW_DESIGN)/microblaze_0/include -Iinclude -msoft-float -I$(RECONOS)/core/ecos/include -DUSE_ECOS -D__RECONOS__
+LDFLAGS=-g -nostartfiles --gc-sections -L$(HW_DESIGN)/microblaze_0/lib -L$(ECOS_INSTALL)/lib -Ttarget.ld -nostdlib -msoft-float
+
+all: $(TARGETS)
+
+mrproper: clean
+	rm -rf $(ECOS_INSTALL) $(ECOS_BUILD)
+
+controller.elf: controller.o 
+	$(CC) $^ $(LDFLAGS) -o $@
+	mb-size -A $@
+
+deps:
+	$(CC) -MM *.c  $(CFLAGS) > .deps
+
+#include .deps
+
+.PHONY: clean deps mrproper
+
+clean:
+	rm -f *.o $(TARGETS)
+

@@ -1,0 +1,13 @@
+ready_0 : out std_logic;
+req_0   : out std_logic_vector(0 to 3 - 1);
+grant_0 : in std_logic_vector(0 to 3 - 1);
+data_0  : out std_logic_vector(0 to 3 * 32 - 1);
+sof_0   : out std_logic_vector(0 to 3 - 1);
+eof_0   : out std_logic_vector(0 to 3 - 1); 
+src_rdy_0 : out std_logic_vector(0 to 3 - 1);
+dst_rdy_0 : in std_logic_vector(0 to 3 - 1);
+busdata_0: in std_logic_vector(0 to 32 - 1);
+bussof_0 : in std_logic;
+buseof_0 : in std_logic;
+bus_dst_rdy_0 : out std_logic;
+bus_src_rdy_0 : in std_logic;

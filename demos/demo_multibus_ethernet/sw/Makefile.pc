@@ -1,0 +1,31 @@
+#
+# Makefile.pc
+# PC-specific makefile for sorting demo.
+#
+# Author:     Enno Luebbers   <luebbers@reconos.de>
+# Date:       28.09.2007
+#
+# This file is part of the ReconOS project <http://www.reconos.de>.
+# University of Paderborn, Computer Engineering Group.
+#
+# (C) Copyright University of Paderborn 2007.
+#
+
+include config.make
+
+TARGETS = sort_pc_st
+
+all: $(TARGETS)
+
+sort_pc_st: sort_pc_st.o merge.o data.o timing.o bubblesort.o
+	$(CC) $^ $(LDFLAGS) -o $@
+	size -A $@
+	cp $@ /tmp/.
+
+include .deps
+
+.PHONY: clean
+
+clean:
+	rm -f *.o $(TARGETS)
+

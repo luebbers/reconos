@@ -1,0 +1,18 @@
+# ReconOS project file (format v1.00.a)
+EDK_BASE_DIR = $(RECONOS)/support/refdesigns/12.3/ml605/ml605_light_eth
+LAYOUT = ethernet.lyt
+HW_THREAD_DIR = hwthreads
+PAROPTS = -ol high -w
+MAPOPTS = -ol high -timing
+# add your static threads here. A slot will be created for each static thread
+STATIC_THREADS=first second third
+
+# for PR designs, uncomment the following:
+#EDK_BASE_DIR = $(RECONOS)/support/refdesigns/9.2/xup/xup_light_pr
+## add your dynamic threads here (don't forget to remove the static ones, if
+## necessary). The number of dynamic slots will be determined from your layout
+## file
+#DYNAMIC_THREADS=
+#ADDTHREAD_OPTS = -o sys_clk_s
+#MAKETOP_OPTS = --no-slot-bufg
+
