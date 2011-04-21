@@ -1,0 +1,21 @@
+bubblesort.o: bubblesort.c bubblesort.h
+data.o: data.c data.h
+merge.o: merge.c merge.h
+sort8k.o: sort8k.c config.h bubblesort.h sort8k.h
+sort_ecos_mt_hw.o: sort_ecos_mt_hw.c config.h sort8k.h merge.h data.h \
+  timing.h
+sort_ecos_mt_sw.o: sort_ecos_mt_sw.c config.h sort8k.h merge.h data.h \
+  timing.h
+sort_ecos_st_hw.o: sort_ecos_st_hw.c config.h merge.h data.h timing.h
+sort_ecos_st_sw.o: sort_ecos_st_sw.c config.h bubblesort.h merge.h data.h \
+  timing.h
+sort_pc_st.o: sort_pc_st.c config.h bubblesort.h merge.h data.h timing.h
+sort_posix_mt_hw.o: sort_posix_mt_hw.c config.h sort8k.h merge.h data.h \
+  timing.h
+sort_posix_mt_sw.o: sort_posix_mt_sw.c config.h sort8k.h merge.h data.h \
+  timing.h
+sort_posix_st_hw.o: sort_posix_st_hw.c config.h sort8k.h merge.h data.h \
+  timing.h
+sort_posix_st_sw.o: sort_posix_st_sw.c config.h bubblesort.h merge.h \
+  data.h timing.h
+timing.o: timing.c timing.h
