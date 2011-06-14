@@ -66,6 +66,12 @@ extern reconos_slot_t reconos_slots[NUM_OSIFS];
 void reconos_register_hwthread( rthread_attr_t *t ) {
     rthread_attr_t *tmp = reconos_hwthread_list;
 
+#ifdef UPBDBG_RECONOS_DEBUG
+    diag_printf("register_hwthread: registering thread (dump follows)\n");
+    rthread_attr_dump( t );
+#endif
+
+
     // if this is the first thread to register
     if (reconos_hwthread_list == NULL) {
         // put it at the top
@@ -83,6 +89,11 @@ void reconos_register_hwthread( rthread_attr_t *t ) {
 
 void reconos_unregister_hwthread( rthread_attr_t *t ) {
     rthread_attr_t *tmp = reconos_hwthread_list, *prev = tmp;
+
+#ifdef UPBDBG_RECONOS_DEBUG
+    diag_printf("unregister_hwthread: unregistering thread (dump follows)\n");
+    rthread_attr_dump( t );
+#endif
 
     CYG_ASSERT(reconos_hwthread_list != NULL, "hw thread list is NULL");
     // find t in list
@@ -248,7 +259,8 @@ void reconos_hw_scheduler(cyg_addrword_t data) {
             if (t_r == NULL) {
                 // no hw threads to reconfigure, nothing to do
 #ifdef UPBDBG_RECONOS_DEBUG
-                diag_printf("hw_sched: no threads to reconfigure\n");
+                diag_printf("hw_sched: no threads to reconfigure (dump of all threads follows)\n");
+                dump_all_hwthreads();
 #endif
                 // clear all yield requests!
                 while (num_global_yield_requests) {

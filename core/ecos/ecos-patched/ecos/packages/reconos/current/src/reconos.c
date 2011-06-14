@@ -421,7 +421,12 @@ void reconos_hwthread_create(
 
 #ifdef UPBFUN_RECONOS_PARTIAL
         // insert thread in list of HW threads
+    if (!cyg_mutex_lock(&reconos_hwsched_mutex)) {
+        CYG_FAIL("mutex lock failed, aborting thread\n");
+    } else {
         reconos_register_hwthread( hwt );
+        cyg_mutex_unlock(&reconos_hwsched_mutex);
+    }
 #endif
 
 }
@@ -456,7 +461,12 @@ int rthread_create(pthread_t *thread, const pthread_attr_t * attr, rthread_attr_
 	hwt->flags |= RTHREAD_ATTR_IS_POSIX;
 #ifdef UPBFUN_RECONOS_PARTIAL
         // insert thread in list of HW threads
+    if (!cyg_mutex_lock(&reconos_hwsched_mutex)) {
+        CYG_FAIL("mutex lock failed, aborting thread\n");
+    } else {
         reconos_register_hwthread( hwt );
+        cyg_mutex_unlock(&reconos_hwsched_mutex);
+    }
 #endif
 	int error = pthread_create(thread, attr, reconos_delegate_thread_posix, hwt);
 	if(error) return error;

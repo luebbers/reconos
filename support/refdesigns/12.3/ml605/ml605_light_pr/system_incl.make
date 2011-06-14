@@ -95,7 +95,8 @@ implementation/proc_sys_reset_0_wrapper.ngc \
 implementation/xps_intc_0_wrapper.ngc \
 implementation/dcr_timebase_0_wrapper.ngc \
 implementation/plbv46_dcr_bridge_0_wrapper.ngc \
-implementation/xps_timer_0_wrapper.ngc
+implementation/xps_timer_0_wrapper.ngc \
+implementation/xps_hwicap_0_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 
