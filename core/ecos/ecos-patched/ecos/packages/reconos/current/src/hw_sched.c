@@ -71,7 +71,6 @@ void reconos_register_hwthread( rthread_attr_t *t ) {
     rthread_attr_dump( t );
 #endif
 
-
     // if this is the first thread to register
     if (reconos_hwthread_list == NULL) {
         // put it at the top
@@ -91,8 +90,7 @@ void reconos_unregister_hwthread( rthread_attr_t *t ) {
     rthread_attr_t *tmp = reconos_hwthread_list, *prev = tmp;
 
 #ifdef UPBDBG_RECONOS_DEBUG
-    diag_printf("unregister_hwthread: unregistering thread (dump follows)\n");
-    rthread_attr_dump( t );
+    diag_printf("unregister_hwthread: unregistering thread\n");
 #endif
 
     CYG_ASSERT(reconos_hwthread_list != NULL, "hw thread list is NULL");
@@ -121,6 +119,16 @@ void dump_all_hwthreads( void ) {
 }
 
 
+///
+/// Print slot state and thread
+///
+void dump_slot( reconos_slot_t *s ) {
+
+    diag_printf( "----- slot %d ----\n", s->num );
+    diag_printf( "state = %di\n", s->state );
+    diag_printf( "thread = 0x%08X\n", s->thread );
+
+}
 
 
 ///
@@ -250,6 +258,14 @@ void reconos_hw_scheduler(cyg_addrword_t data) {
             CYG_FAIL("mutex lock failed, aborting thread\n");
         } else {
 
+#ifdef UPBDBG_RECONOS_DEBUG
+            {
+                int i;
+                for (i = 0; i < NUM_OSIFS; i++) {
+                    dump_slot( &reconos_slots[i] );
+                }
+            }
+#endif
             // find thread t_r that wants to run (FIXME: no priorities or
             // queuing!)
             t_r = reconos_hwthread_list;
@@ -259,8 +275,7 @@ void reconos_hw_scheduler(cyg_addrword_t data) {
             if (t_r == NULL) {
                 // no hw threads to reconfigure, nothing to do
 #ifdef UPBDBG_RECONOS_DEBUG
-                diag_printf("hw_sched: no threads to reconfigure (dump of all threads follows)\n");
-                dump_all_hwthreads();
+                diag_printf("hw_sched: no threads to reconfigure\n");
 #endif
                 // clear all yield requests!
                 while (num_global_yield_requests) {
