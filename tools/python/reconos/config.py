@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 """
-Reads ReconOS project configuration (*.rprj)
+ReconOS configuration-related classes and functions.
+
+Contains tools for reading configuration files.
 """
 #
-# \file projectconfig.py
+# \file config.py
 #
 # \author Enno Luebbers <luebbers@reconos.de>
 # \date   15.06.2011
