@@ -90,7 +90,7 @@ $RECONOS/demos/pr_msg_demo/hw/edk-static/synthesis/system.ngc as the toplevel
 netlist, and .../edk-static/implementation as the netlist directory. Also use
 .../edk-static/data/system.ucf as the constraints file.
 
-* Insert the created hw_task_0_wrapper_ngc files of the respective hardware
+* Insert the created thread_x.ngc (in .../hwthreads/) files of the respective hardware
 thread as partially reconfigurable modules within PlanAhead (TODO: more
 elaborate instructions, refer to Xilinx PR documentation).
 
