@@ -49,20 +49,25 @@ from pyparsing import Word, alphas, alphanums, nums, OneOrMore, Literal, Keyword
 #
 
 # terminal symbols
-IDENT       = Word(alphas, alphanums + "_")
+IDENT       = Word(alphas, alphanums + "_" + "-")
 INT         = Word(nums)
 DSP48       = Literal("DSP48")
 RAMB16      = Literal("RAMB16")
+RAMB18      = Literal("RAMB18")
+RAMB36      = Literal("RAMB36")
 FIFO16      = Literal("FIFO16")
 MULT18x18   = Literal("MULT18x18")
 DSP48       = Literal("DSP48")
+PMVBRAM     = Literal("PMVBRAM")
 SLICE       = Literal("SLICE")
 UNDERSCORE  = Literal("_")
+MINUS       = Literal("-")
 COLON       = Literal(":")
 X           = Literal("X")
 Y           = Literal("Y")
 END         = Keyword("end")
 DEVICE      = Keyword("device")
+PART        = Keyword("part")
 FAMILY      = Keyword("family")
 SLICE_RANGE = Keyword("slice_range")
 RANGE       = Keyword("range")
@@ -72,13 +77,15 @@ BUSMACRO    = Keyword("busmacro")
 SLOT        = Keyword("slot")
 TARGET      = Keyword("target")
 
-resource_str      = (DSP48 ^ RAMB16 ^ FIFO16 ^ MULT18x18 ^ DSP48)
+resource_str      = (DSP48 ^ RAMB16 ^ FIFO16 ^ MULT18x18 ^ RAMB18 ^
+        RAMB36 ^ PMVBRAM)
 location          = X + OneOrMore(INT) + Y + OneOrMore(INT)
 resource_location = (resource_str ^ SLICE) + UNDERSCORE + location
 range_str         = resource_location + COLON + resource_location
 
 # clauses
 device_clause         = DEVICE + IDENT("device")
+part_clause           = PART + IDENT("part")
 family_clause         = FAMILY + IDENT("family")
 slice_range_clause    = SLICE_RANGE + range_str("range")
 range_clause          = RANGE + resource_str("res") + range_str("range")
@@ -87,8 +94,8 @@ loc_clause            = LOC + location("loc")
 
 # blocks
 busmacro_block  = BUSMACRO + type_clause + loc_clause + END
-slot_block      = SLOT + IDENT("name") + slice_range_clause("slice_range") + ZeroOrMore(range_clause.setResultsName("res_range", listAllMatches=True)) + OneOrMore(busmacro_block) + END
-target_block    = TARGET + device_clause + family_clause + END
+slot_block      = SLOT + IDENT("name") + slice_range_clause("slice_range") + ZeroOrMore(range_clause.setResultsName("res_range", listAllMatches=True)) + ZeroOrMore(busmacro_block) + END
+target_block    = TARGET + device_clause + part_clause + family_clause + END
 
 # root node
 layout_file = target_block + OneOrMore(slot_block)
@@ -228,13 +235,15 @@ class Target(object):
 
     reconosVersion = "2.00.a"
 
-    def __init__(self, device, family):
+    def __init__(self, device, part, family):
         self.device = device
+        self.part = part
         self.family = family
 
     def __str__(self):
         s = "target\n"
         s += "    device          " + self.getDevice() + "\n"
+        s += "    part            " + self.getPart() + "\n"
         s += "    family          " + self.getFamily() + "\n"
         s += "    reconos_version " + self.reconosVersion + "\n"
         s += "end\n\n"
@@ -242,6 +251,9 @@ class Target(object):
 
     def getDevice(self):
         return self.device.lower()
+
+    def getPart(self):
+        return self.part.lower()
 
     def getFamily(self):
         return self.family.lower()
@@ -262,6 +274,9 @@ class Layout(object):
         
     def getSlotByName(self, name):
         return filter(lambda x: x.getName() == name, self.slots)[0]
+
+    def getNumSlots(self):
+        return len(self.slots)
 
     def getFPGA(self):
         print "ERROR: getFPGA is deprecated: use target.getDevice() instead!"
@@ -285,17 +300,23 @@ class Layout(object):
 # Class LayoutParser 
 #----------------------------------------------------------------------------
 busmacroCount = 0       # FIXME: ugly global variable
+haveSeenBusmacros = False
 class LayoutParser(object):
     """Parses a .lyt file into a Layout object"""
 
     def on_busmacro(s, loc, toks):
-        global busmacroCount
-        b = BusMacro(slot=None, num=busmacroCount)      # we set the slot later in on_slot()
-        busmacroCount = busmacroCount + 1
-        b.type = toks.type
-        # FIXME: is this the best way to get the location string?
-        b.loc = reduce(lambda x, y: str(x)+str(y), toks.loc)
-        return b
+        global haveSeenBusmacros
+        if not haveSeenBusmacros:  # print only once
+            print >> sys.stderr, "NOTE: 'busmacro' blocks are deprecated and will be ignored."
+            haveSeenBusmacros = True
+
+#        global busmacroCount
+#        b = BusMacro(slot=None, num=busmacroCount)      # we set the slot later in on_slot()
+#        busmacroCount = busmacroCount + 1
+#        b.type = toks.type
+#        # FIXME: is this the best way to get the location string?
+#        b.loc = reduce(lambda x, y: str(x)+str(y), toks.loc)
+#        return b
 
 
     def on_slot(s, loc, toks):
@@ -322,7 +343,7 @@ class LayoutParser(object):
 
 
     def on_target(s, loc, tocs):
-        t = Target(tocs.device, tocs.family)
+        t = Target(tocs.device, tocs.part, tocs.family)
         return t
 
     # set parse actions
@@ -353,9 +374,15 @@ class LayoutParser(object):
 # MAIN ======================================================================
 
 if __name__ == "__main__":
-    fin = open(sys.argv[1])
+    try:
+        fin = open(sys.argv[1])
+        l = LayoutParser.read(fin)
+    except Exception, e:
+        fin.close()
+        print str(e)
+        sys.exit(1)
     
-    l = LayoutParser.read(fin)
+    fin.close()
     
     print l
     
