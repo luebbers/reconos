@@ -55,13 +55,12 @@ see what threads are already in the slots, _all_ threads created will cause a
 partial reconfiguration.
 
 
-Building the demo
------------------
+Manually building the demo
+--------------------------
 
 These are the steps necessary to build the demo manually using the regular
-ReconOS tool chain and PlanAhead. Since the new PR flow introduced with ISE12
-is not yet integrated into the ReconOS toolchain, it is necessary to manually
-assemble the partial bitstreams using PlanAhead.
+ReconOS tool chain and PlanAhead. Steps for automatic builds are shown in 
+a later section.
 
 Please read the whole process description before starting.
 
@@ -124,16 +123,59 @@ should thus be:
 * config_3_hw_task_1_thread_3_partial.bit
 * config_4_hw_task_1_thread_4_partial.bit
 
+They can be found in the ".runs" subdirectory of the PlanAhead project.
+
 To build the software application for the pr_msg_demo, issue the following
-commands:
+commands (you might need to edit the Makefile in the 'sw' directory, first,
+to account for the PlanAhead project name):
 
     cd $RECONOS/demos/pr_msg_demo/sw
     export HW_DESIGN=$RECONOS/demos/pr_msg_demo/hw/edk-static
-    make mrproper && setup && all
+    make mrproper setup all
 
 This will create a pr_msg_demo.elf executable including the software
 application as well as all the partial bitstreams in a single image.
 
+
+Automatically building the demo
+-------------------------------
+
+Using the makefiles supplied by ReconOS, the entire build process can be
+automated, assuming that all project description files (.rprj, .lyt) contain
+valid information. In this case, the build process for the complete and
+partial bitstreams of the pr_msg_demo is as follows:
+
+Change to the hardware directory and invoke 'make':
+
+    cd $RECONOS/demos/pr_msg_demo/hw
+    make all
+    
+The complete bitstreams can then be found in 
+
+    .../hw/project_reconos_1/project_reconos_1.runs/config_x/config_x.bit
+
+where 'x' is the configuration number (1 to 4).
+
+The partial bitstreams are located in the same directories, with filenames:
+
+* config_1_hw_task_0_thread_1_partial.bit
+* config_2_hw_task_0_thread_2_partial.bit
+* config_3_hw_task_0_thread_3_partial.bit
+* config_4_hw_task_0_thread_4_partial.bit
+* config_1_hw_task_1_thread_1_partial.bit
+* config_2_hw_task_1_thread_2_partial.bit
+* config_3_hw_task_1_thread_3_partial.bit
+* config_4_hw_task_1_thread_4_partial.bit
+
+Building the software application is exactly the same process as in a manual
+build:
+
+    cd $RECONOS/demos/pr_msg_demo/sw
+    export HW_DESIGN=$RECONOS/demos/pr_msg_demo/hw/edk-static
+    make mrproper setup all
+
+resulting in a 'pr_msg_demo.elf' which can be uploaded to an ML605 which has
+been initialized with a complete bistream (see next section).
 
 Running the demo
 ----------------
