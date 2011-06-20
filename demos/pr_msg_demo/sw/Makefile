@@ -9,11 +9,12 @@ OBJECTS=pr_msg_demo.o
 #timing.o
 # name of final executable (e.g. pr_howto.elf)
 TARGET=pr_msg_demo.elf
-
-
 ######## NO CHANGES NECESSARY BEYOND THIS LINE ###################
 
-BITFILES=$(notdir $(shell find ../hw/project_1/project_1.runs/ -name "*_partial.bit"))
+# PlanAhead project name (within hw directory)
+PA_PROJECT_NAME=project_reconos_1
+
+BITFILES=$(notdir $(shell find ../hw/$(PA_PROJECT_NAME)/$(PA_PROJECT_NAME).runs/ -name "*_partial.bit"))
 BITFILES_SRC=$(foreach b,$(BITFILES),$b.c) $(foreach b,$(BITFILES),$b.h)
 BITFILES_OBJ=$(foreach b,$(BITFILES),$b.o)
 ECOS_INSTALL=$(ECOS_BASENAME)_install
@@ -44,7 +45,7 @@ mrproper: clean
 	rm -rf $(ECOS_INSTALL) $(ECOS_BUILD) $(ECOS_MLT)
 
 $(BITFILES):
-	find ../hw/project_1/project_1.runs/ -name '$@' -exec cp {} . \;
+	find ../hw/$(PA_PROJECT_NAME)/$(PA_PROJECT_NAME).runs/ -name '$@' -exec cp {} . \;
 
 %.bit.c %.bit.h: $(BITFILES)
 	bit2c $*.bit
