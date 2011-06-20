@@ -37,10 +37,13 @@ endif
 # find used Xilinx tools version (from ISE)
 XILINX_VER = $(shell cat $(XILINX)/fileset.txt | grep version | tail -1 | sed "s/.*version=\([0-9]\+\.[0-9]\+\).*/\1/")
 
+# the ReconOS project file
+PROJECT_FILE ?= $(shell find .. -iname "*.rprj*" | tail -1 )
+PROJECT_ROOT ?= ..
 # location of the base design (EDK project)
 EDK_BASE_DIR ?= $(RECONOS)/support/refdesigns/$(XILINX_VER)/xup/xup_light
 # the fpga layout file
-LAYOUT ?= layout.lyt
+LAYOUT ?= hw/layout.lyt
 # the hw thread directory
 HW_THREAD_DIR ?= hwthreads
 # options to par
@@ -63,14 +66,14 @@ PCORE_MGTPROTECTOR=$(RECONOS)/support/pcores/v4_mgt_protector_v1_00_a
 ifeq ($(DYNAMIC_THREADS),)
     NUM_DYNAMIC_OSIFS=0
 else
-    NUM_DYNAMIC_OSIFS=$(shell grep -i "^\s*slot" $(LAYOUT) | wc -l)
+    NUM_DYNAMIC_OSIFS=$(shell grep -i "^\s*slot" $(PROJECT_ROOT)/$(LAYOUT) | wc -l)
 endif
 # the number of reconos osifs/slots that are static (always present)
 NUM_STATIC_OSIFS=$(shell echo $(STATIC_THREADS) | wc -w)
 # the total number of OSIFs
 NUM_OSIFS=$(shell echo "$$(($(NUM_DYNAMIC_OSIFS) + $(NUM_STATIC_OSIFS)))")
 # the target FPGA's family (for determining bus macro locations and names)
-TARGET_FAMILY=$(shell grep -i "\s*family" $(LAYOUT) | sed "s/^\s*family //")
+TARGET_FAMILY=$(shell grep -i "\s*family" $(PROJECT_ROOT)/$(LAYOUT) | sed "s/^\s*family //")
 BUFG_WRAPPER_PATTERN?=: bufg_logic_.*_wrapper
 BUFG_WRAPPER_REPLACE?=: BUFG
 
@@ -99,6 +102,9 @@ DUMMY_THREAD_VHDL=$(RECONOS)/support/threads/dummy_ul.vhd
 PR_VERIFYDESIGN=PR_verifydesign
 PR_ASSEMBLE=PR_assemble
 MAKE_LOG=$(shell pwd)/make.log
+PLANAHEAD=planAhead
+MAKE_PA_TCL_PARTIAL=$(RECONOS)/tools/python/mkpatcl_partial.py
+PA_SCRIPT=pa_partial.tcl
 
 ########################################################
 # beautify output
@@ -145,7 +151,7 @@ export Q QQ NUM_OSIFS NUM_DYNAMIC_OSIFS RECONOS_VER DYNAMIC_THREADS
 
 
 
-all: merges
+all: planahead-all
 
 help:
 	@echo "Targets:"
@@ -153,12 +159,10 @@ help:
 	@echo "        create bitstreams for the complete reconfigurable hwdesign"
 	@echo "    edk-static:"
 	@echo "        just set up the static edk design (do not create netlists)"
+	@echo "    netlist-static:"
+	@echo "        generate all netlists for the static design"
 	@echo "    bits-static:"
-	@echo "        create bitstream for the static design (using static threads)"
-	@echo "    static-eapr:"
-	@echo "	       build a complete design (sans bitstream) of the static design"
-	@echo "	       including busmacros and clock buffer, e.g. for static timing"
-	@echo "        analysis"
+	@echo "        create bitstream for a static design (using static threads)"
 
 	
 
@@ -166,7 +170,7 @@ edk-base:
 	#
 	####################################################################
 	#
-	# Step 0:
+	# edk-base:
 	#     - create a link to the reference design 
 	#
 	$(Q)ln -s $(EDK_BASE_DIR) edk-base
@@ -175,13 +179,13 @@ edk-static: edk-base
 	#
 	####################################################################
 	#
-	# Step 1:
+	# edk-static:
 	#     - make a copy of the edk-base directory -> edk-static
 	#     - add $(NUM_OSIFS) OSIFs and dummy threads to the hw design
 	#     - add OSIF drivers
 	#     - link/create pcores (OSIF, reconos, dummy threads)
 	#
-	$(Q)test -f $(LAYOUT)
+	$(Q)test -f $(PROJECT_ROOT)/$(LAYOUT)
 	$(Q)cp -r edk-base/ edk-static
 	$(Q)$($(QQ)ADDOSIF) edk-static/system.mhs $(NUM_OSIFS) $(ADDOSIF_OPTS) > system.mhs.osif
 	$(Q)$($(QQ)ADDTHREAD) $(ADDTHREAD_OPTS) system.mhs.osif > edk-static/system.mhs
@@ -198,7 +202,7 @@ static-threads: edk-static
 	#
 	######################################################################
 	#
-	# Step 1a: static-threads
+	# static-threads:
 	#	- link static hardware threads into pcore directory
 	#	  
 	$(Q)for t in $(STATIC_THREADS); do make -C hwthreads/$$t clean; done
@@ -215,13 +219,99 @@ netlist-static: static-threads
 	#
 	####################################################################
 	#
-	# Step 2:
+	# netlist-static:
 	#     - build netlist with static and dummy threads
 	#     - generate libs (-> libxil.a, xparameters.h, etc.)
 	#
 	$(Q)cp -f $(MAKE_NETLIST) edk-static
 	$(Q)cd edk-static && $($(QQ)XPS) -nw -scr $(MAKE_NETLIST) | tee -a $(MAKE_LOG) | grep -s ERROR; [ $$? -ne 0 ] 
 	$(Q)touch netlist-static
+
+
+bits-static: static-threads
+	#
+	######################################################################
+	#
+	# bits-static:
+	#     - implement purely static design
+	#
+	$(Q)[ $(NUM_DYNAMIC_OSIFS) -eq 0 ] || echo -e "ERROR: You have dynamic threads, but want to build a purely static design.\n       Use 'make all' instead."
+	$(Q)[ $(NUM_DYNAMIC_OSIFS) -eq 0 ]
+	$(Q)cp -f $(MAKE_BITS) edk-static
+	$(Q)cd edk-static && $($(QQ)XPS) -nw -scr $(MAKE_BITS) | tee -a $(MAKE_LOG) | grep -s ERROR; [ $$? -ne 0 ]
+
+
+remove-dummy-netlists: netlist-static
+	#
+	######################################################################
+	#
+	# remove-dummy-netlists:
+	#     - remove netlists for dummy threads to prepare for partial
+	#       reconfiguration flow
+	#
+	$(Q)for s in $$(seq 0 $$(($(NUM_DYNAMIC_OSIFS)-1))); do\
+	    rm -f edk-static/implementation/hw_task_$${s}_wrapper.ngc;\
+	done;
+
+
+dynamic-threads-netlists:
+	#
+	######################################################################
+	#
+	# dynamic-threads-netlists:
+	#     - build netlists for dynamic threads
+	#
+	$(Q)make -C $(PROJECT_ROOT)/$(HW_THREAD_DIR) all >> $(MAKE_LOG)
+
+
+planahead-all: remove-dummy-netlists dynamic-threads-netlists
+	#
+	####################################################################
+	#
+	# planahead-all:
+	#     - run PlanAhead to generate all bitstreams
+	#	TODO: split into several steps
+	#
+	$(Q)$(MAKE_PA_TCL_PARTIAL) -p $(PROJECT_FILE) -o $(PA_SCRIPT) >> $(MAKE_LOG)
+	$(Q)$(PLANAHEAD) -mode batch -source $(PA_SCRIPT) >> $(MAKE_LOG)
+	$(Q)touch planahead-all
+
+
+.PHONY:	clean hwclean 
+
+clean: hwclean
+
+eapr-clean:
+	
+
+hwclean:
+	rm -f  edk-base eapr-modules eapr-setup netlist-static static-threads
+	rm -rf edk-static
+	rm -rf project_reconos_1
+	rm -rf base
+	rm -rf top
+	rm -rf prms
+	rm -rf merges
+	rm -f $(MAKE_LOG)
+	make -C $(PROJECT_ROOT)/$(HW_THREAD_DIR) clean
+
+
+
+###################################################
+###################################################
+###################################################
+###################################################
+###################################################
+###################################################
+#--------------------------------------------------
+# steps below are DEPRECATED
+#--------------------------------------------------
+###################################################
+###################################################
+###################################################
+###################################################
+###################################################
+###################################################
 
 eapr-setup: netlist-static
 	#
@@ -338,17 +428,6 @@ merges: eapr-modules
 	#
 		
 	
-bits-static: static-threads
-	#
-	######################################################################
-	#
-	# bits-static: implement purely static design
-	#
-	$(Q)[ $(NUM_DYNAMIC_OSIFS) -eq 0 ] || echo -e "ERROR: You have dynamic threads, but want to build a purely static design.\n       Use 'make static-eapr' instead."
-	$(Q)[ $(NUM_DYNAMIC_OSIFS) -eq 0 ]
-	$(Q)cp -f $(MAKE_BITS) edk-static
-	$(Q)cd edk-static && $($(QQ)XPS) -nw -scr $(MAKE_BITS) | tee -a $(MAKE_LOG) | grep -s ERROR; [ $$? -ne 0 ]
-
 
 static-eapr: static-threads
 	#
@@ -374,21 +453,4 @@ static-eapr: static-threads
 	$(Q)cd edk-static/implementation && $($(QQ)MAP) $(MAPOPTS) system.ngd >> $(MAKE_LOG)
 	$(Q)cd edk-static/implementation && $($(QQ)PAR) $(PAROPTS) system.ncd system_routed_static-eapr.ncd >> $(MAKE_LOG)
 
-
-.PHONY:	clean hwclean 
-
-clean: hwclean
-
-eapr-clean:
-	
-
-hwclean:
-	rm -f  edk-base eapr-modules eapr-setup netlist-static static-threads
-	rm -rf edk-static
-	rm -rf base
-	rm -rf top
-	rm -rf prms
-	rm -rf merges
-	rm -f $(MAKE_LOG)
-	cd $(HW_THREAD_DIR) && make clean
 
