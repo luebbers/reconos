@@ -8,8 +8,12 @@ NETLIST_FILES=
 USER_LOGIC_ENTITY=$template:user_logic_entity$
 # Target architecture
 ARCHITECTURE=$template:architecture$
-# HW thread generics
+# HW thread generics (make sure the thread's VHDL supports them)
 GENERICS=$template:generics$
+# HW thread wrapper parameters (e.g. "C_REGISTER_OSIF_PORTS = 1")
+# note the different notation from generics ('=' instead of '=>'),
+# as parameters will be set within a .MHS file
+WRAPPER_PARAMETERS=$template:wrapper_parameters$
 
 ######### NO CHANGES NECESSARY BEYOND THIS LINE ###########
 
@@ -35,6 +39,12 @@ else
 	GENERIC_STMT=-g $(GENERICS)
 endif
 
+ifeq ($(WRAPPER_PARAMETERS),"")
+	WRAPPER_PARAMETER_STMT=
+else
+	WRAPPER_PARAMETER_STMT=-p $(WRAPPER_PARAMETERS)
+endif
+
 all: hwthread
 
 clean:
@@ -52,6 +62,6 @@ hwthread: clean $(THREAD_PCORE)
 	$(Q)cd pcores && for z in $(CORE_PCORES); do \
 	    ln -s $(RECONOS)/core/pcores/$$z . ;\
 	done
-	$(Q)$($(QQ)MKPRMHS) 1 $(NUM_DYNAMIC_OSIFS) > system.mhs
+	$(Q)$($(QQ)MKPRMHS) $(WRAPPER_PARAMETER_STMT) 1 $(NUM_DYNAMIC_OSIFS) > system.mhs
 	$(Q)$($(QQ)PLATGEN) -lp $$(pwd) -p $(ARCHITECTURE) system.mhs >> make.log
 	

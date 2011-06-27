@@ -38,6 +38,8 @@ import reconos.tools, sys, os, string, shutil, getopt
 def usage():
     sys.stderr.write('USAGE: ' + os.path.basename(sys.argv[0]) + ' [-g "GENERIC=>1"] [-l] <hwthread_name> <user_logic_entity> [<first_file> <second_file> ...]\n')
     sys.stderr.write('   -g "GENERIC => 1"   set generic of hw thread\n')
+    sys.stderr.write('   -p "PARAMETER = 2"  set parameter for hw thread WRAPPER\n')
+    sys.stderr.write('                       NOTE: use "=" instead of "=>"\n')
     sys.stderr.write('   -l                  link files instead of copying\n')
     sys.stderr.write('If you don\'t specify any files, you\'ll have to manually copy them\ninto the created directory and add them to the top of the Makefile.\n')
     sys.stderr.write('Actually, that is what you have to do if you want to add netlists (.ngc/.edn) to your hardware thread.\n')
@@ -46,13 +48,14 @@ def usage():
 def main(arguments):
 	
     try:
-        opts, args = getopt.getopt(arguments, "lg:a:", ["link", "generic=", "architecture="])
+        opts, args = getopt.getopt(arguments, "lg:p:a:", ["link", "generic=", "parameter=", "architecture="])
     except getopt.GetoptError, err:
         print str(err)
         usage()
         sys.exit(2)
 
     generics = []
+    parameters = []
     link = False
     arch = "virtex6"
 
@@ -62,6 +65,8 @@ def main(arguments):
             # addthread -g "C_THREAD_NUM : integer := 2" ...
             # TODO: catch invalid generics?
             generics.append(a)
+        elif o in ("-p", "--parameter"):
+            parameters.append(a)
         elif o in ("-l", "--link"):
             link = True
         elif o in ("-a", "--architecture"):
@@ -96,7 +101,8 @@ def main(arguments):
         ('\$template:vhdl_files\$', string.join([ os.path.basename(f) for f in files ], ' ')),
         ('\$template:user_logic_entity\$', user_logic_entity),
         ('\$template:architecture\$', arch),
-		('\$template:generics\$', "\"" + ",".join(generics) + "\"")
+        ('\$template:generics\$', "\"" + ",".join(generics) + "\""),
+        ('\$template:wrapper_parameters\$', "\"" + ",".join(parameters) + "\"")
     ]
     templ_name = os.environ['RECONOS'] + '/tools/makefiles/templates/Makefile_hw_hwthreads_thread.template'
     makefile_name = os.path.join(hwthread_name, 'Makefile')

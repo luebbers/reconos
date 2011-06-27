@@ -31,29 +31,51 @@
 #---------------------------------------------------------------------------
 #
 
-import sys
+import sys, getopt
 
 def exitUsage():
-	sys.stderr.write("Usage: %s num_thread num_osifs [first_task_num]\n" % sys.argv[0])
-	sys.exit(1)
+    sys.stderr.write("Usage: %s [-p parameter] num_thread num_osifs [first_task_num]\n" % sys.argv[0])
+    sys.exit(1)
 
+
+def main(arguments):
+
+    try:
+        opts, args = getopt.getopt(arguments, "p:", ["parameter="])
+    except getopt.GetoptError, err:
+        print str(err)
+        exitUsage()
+
+    parameters = []
+
+    for o, a in opts:
+        if o in ("-p", "--parameter"):
+            parameters.append(a)
+        else:
+            assert False, "unhandled option"
+  
+    if len(args) < 2: exitUsage()
+	
+    first_task = 0
+    if len(args) == 3:
+        first_task = int(args[2])
+    
+    num_thread = int(args[0])
+    num_osifs = int(args[1])
+    
+    print "PARAMETER VERSION = 2.1.0"
+    print
+    print
+    for i in range(num_osifs):
+	print "BEGIN hw_task"
+        print "\tPARAMETER INSTANCE = hw_task_%d" % (i + first_task)
+        print "\tPARAMETER HW_VER = 1.%02d.b" % num_thread
+        for p in parameters:
+            print "\tPARAMETER %s" % p
+        print "END"
+        print
+    
+    
 if __name__ == "__main__":
-	if len(sys.argv) < 3: exitUsage()
-	
-	first_task = 0
-	if len(sys.argv) == 4:
-		first_task = int(sys.argv[3])
-	
-	num_thread = int(sys.argv[1])
-	num_osifs = int(sys.argv[2])
-	
-	print "PARAMETER VERSION = 2.1.0"
-	print
-	print
-	for i in range(num_osifs):
-		print "BEGIN hw_task"
-		print "\tPARAMETER INSTANCE = hw_task_%d" % (i + first_task)
-		print "\tPARAMETER HW_VER = 1.%02d.b" % num_thread
-		print "END"
-		print
+    main(sys.argv[1:])
 
