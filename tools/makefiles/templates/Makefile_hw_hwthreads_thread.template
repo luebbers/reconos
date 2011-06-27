@@ -33,13 +33,13 @@ ifeq ($(NUM_DYNAMIC_OSIFS),)
     $(error Number of dynamic OSIFs unknown. Specify NUM_DYNAMIC_OSIFS)
 endif
 
-ifeq ($(GENERICS),"")
+ifeq ($(GENERICS),)
 	GENERIC_STMT=
 else
 	GENERIC_STMT=-g $(GENERICS)
 endif
 
-ifeq ($(WRAPPER_PARAMETERS),"")
+ifeq ($(WRAPPER_PARAMETERS),)
 	WRAPPER_PARAMETER_STMT=
 else
 	WRAPPER_PARAMETER_STMT=-p $(WRAPPER_PARAMETERS)
