@@ -88,42 +88,50 @@ reconos_res_t resources[NUM_THREADS][3] = {
 reconos_bitstream_t slot_0_thread_1_bit = {
     .slot_num = 0,
     .data     = config_1_hw_task_0_thread_1_partial_bit,
-    .size     = CONFIG_1_HW_TASK_0_THREAD_1_PARTIAL_BIT_SIZE
+    .size     = CONFIG_1_HW_TASK_0_THREAD_1_PARTIAL_BIT_SIZE,
+    .filename = "config_1_hw_task_0_thread_1_partial_bit"
 };
 reconos_bitstream_t slot_0_thread_2_bit = {
     .slot_num = 0,
     .data     = config_2_hw_task_0_thread_2_partial_bit,
-    .size     = CONFIG_2_HW_TASK_0_THREAD_2_PARTIAL_BIT_SIZE
+    .size     = CONFIG_2_HW_TASK_0_THREAD_2_PARTIAL_BIT_SIZE,
+    .filename = "config_2_hw_task_0_thread_2_partial_bit"
 };
 reconos_bitstream_t slot_0_thread_3_bit = {
     .slot_num = 0,
     .data     = config_3_hw_task_0_thread_3_partial_bit,
-    .size     = CONFIG_3_HW_TASK_0_THREAD_3_PARTIAL_BIT_SIZE
+    .size     = CONFIG_3_HW_TASK_0_THREAD_3_PARTIAL_BIT_SIZE,
+    .filename = "config_3_hw_task_0_thread_3_partial_bit"
 };
 reconos_bitstream_t slot_0_thread_4_bit = {
     .slot_num = 0,
     .data     = config_4_hw_task_0_thread_4_partial_bit,
-    .size     = CONFIG_4_HW_TASK_0_THREAD_4_PARTIAL_BIT_SIZE
+    .size     = CONFIG_4_HW_TASK_0_THREAD_4_PARTIAL_BIT_SIZE,
+    .filename = "config_4_hw_task_0_thread_4_partial_bit"
 };
 reconos_bitstream_t slot_1_thread_1_bit = {
     .slot_num = 1,
     .data     = config_1_hw_task_1_thread_1_partial_bit,
-    .size     = CONFIG_1_HW_TASK_1_THREAD_1_PARTIAL_BIT_SIZE
+    .size     = CONFIG_1_HW_TASK_1_THREAD_1_PARTIAL_BIT_SIZE,
+    .filename = "config_1_hw_task_1_thread_1_partial_bit"
 };
 reconos_bitstream_t slot_1_thread_2_bit = {
     .slot_num = 1,
     .data     = config_2_hw_task_1_thread_2_partial_bit,
-    .size     = CONFIG_2_HW_TASK_1_THREAD_2_PARTIAL_BIT_SIZE
+    .size     = CONFIG_2_HW_TASK_1_THREAD_2_PARTIAL_BIT_SIZE,
+    .filename = "config_2_hw_task_1_thread_2_partial_bit"
 };
 reconos_bitstream_t slot_1_thread_3_bit = {
-    .slot_num = 2,
+    .slot_num = 1,
     .data     = config_3_hw_task_1_thread_3_partial_bit,
-    .size     = CONFIG_3_HW_TASK_1_THREAD_3_PARTIAL_BIT_SIZE
+    .size     = CONFIG_3_HW_TASK_1_THREAD_3_PARTIAL_BIT_SIZE,
+    .filename = "config_3_hw_task_1_thread_3_partial_bit"
 };
 reconos_bitstream_t slot_1_thread_4_bit = {
-    .slot_num = 3,
+    .slot_num = 1,
     .data     = config_4_hw_task_1_thread_4_partial_bit,
-    .size     = CONFIG_4_HW_TASK_1_THREAD_4_PARTIAL_BIT_SIZE
+    .size     = CONFIG_4_HW_TASK_1_THREAD_4_PARTIAL_BIT_SIZE,
+    .filename = "config_4_hw_task_1_thread_4_partial_bit"
 };
 
 reconos_circuit_t thread_1_circuit = {
@@ -139,13 +147,13 @@ reconos_circuit_t thread_2_circuit = {
     .signature = 0x20000000
 };
 reconos_circuit_t thread_3_circuit = {
-    .name     = "THREAD_1",
+    .name     = "THREAD_3",
     .bitstreams = {&slot_0_thread_3_bit, &slot_1_thread_3_bit},
     .num_bitstreams = 2,
     .signature = 0x10000000
 };
 reconos_circuit_t thread_4_circuit = {
-    .name     = "THREAD_1",
+    .name     = "THREAD_4",
     .bitstreams = {&slot_0_thread_4_bit, &slot_1_thread_4_bit},
     .num_bitstreams = 2,
     .signature = 0x08000000
@@ -229,10 +237,10 @@ int main( int argc, char *argv[] )
             rthread_attr_setresources(&attr[i], resources[i], 3);
             reconos_hwthread_create( 15,                                              // priority
                                      &attr[i],                                        // hardware thread attributes
-                                     (cyg_addrword_t) REPEATS,                 		  // entry data (number of repeats)
-                                     "HW_THREAD",                                     // thread name
+                                     (cyg_addrword_t) REPEATS,                        // entry data (number of repeats)
+                                     thread_circuit[i]->name,                         // thread name
                                      stack[i],                                        // stack
-                                     STACK_SIZE,                                       // stack size
+                                     STACK_SIZE,                                      // stack size
                                      &handle[i],                                      // thread handle
                                      &thread[i]                                       // thread object
                  );
