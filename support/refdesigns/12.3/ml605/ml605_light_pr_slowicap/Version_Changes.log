@@ -1,0 +1,17 @@
+ The following files will be modified:
+  system.mhs
+  system.mss
+
+--------------------------------------
+ The following changes will be made:
+ Core plb_v46 1.04.a will be replaced by 1.05.a
+ Core mpmc 6.01.a will be replaced by 6.02.a
+
+ Driver cpu 1.12.b will be replaced by 1.13.a
+ Driver mpmc 4.00.a will be replaced by 4.01.a
+ Driver tmrctr 2.00.a will be replaced by 2.01.a
+--------------------------------------
+ The following changes need to be made manually by the user:
+ Core microblaze 7.30.b needs to be replaced by 8.00.a
+ Core mdm 1.00.g needs to be replaced by 2.00.a
+ Core proc_sys_reset 2.00.a needs to be replaced by 3.00.a
