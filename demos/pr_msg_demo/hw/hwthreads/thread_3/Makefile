@@ -8,8 +8,12 @@ NETLIST_FILES=
 USER_LOGIC_ENTITY=thread
 # Target architecture
 ARCHITECTURE=virtex6
-# HW thread generics
+# HW thread generics (make sure the thread's VHDL supports them)
 GENERICS="C_THREAD_NUM => 3"
+# HW thread wrapper parameters (e.g. "C_REGISTER_OSIF_PORTS = 1")
+# note the different notation from generics ('=' instead of '=>'),
+# as parameters will be set within a .MHS file
+WRAPPER_PARAMETERS=
 
 ######### NO CHANGES NECESSARY BEYOND THIS LINE ###########
 
@@ -29,10 +33,16 @@ ifeq ($(NUM_DYNAMIC_OSIFS),)
     $(error Number of dynamic OSIFs unknown. Specify NUM_DYNAMIC_OSIFS)
 endif
 
-ifeq ($(GENERICS),"")
+ifeq ($(GENERICS),)
 	GENERIC_STMT=
 else
 	GENERIC_STMT=-g $(GENERICS)
+endif
+
+ifeq ($(WRAPPER_PARAMETERS),)
+	WRAPPER_PARAMETER_STMT=
+else
+	WRAPPER_PARAMETER_STMT=-p $(WRAPPER_PARAMETERS)
 endif
 
 all: hwthread
@@ -52,6 +62,6 @@ hwthread: clean $(THREAD_PCORE)
 	$(Q)cd pcores && for z in $(CORE_PCORES); do \
 	    ln -s $(RECONOS)/core/pcores/$$z . ;\
 	done
-	$(Q)$($(QQ)MKPRMHS) 1 $(NUM_DYNAMIC_OSIFS) > system.mhs
+	$(Q)$($(QQ)MKPRMHS) $(WRAPPER_PARAMETER_STMT) 1 $(NUM_DYNAMIC_OSIFS) > system.mhs
 	$(Q)$($(QQ)PLATGEN) -lp $$(pwd) -p $(ARCHITECTURE) system.mhs >> make.log
 	
