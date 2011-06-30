@@ -1,0 +1,26 @@
+# Reconos FPGA layout file (version 3.1.0a)
+
+target
+	device XC6VLX240
+        part   xc6vlx240tff1156-1
+	family xc6vlx
+end
+
+slot hw_task_0
+	slice_range SLICE_X16Y160:SLICE_X47Y199
+        range DSP48 DSP48_X1Y64:DSP48_X2Y79 
+        range PMVBRAM PMVBRAM_X1Y4:PMVBRAM_X2Y4
+        range RAMB18 RAMB18_X1Y64:RAMB18_X2Y79
+        range RAMB36 RAMB36_X1Y32:RAMB36_X2Y39
+end
+
+
+slot hw_task_1
+	slice_range SLICE_X16Y80:SLICE_X47Y119
+        range DSP48 DSP48_X1Y32:DSP48_X2Y47
+        range PMVBRAM PMVBRAM_X1Y2:PMVBRAM_X2Y2
+        range RAMB18 RAMB18_X1Y32:RAMB18_X2Y47
+        range RAMB36 RAMB36_X1Y16:RAMB36_X2Y23
+end
+
+

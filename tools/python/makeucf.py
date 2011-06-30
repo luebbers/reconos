@@ -31,7 +31,7 @@
 #---------------------------------------------------------------------------
 #
 
-import sys, getopt
+import sys, slop
 from reconos.vhdl import *
 from reconos.layout import *
 
@@ -46,30 +46,20 @@ bufgmux_locations = {"xc2vp": bufgmux_locations_xc2vp, "xc4v": bufgmux_locations
 def main(argv):
 
         # Parse command line arguments
-        try:
-                opts, args = getopt.getopt(argv, "hso:l:t:", ["help","static"])
-        except getopt.GetoptError:
-                usage()
-                sys.exit(2)
-        layout = None
-        outputFileName = None
-        topFileName = None
-        static = False;
-        for opt, arg in opts:
-                if opt == "-o":
-                        outputFileName = arg
-                if opt == "-l":
-                        layout = LayoutParser.read(open(arg,"r"))
-                if opt == "-t":
-                        topFileName = arg
-                if opt in ("-s", "--static"):
-                        static = True;
-                if opt in ("-h", "--help"):
-                        usage()
-                        sys.exit(2)
+        opts, args = slop.parse([
+            ("s", "static",  "Generate UCF file for the static design"),
+            ("o", "outfile", "Output UCF file. Omit for stdout.",                 True),
+            ("l", "layout",  "Name of layout file",                               True, {"optional" : False}),
+            ("t", "top",     "Top level UCF (after addition of bus macros etc.)", True, {"optional" : False})],
+            args=argv, banner="%prog [options] -l <layout.lyt> -t <top.vhd> <in.ucf>")
+
+        layout = LayoutParser.read(open(opts["layout"],"r"))
+        outputFileName = opts["outfile"]
+        topFileName = opts["top"]
+        static = opts["static"]
+
         if not layout or not topFileName or len(args) != 1:
-                print args
-                usage()
+                opts.help()
                 sys.exit(2)
                 
         inputFileName = args[0]
@@ -204,18 +194,6 @@ def makeucf(ucfLines, vhdlLines, outputFileName, layout, static):
 		outputUcfFile.close()
 
 	return constraints
- 
-def usage():
-        print "USAGE:"
-        print sys.argv[0] + " [-h] | [--static] [-o <out.ucf>] -l <layout.lyt> -t <top.vhd> <in.ucf>"
-        print "\t-h | --help       Display this help"
-        print "\t-s | --static     Generate UCF file for the static design"
-        print "\t-o <out.ucf>      Output UCF file. Omit for stdout."
-        print "\t-l <layout.lyt>   Name of layout file"
-        print "\t-t <top.vhd>      Top level UCF (after addition of bus macros etc.)"
-        print "\t<in.ucf>          Input UCF file (from EDK, e.g. system.ucf)"
-
-
 
 
 if __name__ == "__main__":

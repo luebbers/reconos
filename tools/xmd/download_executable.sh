@@ -1,6 +1,11 @@
 #!/bin/bash -i
 LAST_ELF_FILE="/tmp/.xmd_download_last"
 
+# FIXME: default architecture is microblaze
+if [ -z "$ARCH" ]; then
+    ARCH="mb"
+fi
+
 
 if [ "$1" ]; then		# ELF provided on command line
 	RETVAL="$1"
@@ -21,9 +26,19 @@ else
   ELF=$RETVAL
 fi
 
-if [ -e "$XILINX_EDK/bin/lin64/xmd" ] ; then
-        echo -e "ppccon\ndow $ELF\nrun\n" | $XILINX_EDK/bin/lin64/xmd
+if [ "$ARCH" == "ppc" ]; then
+    DOWCMD="ppccon\ndow $ELF\nrun\n"
+elif [ "$ARCH" == "mb" ]; then
+    DOWCMD="connect mb mdm\ndow $ELF\nrun\n"
 else
-        echo -e "ppccon\ndow $ELF\nrun\n" | $XILINX_EDK/bin/lin/xmd
+    echo "unknown ARCH '$ARCH'"
+    exit 1
+fi
+
+
+if [ -e "$XILINX_EDK/bin/lin64/xmd" ] ; then
+        echo -e $DOWCMD | $XILINX_EDK/bin/lin64/xmd
+else
+        echo -e $DOWCMD | $XILINX_EDK/bin/lin/xmd
 fi
 	

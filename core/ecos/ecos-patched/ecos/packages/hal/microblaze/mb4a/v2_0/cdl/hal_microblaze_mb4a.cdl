@@ -1,0 +1,114 @@
+# ====================================================================
+#
+#      hal_microblaze_mb4a.cdl
+#
+#      MicroBlaze/mb4a variant architectural HAL package configuration data
+#
+# ====================================================================
+#####ECOSGPLCOPYRIGHTBEGIN####
+## -------------------------------------------
+## This file is part of eCos, the Embedded Configurable Operating System.
+## Copyright (C) 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
+## Copyright (C) 2002 Gary Thomas
+##
+## eCos is free software; you can redistribute it and/or modify it under
+## the terms of the GNU General Public License as published by the Free
+## Software Foundation; either version 2 or (at your option) any later version.
+##
+## eCos is distributed in the hope that it will be useful, but WITHOUT ANY
+## WARRANTY; without even the implied warranty of MERCHANTABILITY or
+## FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+## for more details.
+##
+## You should have received a copy of the GNU General Public License along
+## with eCos; if not, write to the Free Software Foundation, Inc.,
+## 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+##
+## As a special exception, if other files instantiate templates or use macros
+## or inline functions from this file, or you compile this file and link it
+## with other works to produce a work based on this file, this file does not
+## by itself cause the resulting work to be covered by the GNU General Public
+## License. However the source code for this file must still be made available
+## in accordance with section (3) of the GNU General Public License.
+##
+## This exception does not invalidate any other reasons why a work based on
+## this file might be covered by the GNU General Public License.
+##
+## Alternative licenses for eCos may be arranged by contacting Red Hat, Inc.
+## at http://sources.redhat.com/ecos/ecos-license/
+## -------------------------------------------
+#####ECOSGPLCOPYRIGHTEND####
+# ====================================================================
+######DESCRIPTIONBEGIN####
+#
+# Author(s):      Michal Pfeifer
+# Original data:  PowerPC
+# Contributors: 
+# Date:           2000-02-04
+#
+#####DESCRIPTIONEND####
+#
+# ====================================================================
+
+cdl_package CYGPKG_HAL_MICROBLAZE_MB4A {
+	display		"Microblaze CPU v4.00.a variant HAL"
+	parent		CYGPKG_HAL_MICROBLAZE
+	hardware
+	include_dir	cyg/hal
+	define_header	hal_microblaze_mb.h
+	description	"
+		The Microblaze v4.0a variant HAL package provides generic support
+		for this processor variant. It is also necessary to
+		select a specific target platform HAL package."
+
+	compile		var_intr.c var_misc.c variant.S
+
+	# Note: This should be sub-variant specific to reduce memory use.
+	define_proc {
+		puts $::cdl_header "#define CYGHWR_HAL_VSR_TABLE 0x200"
+		puts $::cdl_header "#define CYGHWR_HAL_VIRTUAL_VECTOR_TABLE (CYGHWR_HAL_VSR_TABLE + 0x200)"
+#		puts $::cdl_header "#include <pkgconf/hal_microblaze.h>"
+		puts $::cdl_system_header "#define CYGBLD_HAL_TARGET_H   <pkgconf/hal_microblaze_mb.h>"
+		puts $::cdl_system_header "#define HAL_PLATFORM_CPU    \"Microblaze 4.0a\""
+	}
+
+	cdl_interface CYGINT_HAL_USE_ROM_MONITOR_UNSUPPORTED {
+		display       "ROM monitor configuration is unsupported"
+		no_define
+	}
+
+	cdl_option CYGSEM_HAL_USE_ROM_MONITOR {
+		display       "Work with a ROM monitor"
+		flavor        bool
+		default_value { (CYG_HAL_STARTUP == "RAM" &&
+				!CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS &&
+				!CYGINT_HAL_USE_ROM_MONITOR_UNSUPPORTED &&
+				!CYGSEM_HAL_MICROBLAZE_COPY_VECTORS) ? 1 : 0 }
+		parent        CYGPKG_HAL_ROM_MONITOR
+		requires      { CYG_HAL_STARTUP == "RAM" }
+		requires      ! CYGSEM_HAL_MICROBLAZE_COPY_VECTORS
+		requires      ! CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS
+		requires      ! CYGINT_HAL_USE_ROM_MONITOR_UNSUPPORTED
+		description   "
+			Allow coexistence with ROM monitor (CygMon or GDB stubs) by
+			only initializing interrupt vectors on startup, thus leaving
+			exception handling to the ROM monitor."
+	}
+
+	cdl_option CYGHWR_HAL_MICROBLAZE_FPU {
+		display		"Variant FPU support"
+		flavor		bool
+		default_value 	0
+		active_if	MON_HAL_CPU_FPU
+		description	"
+			Allow using FPU but FPU must be enabled in Microblaze options." 
+	}
+
+	cdl_option CYGHWR_HAL_MICROBLAZE_HWEXCEPTION_REGS {
+		display    		"Variant use HW exception registers"
+		flavor     		bool
+		default_value 	0
+		description		"
+			Allow HW exception registers. Any HW exception must be enabled in Microblaze options." 
+	}
+}

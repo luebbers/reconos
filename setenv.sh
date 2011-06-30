@@ -14,6 +14,7 @@
 #   * ISE_LIB         -- precompiled ISE simulation models
 #   * MODELSIM        -- modelsim.ini with ReconOS references
 #   * PATH            -- ReconOS tools directory
+#   * PYTHONPATH      -- Path to ReconOS python script library
 #
 # This script needs to be sourced to take effect:
 #
@@ -49,7 +50,7 @@
 #
 
 # check whether we've been sourced correctly
-if [ `basename $0` = "setenv.sh" ]; then
+if [ "$0" != "-bash" ] && [ `basename $0` = "setenv.sh" ]; then
     echo "You need to source 'setenv.sh', not execute it."
     echo "Try:"
     echo "    . <path_to_reconos>/setenv.sh"
@@ -100,7 +101,10 @@ fi
 EDK_LIB="/Xilinx/EDK_Lib"
 ISE_LIB="/Xilinx/ISE_Lib"
 
-export RECONOS RECONOS_VER ECOS_REPOSITORY ECOS_EXTRA MODELSIM PATH EDK_LIB ISE_LIB
+# add ReconOS python scripts to PYTHONPATH
+PYTHONPATH="$RECONOS/tools/python:$PYTHONPATH"
+
+export RECONOS RECONOS_VER ECOS_REPOSITORY ECOS_EXTRA MODELSIM PATH EDK_LIB ISE_LIB PYTHONPATH
 
 # print environment, if requested
 if [ "$1" = '-v' ]; then
@@ -112,5 +116,6 @@ if [ "$1" = '-v' ]; then
     echo "    PATH:            '$PATH'"
     echo "    EDK_LIB:         '$EDK_LIB'"
     echo "    ISE_LIB:         '$ISE_LIB'"
+    echo "    PYTHONPATH:      '$PYTHONPATH'"
 fi
 

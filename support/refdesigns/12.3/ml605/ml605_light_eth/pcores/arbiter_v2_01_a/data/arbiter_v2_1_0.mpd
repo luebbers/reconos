@@ -1,0 +1,30 @@
+###################################################################
+##
+## Name     : arbiter 
+## Desc     : Microprocessor Peripheral Description
+##
+###################################################################
+
+BEGIN arbiter 
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE 
+OPTION HDL = VHDL
+OPTION STYLE = HDL 
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION DESC =ARBITER 
+## Ports
+PORT i_ready = "", DIR = I, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+PORT i_req_0 = "req_0", DIR = I, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+PORT i_req_1 = "req_1", DIR = I, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+PORT i_req_2 = "req_2", DIR = I, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+
+PORT o_grant_0 = "grant_0", DIR = O, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+PORT o_grant_1 = "grant_1", DIR = O, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+PORT o_grant_2 = "grant_2", DIR = O, VEC = [0:3 -1], ASSIGNMENT=REQUIRE
+
+PORT clk      = "clk_100_0000MHzMMCM0",     DIR = I, SIGIS = Clk, ASSIGNMENT=REQUIRE
+PORT reset    = "sys_bus_reset",     DIR = I, SIGIS = Rst, ASSIGNMENT=REQUIRE
+
+END

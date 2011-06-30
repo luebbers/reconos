@@ -1,0 +1,37 @@
+// eCos memory layout - Thu May 30 10:27:39 2002
+
+// This is a generated file - do not edit
+
+#include <cyg/infra/cyg_type.inc>
+#include <pkgconf/hal_microblaze_platform.h>
+
+MEMORY
+{
+	bram(WA) : ORIGIN = MON_BRAM_BASE, LENGTH = MON_BRAM_HIGH
+	ram(WA) : ORIGIN = MON_MEMORY_BASE, LENGTH = (MON_MEMORY_HIGH - MON_MEMORY_BASE + 1)
+}
+
+SECTIONS
+{
+    SECTIONS_BEGIN
+    CYG_LABEL_DEFN(__reserved_vectors) = 0;
+    SECTION_vectors (bram, ALIGN (0x10), LMA_EQ_VMA)
+	
+	. = CYG_LABEL_DEFN(__reserved_vectors) + 0x200;
+    CYG_LABEL_DEFN(__reserved_vsr_table) = ALIGN (0x4); 
+	. = CYG_LABEL_DEFN(__reserved_vsr_table) + 0x200;
+    CYG_LABEL_DEFN(__reserved_virtual_table) = ALIGN (0x4); 
+	. = MON_MEMORY_BASE;
+
+    SECTION_text (ram, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_fini (ram, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_rodata1 (ram, ALIGN (0x8), LMA_EQ_VMA)
+    SECTION_rodata (ram, ALIGN (0x8), LMA_EQ_VMA)
+    SECTION_fixup (ram, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_gcc_except_table (ram, ALIGN (0x1), LMA_EQ_VMA)
+    SECTION_data (ram, ALIGN (0x8), LMA_EQ_VMA)
+    SECTION_sbss (ram, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_bss (ram, ALIGN (0x10), LMA_EQ_VMA)
+    CYG_LABEL_DEFN(__heap1) = ALIGN (0x8);
+    SECTIONS_END
+}

@@ -67,7 +67,7 @@
 # %%%RECONOS_COPYRIGHT_END%%%
 #---------------------------------------------------------------------------
 
-import sys, re, datetime, copy, getopt
+import sys, re, datetime, copy, slop
 from reconos.vhdl import *
 from reconos.pr import *
 from reconos.tools import *
@@ -136,12 +136,6 @@ def renameEntity(newName, lines):
 
 def maketop(fileName, PRInstName, outputEntityName, PRSignalSuffix, reconosSlot, doBufg = True):
 	  
-	# open target file
-   #     if outputFileName:
-  #              outfile = open(outputFileName, "w")
- #       else:
-#                outfile = sys.stdout                
-		
 	# open VHDL file and read in the lines
 	infile = open(fileName, "r")
 	lines = infile.readlines()
@@ -327,28 +321,18 @@ def insertBusMacroLib(filename, layout):
 def main(argv):
 
 	# Parse command line arguments
-	args = None
-	try:
-		opts, args = getopt.getopt(argv, "h:e:l:", ["help", "no-slot-bufg"])
-	except getopt.GetoptError:
-		usage()
-		sys.exit(2)
-	layout = None
-	PRInstName = None
-	outputFileName = None
-	outputEntityName = None
+        opts, args = slop.parse([
+            ("e", "entity",          "Change output entity name.",          True),
+            ("p", "pr_instance",     "Name of reconfigurable module",       True),
+            ("l", "layout",          "Name of the layout file. Mandatory.", True, {"optional" : False}),
+            (None, "no-slot-bufg",   "Do not instantiate BUFGs for the slot's clocks")],
+            args=argv, banner="%prog [-e <entitiy>] [-p pr_inst] -l <layout.lyt> <in.vhd>")
+	
+	layout = opts["layout"]
+	PRInstName = opts["pr_instance"]
+	outputEntityName = opts["entity"]
 	PRSignalSuffix = "_module"
-        doBufg = True
-	for opt, arg in opts:
-		if opt == "-e":
-			outputEntityName = arg
-		if opt == "-l":
-			layout = LayoutParser.read(open(arg,"r"))
-                if opt == "--no-slot-bufg":
-                        doBufg = False
-		if opt in ("-h", "--help"):
-			usage()
-			sys.exit(2)
+        doBufg = opts["no-slot-bufg"]
 
 	if not layout or len(args) != 1:
 		usage()

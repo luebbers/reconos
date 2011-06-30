@@ -69,7 +69,8 @@ cdl_package UPBPKG_RECONOS {
                PYTHONPATH=$(PYTHONPATH):$(RECONOS)/tools/python/generator python src/delegate.py $(RECONOS)/core/defs/*.cmddef | indent > $@
         }
         flavor        bool
-        requires      { RECONOS_HW_SUPPORT }
+        requires      RECONOS_HW_SUPPORT
+        requires      CYGPKG_KERNEL_THREADS_DESTRUCTORS
         default_value 1
         description   "
             You need to enable this to include ReconOS

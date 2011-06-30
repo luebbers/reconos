@@ -66,6 +66,11 @@ extern reconos_slot_t reconos_slots[NUM_OSIFS];
 void reconos_register_hwthread( rthread_attr_t *t ) {
     rthread_attr_t *tmp = reconos_hwthread_list;
 
+#ifdef UPBDBG_RECONOS_DEBUG
+    diag_printf("register_hwthread: registering thread (dump follows)\n");
+    rthread_attr_dump( t );
+#endif
+
     // if this is the first thread to register
     if (reconos_hwthread_list == NULL) {
         // put it at the top
@@ -83,6 +88,10 @@ void reconos_register_hwthread( rthread_attr_t *t ) {
 
 void reconos_unregister_hwthread( rthread_attr_t *t ) {
     rthread_attr_t *tmp = reconos_hwthread_list, *prev = tmp;
+
+#ifdef UPBDBG_RECONOS_DEBUG
+    diag_printf("unregister_hwthread: unregistering thread\n");
+#endif
 
     CYG_ASSERT(reconos_hwthread_list != NULL, "hw thread list is NULL");
     // find t in list
@@ -110,6 +119,16 @@ void dump_all_hwthreads( void ) {
 }
 
 
+///
+/// Print slot state and thread
+///
+void dump_slot( reconos_slot_t *s ) {
+
+    diag_printf( "----- slot %d ----\n", s->num );
+    diag_printf( "state = %di\n", s->state );
+    diag_printf( "thread = 0x%08X\n", s->thread );
+
+}
 
 
 ///
@@ -239,6 +258,14 @@ void reconos_hw_scheduler(cyg_addrword_t data) {
             CYG_FAIL("mutex lock failed, aborting thread\n");
         } else {
 
+#ifdef UPBDBG_RECONOS_DEBUG
+            {
+                int i;
+                for (i = 0; i < NUM_OSIFS; i++) {
+                    dump_slot( &reconos_slots[i] );
+                }
+            }
+#endif
             // find thread t_r that wants to run (FIXME: no priorities or
             // queuing!)
             t_r = reconos_hwthread_list;
@@ -307,14 +334,16 @@ void reconos_hw_scheduler(cyg_addrword_t data) {
 
                 if ( s_f != NULL) {     // if we found a free slot
                     // one way or the other
-#ifdef UPBDBG_RECONOS_DEBUG
-                    diag_printf("hw_sched: configuring thread @ 0x%08X into slot %d\n", (uint32)t_r, s_f->num);
-#endif
+
                     // get bitstream for t_r in s_f
                     t_r_bit = get_bit_for_slot( t_r, s_f );
 
                     CYG_ASSERT( t_r_bit, "no bitstream" );
                     CYG_ASSERT( s_f->state == FREE || s_f->thread->flags & RTHREAD_ATTR_IS_DYNAMIC, "slot not free or present thread is static" );
+
+#ifdef UPBDBG_RECONOS_DEBUG
+                    diag_printf("hw_sched: configuring thread @ 0x%08X into slot %d using bitstream '%s'\n", (uint32)t_r, s_f->num, t_r_bit->filename);
+#endif
 
                     // configure t_r into s_f
                     // NOTE: we don't need to synchronize this with the

@@ -34,13 +34,14 @@
 import os
 import shutil
 
-def createPCore(user_logic_name,task_number,vhdl_files,task_name,netlist_files,header=""):
+def createPCore(user_logic_name,task_number,vhdl_files,task_name,netlist_files,header="",generics=[]):
         
         pcore_name = (task_name + "_v1_%02i_b") % task_number
-	
         reconos_version = os.environ["RECONOS_VER"] #"v2_01_a"
-	osif_version    = os.environ["OSIF_VER"]
+        osif_version    = os.environ["OSIF_VER"]
         ram_version     = reconos_version
+        generics.append("C_BURST_AWIDTH => C_TASK_BURST_AWIDTH")
+        generics.append("C_BURST_DWIDTH => C_TASK_BURST_DWIDTH")
 
         #################
 
@@ -133,6 +134,9 @@ use reconos_%s.reconos_pkg.ALL;
 library burst_ram_%s;
 use burst_ram_%s.ALL;
 
+library %s;
+use %s.ALL;
+
 ---- Uncomment the following library declaration if instantiating
 ---- any Xilinx primitives in this code.
 --library UNISIM;
@@ -221,10 +225,9 @@ begin
         i_osif <= to_osif_os2task_t(i_osif_flat_i or (X"0000000000" & busy_local & "000000"));
         
         -- instantiate user task
-        %s_i : entity %s
+        %s_i : entity %s.%s
         generic map (
-            C_BURST_AWIDTH => C_TASK_BURST_AWIDTH,
-            C_BURST_DWIDTH => C_TASK_BURST_DWIDTH
+                %s
         )
         port map (
                 clk => threadClk,
@@ -283,7 +286,7 @@ begin
         end process;
 
 end structural;
-""" % (header,reconos_version,reconos_version,ram_version,ram_version,task_name,task_name,task_name,user_logic_name,user_logic_name,ram_version)
+""" % (header,reconos_version,reconos_version,ram_version,ram_version,pcore_name,pcore_name,task_name,task_name,task_name,user_logic_name,pcore_name,user_logic_name,",\n\t\t".join(generics),ram_version)
 
         # create directory tree 
         os.mkdir(pcore_name)

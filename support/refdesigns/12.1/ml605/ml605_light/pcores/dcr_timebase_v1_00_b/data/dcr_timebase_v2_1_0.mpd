@@ -1,0 +1,36 @@
+BEGIN dcr_timebase
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION STYLE = HDL
+OPTION DESC = DCR timebase
+OPTION IP_GROUP = PPC:USER
+OPTION CORE_STATE = DEVELOPMENT
+
+## Bus Interfaces
+BUS_INTERFACE BUS = SDCR, BUS_STD = DCR, BUS_TYPE = SLAVE
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER C_FAMILY = virtex2p, DT = string
+PARAMETER C_DCR_BASEADDR = 0b1111111111, DT = std_logic_vector, BUS = SDCR, MIN_SIZE = 0
+PARAMETER C_DCR_HIGHADDR = 0b0000000000, DT = std_logic_vector, BUS = SDCR
+PARAMETER C_DCR_AWIDTH = 10, DT = integer, BUS = SDCR
+PARAMETER C_DCR_DWIDTH = 32, DT = integer, BUS = SDCR
+
+## Ports
+PORT i_clk = "", DIR = I, SIGIS = CLK
+PORT i_reset = "", DIR = I
+PORT o_dcrAck = Sl_dcrAck, DIR = O, BUS = SDCR
+PORT o_dcrDBus = Sl_dcrDBus, DIR = O, VEC = [0:C_DCR_DWIDTH-1], BUS = SDCR
+PORT i_dcrABus = DCR_ABus, DIR = I, VEC = [0:C_DCR_AWIDTH-1], BUS = SDCR
+PORT i_dcrDBus = DCR_Sl_DBus, DIR = I, VEC = [0:C_DCR_DWIDTH-1], BUS = SDCR
+PORT i_dcrRead = DCR_Read, DIR = I, BUS = SDCR
+PORT i_dcrWrite = DCR_Write, DIR = I, BUS = SDCR
+
+PORT o_timeBase = "", DIR = O, VEC = [0:C_DCR_DWIDTH-1]
+PORT o_irq = "", DIR = O, SIGIS = INTERRUPT, SENSITIVITY = LEVEL_HIGH, INTERRUPT_PRIORITY = LOW
+
+END
+

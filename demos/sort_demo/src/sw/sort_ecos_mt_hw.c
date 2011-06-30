@@ -18,7 +18,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <xcache_l.h>
+//#include <xcache_l.h>
+#include <cyg/hal/hal_cache.h>
 #include <reconos/reconos.h>
 #include <reconos/resources.h>
 #include "config.h"
@@ -70,10 +71,12 @@ int main( int argc, char *argv[] )
 
 #ifdef USE_CACHE
     printf( "enabling data cache for external ram\n" );
-    XCache_EnableDCache( 0x80000000 );
+//    XCache_EnableDCache( 0x80000000 );
+    HAL_DCACHE_ENABLE();
 #else
     printf( "data cache disabled\n" );
-    XCache_DisableDCache(  );
+//    XCache_DisableDCache(  );
+    HAL_DCACHE_DISABLE();
 #endif
 
     data = buf_a;
@@ -94,7 +97,8 @@ int main( int argc, char *argv[] )
     // flush cache contents - the hardware can only read from main memory
     // TODO: storing could be more efficient
     printf( "Flushing cache..." );
-    XCache_EnableDCache( 0x80000000 );
+//    XCache_EnableDCache( 0x80000000 );
+    HAL_DCACHE_FLUSH( data, SIZE );
     printf( "done\n" );
 #endif
 
@@ -166,10 +170,9 @@ int main( int argc, char *argv[] )
 
 
 #ifdef USE_CACHE
-    // flush cache contents
-    // TODO: invalidating would suffice
-    printf( "Flushing cache..." );
-    XCache_EnableDCache( 0x80000000 );
+    // invalidate cache contents
+    printf( "Invalidating cache..." );
+    HAL_DCACHE_INVALIDATE_ALL();
     printf( "done\n" );
 #endif
 

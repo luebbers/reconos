@@ -1,0 +1,63 @@
+Demo for the Multibus and Ethernet Reference Design of ReconOS
+==============================================================
+
+Files and Directories
+---------------------
+	sw/ 			everything related to the software (we use a microblaze)
+	hw/ 			everything related to the hardware
+	hw/hwthreads		the three hardware threads used in the design
+	hw/hwthread/first	a thread that can send/receive to/from the other threads. It is put in hw slot 0.
+	hw/hwthread/second	a thread that can send/receive to/from the other threads. It is put in hw slot 1.
+	hw/hwthread/third	a thread that can send/receive to/from the other threads. It is put in hw slot 2.
+				Additionally, this thread can send/receive to/from the Ethernet interface.
+
+Building the Hardware
+---------------------
+	make sure your $RECONOS Variable is set correctly (Execute ". setenv.sh") in the main reconos folder. 
+	$cd hw
+	$make bits-statics
+	
+	The bitstream will be in hw/edk-static/implementation/system.bit
+
+Building the Software
+---------------------
+	edit the settings.sh file to point to your hardware design e.g. the file content should be:
+	export HW_DESIGN=/PATH/TO/YOUR/HW/DESIGN/reconos/demos/demo_multibus_ethernet/hw/edk-static
+	$cd sw
+	$make setup.mb
+	$make ecos.mb
+	
+	The executable is in the same direcotry: controller.elf
+
+Running the Demo
+---------------
+	setup minicom to see an output (via USB)
+	connect your board to a computer (via Ethernet). 
+	$dow ../hw/edk-static/implementation/system.bit
+	$dow controller.elf
+	
+	You should see an output similar to the following:
+	-------------------------------------------------------
+	ReconOS hardware multithreading case study (multibus with Ethernet)
+	(c) Computer Engineering Group, University of Paderborn
+
+	eCos, multi-threaded hardware version (controller.c)
+	Compiled on Mar 23 2011, 17:58:34.
+	-------------------------------------------------------
+
+	  1...
+	Started threads...
+	Started sending
+	  1...
+	Stopped sending
+	received 5619815 packets on thread 0
+	received 5622450 packets on thread 1
+	received 5843462 packets on thread 2 on the multibus interface
+	received 0 packets on thread 2 on the Ethernet interface
+	
+Changing the SW
+---------------
+	- You can edit the controller.c file in order to change which hw thread sends to which other hw thread.
+	- You can also send packets to the Ethernet interface of the FPGA card (e.g. with a ping to a broadcast address). 
+	  Those packets should be reported in the last output line.
+	- You can use wireshark to sniff the packets sent by the FPGA. (note, wireshark will drop some packets, since it is to slow to process all received packets). 

@@ -41,7 +41,7 @@
 
 #include <cyg/kernel/kapi.h>	// for eCos datatypes
 #include <xparameters.h>
-#include <xio_dcr.h>
+#include <xparameters_translation.h>
 
 #ifdef UPBFUN_RECONOS_POSIX
 #include <pthread.h>

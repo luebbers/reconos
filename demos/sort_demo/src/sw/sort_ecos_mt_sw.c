@@ -17,7 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <xcache_l.h>
+//#include <xcache_l.h>
+#include <cyg/hal/hal_cache.h>
 #include "config.h"
 #include "sort8k.h"
 #include "merge.h"
@@ -53,11 +54,13 @@ int main( int argc, char *argv[] )
             "-------------------------------------------------------\n\n" );
 
 #ifdef USE_CACHE
-    diag_printf( "enabling data cache for external ram\n" );
-    XCache_EnableDCache( 0x80000000 );
+    printf( "enabling data cache for external ram\n" );
+//    XCache_EnableDCache( 0x80000000 );
+    HAL_DCACHE_ENABLE();
 #else
-    diag_printf( "data cache disabled\n" );
-    XCache_DisableDCache(  );
+    printf( "data cache disabled\n" );
+//    XCache_DisableDCache(  );
+    HAL_DCACHE_DISABLE();
 #endif
 
     data = buf_a;

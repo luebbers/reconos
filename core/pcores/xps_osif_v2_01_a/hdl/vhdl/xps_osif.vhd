@@ -96,12 +96,12 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
-library proc_common_v2_00_a;
-use proc_common_v2_00_a.proc_common_pkg.all;
-use proc_common_v2_00_a.ipif_pkg.all;
+library proc_common_v3_00_a;
+use proc_common_v3_00_a.proc_common_pkg.all;
+use proc_common_v3_00_a.ipif_pkg.all;
 
-library plbv46_master_burst_v1_00_a;
-use plbv46_master_burst_v1_00_a.plbv46_master_burst;
+library plbv46_master_burst_v1_01_a;
+use plbv46_master_burst_v1_01_a.plbv46_master_burst;
 
 library osif_core_v2_01_a;
 use osif_core_v2_01_a.all;
@@ -578,6 +578,13 @@ architecture IMP of xps_osif is
     signal fifomgr_write_add   : std_logic;
     signal fifomgr_write_data  : std_logic_vector(0 to C_FIFO_DWIDTH-1);
     signal fifomgr_write_wait  : std_logic;
+
+    -- bus macro control signal
+    signal bmEnable_i          : std_logic;
+
+    -- incoming task signals (can be disabled via bmEnable_i)
+    signal osif_task2os_vec_i  : std_logic_vector(0 to C_OSIF_TASK2OS_REC_WIDTH-1);
+    signal burstRdData_i       : std_logic_vector(0 to C_MPLB_NATIVE_DWIDTH-1);
 begin
 
 ---------
@@ -585,6 +592,22 @@ begin
 ---------   
 task_clk <= task_clk_internal;
 task_reset <= task_reset_internal;
+
+-- propagate bus macro enable signal (COMPATIBILITY with older tool chains)
+bmEnable <= bmEnable_i;
+
+-- gate incoming task signals with bmEnable_i
+    gate_incoming : process(bmEnable_i, osif_task2os_vec, burstRdData)
+    begin
+        if bmEnable_i = '1' then
+            osif_task2os_vec_i <= osif_task2os_vec;
+            burstRdData_i      <= burstRdData;  
+        else
+            osif_task2os_vec_i <= (others => '0');
+            burstRdData_i      <= (others => '0');
+        end if;
+    end process;
+
 
  		--------------------------------------
         -- memory bus controller core
@@ -612,7 +635,7 @@ task_reset <= task_reset_internal;
             -- burst mem interface
             o_burstAddr => burstAddr,
             o_burstData => burstWrData,
-            i_burstData => burstRdData,
+            i_burstData => burstRdData_i,
             o_burstWE   => burstWE,
             o_burstBE   => burstBE,
 
@@ -686,7 +709,7 @@ task_reset <= task_reset_internal;
   ------------------------------------------
   -- instantiate plbv46_master_burst
   ------------------------------------------
-  PLBV46_MASTER_BURST_I : entity plbv46_master_burst_v1_00_a.plbv46_master_burst
+  PLBV46_MASTER_BURST_I : entity plbv46_master_burst_v1_01_a.plbv46_master_burst
     generic map
     (
       C_MPLB_AWIDTH                  => C_MPLB_AWIDTH,
@@ -796,7 +819,7 @@ USER_LOGIC_I : entity osif_core_v2_01_a.osif_core
             task_clk           => task_clk_internal,
             task_reset         => task_reset_internal,
             osif_os2task_vec   => osif_os2task_vec,
-            osif_task2os_vec   => osif_task2os_vec,
+            osif_task2os_vec   => osif_task2os_vec_i,
             -- FIFO manager access signals
             o_fifomgr_read_remove => fifomgr_read_remove,
             i_fifomgr_read_data   => fifomgr_read_data,
@@ -818,7 +841,7 @@ USER_LOGIC_I : entity osif_core_v2_01_a.osif_core
             i_mem_rdDone       => mem_rdDone,
             i_mem_wrDone       => mem_wrDone,
             -- bus macro control
-            o_bm_enable        => bmEnable,
+            o_bm_enable        => bmEnable_i,
             -- MAP USER PORTS ABOVE THIS LINE  ------------------
 
             sys_clk   => MPLB_Clk,--sys_clk,

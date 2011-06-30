@@ -1,0 +1,40 @@
+ReconOS "sort" example/case study
+Software part
+
+(c) 2007 Enno Luebbers <luebbers@reconos.de>
+This file is part of the ReconOS project <http://www.reconos.de>.
+University of Paderborn, Computer Engineering Group 
+
+----------------------
+
+This directory contains all necessary files to generate the software libraries
+and executables for the "sort" example application. Be sure to build the
+hardware part first. See ../hw/README for details on how to do that.
+
+When the hardware part is built, make sure your environment is set correctly,
+especially the HW_DESIGN variable (it needs to be set to the absolute path
+to the ../hw/edk-static directory). See ../settings.sh for the correct
+setting.
+See http://www.reconos.de/twiki/bin/view/ReconOS/SetupEnvironment for details.
+
+    - Run 'make setup' to build the eCos library.
+    - Run 'make pc' to build the executables for your workstation.
+    - Run 'make ecos' to build the executables for the ReconOS/eCos system,
+      using the eCos API.
+    - Run 'make posix' to build the executables for the ReconOS/eCos system,
+      using the POSIX API.
+    - Use the XMD to upload the executables to the XUP board.
+    
+There are nine executables in total:
+
+    sort_pc_st			single-threaded version for destop PC
+    sort_ecos_st_sw		eCos API, single-threaded software version
+    sort_ecos_st_hw		eCos API, single-threaded hardware version
+    sort_ecos_mt_sw		eCos API, multi-threaded software version
+    sort_ecos_mt_hw		eCos API, multi-threaded hardware version
+    sort_posix_st_sw		POSIX API, single-threaded software version
+    sort_posix_st_hw		POSIX API, single-threaded hardware version
+    sort_posix_mt_sw		POSIX API, multi-threaded software version
+    sort_posix_mt_hw		POSIX API, multi-threaded hardware version
+    
+Use 'config.h' to set up the application parameters.

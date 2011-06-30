@@ -36,19 +36,27 @@ import os
 import os.path
 import reconos.pcore
 import datetime
-import getopt
+import slop
 
 
 task_name = "hw_task"
 
-def exitUsage():
-    sys.stderr.write("Usage: %s user_logic_entity thread_num [ vhdl_files... ] [-v netlist1 -v netlist2 ...]\n" % os.path.basename(sys.argv[0]))
-    sys.stderr.write("\nNOTE: thread numbers start at 1!\n")
-    sys.exit(1)
+def main(arguments):
+    
+    opts, args = slop.parse([
+        ("g", "generic", "generics to set. "
+                         "If your generic's value includes quotes (e.g. X\"DEADBEEF\"), "
+                         "you need to escape it twice: '-g SOME_GENERIC => X\\\\\\\"DEADBEEF\\\\\\\"'.", True,
+            {"as" : "list", "default" : []})],
+        banner = "%prog [options] user_logic_entity thread_num [ vhdl_files ... ] [ netlist_files ... ]", 
+        args = arguments)
 
-def main(args):
+    # TODO: catch invalid generics?
+    generics = opts["generic"]
 
-    if len(args) < 2: exitUsage()
+    if len(args) < 2:
+        opts.help()
+        sys.exit(2)
     
     if os.environ["RECONOS"] == "":
         sys.stderr.write("RECONOS environment variable not set.\n")
@@ -68,7 +76,7 @@ def main(args):
         header = header + " " + n
     header = header + "'" 
     
-    reconos.pcore.createPCore(user_logic_name,task_number,vhdl_files,task_name,[os.environ["RECONOS"] + "/support/templates/coregen/burst_ram/burst_ram.edn"] + netlist_files,header)
+    reconos.pcore.createPCore(user_logic_name,task_number,vhdl_files,task_name,[os.environ["RECONOS"] + "/support/templates/coregen/burst_ram/burst_ram.edn"] + netlist_files,header,generics)
 
     print "pcore generated."
     print "Don't forget to put any additional user logic files into the %s directory." % (pcore_name + "/hdl/vhdl")

@@ -6,10 +6,20 @@ ECOS_SRC=$(ECOS_REPOSITORY)
 EDKDIR = $(HW_DESIGN)
 BSPDIR = $(EDKDIR)
 
+# set compiler and flags depending on ARCH
+ifeq ($(ARCH),ppc)
 CC=powerpc-eabi-gcc
 CFLAGS=-O -g -Wall -Werror -ffunction-sections -fdata-sections -I../shared -I$(ECOS_INSTALL)/include \
  -I$(HW_DESIGN)/ppc405_0/include -I../../common -Iinclude -msoft-float -I$(RECONOS)/core/ecos/include -DUSE_ECOS -D__RECONOS__
 LDFLAGS=-g -nostartfiles --gc-sections -L$(HW_DESIGN)/ppc405_0/lib -L$(ECOS_INSTALL)/lib -Ttarget.ld -nostdlib -msoft-float
+else ($(ARCH),mb)
+CC=mb-gcc
+CFLAGS=-O3 -g -Wall -ffunction-sections -fdata-sections -I../shared -I$(ECOS_INSTALL)/include \
+ -I$(HW_DESIGN)/microblaze_0/include -I../../common -Iinclude -msoft-float -I$(RECONOS)/core/ecos/include -DUSE_ECOS -D__RECONOS__
+LDFLAGS=-g -nostartfiles --gc-sections -L$(HW_DESIGN)/microblaze_0/lib -L$(ECOS_INSTALL)/lib -Ttarget.ld -nostdlib -msoft-float
+else
+$(error Unsupported ARCH or no ARCH specified)
+endif
 
 help:
 	@echo "Available make targets:"

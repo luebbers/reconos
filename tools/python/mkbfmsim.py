@@ -31,7 +31,7 @@
 #---------------------------------------------------------------------------
 #
 
-import getopt
+import slop
 import os
 import re
 import reconos.vhdl
@@ -59,26 +59,6 @@ bfmsimTestbenchEntity =     {'34': "osif_tb_v1_00_c",
 slotVhdFiles = {'34': ("fifo_mgr.vhd", "bus_master.vhd", "bus_slave_regs.vhd", "dcr_slave_regs.vhd", "command_decoder.vhd", "user_logic.vhd", "mem_plb34.vhd", "osif.vhd"),
                 '46': ("fifo_mgr.vhd", "dcr_slave_regs.vhd", "command_decoder.vhd", "user_logic.vhd", "mem_plb46.vhd", "xps_osif.vhd")}
 
-
-#----------------------------------------------------
-# exitUsage: prints usage
-#----------------------------------------------------
-def exitUsage():
-    scriptName = os.path.basename(sys.argv[0])
-    sys.stderr.write("Usage: %s -e thread_entity [-v] [ -X ise_simlib_dir ]\\\n" % scriptName)
-    sys.stderr.write("       %s [ -E edk_simlib_dir ] [-V PLB version] vhdl_files...\n\n" % (" "*len(scriptName)))
-    sys.stderr.write("           -e user_logic_entity   Name of thread entity to simulate\n")
-    sys.stderr.write("           -X ise_simlib_dir      Location of ISE simulation libraries\n")
-    sys.stderr.write("                                      (Default: $ISE_LIB)\n")
-    sys.stderr.write("           -E edk_simlib_dir      Location of EDK simulation libraries\n")
-    sys.stderr.write("                                      (Default: $EDK_LIB)\n")
-    sys.stderr.write("           -V PLB version         Version of PLB to use for simulation\n")
-    sys.stderr.write("                                      (Default: 46)\n")
-    sys.stderr.write("                                      Possible values: " + str(supportedPLBVersions) + "\n")
-    sys.stderr.write("           -v                     Verbose output\n")
-    sys.exit(1)
-
-
 #----------------------------------------------------
 # main program
 #----------------------------------------------------
@@ -88,43 +68,37 @@ if __name__ == "__main__":
         sys.stderr.write("RECONOS environment variable not set.\n")
         sys.exit(1)
     
-    # parse command line arguments
-    args = None
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "hve:X:E:V:", ["--help"])
-    except getopt.GetoptError:
-        exitUsage()
-        
+
     # get standard simulation directories from environment
     try:
-        ISELib = os.environ["ISE_LIB"]
+        defaultISELib = os.environ["ISE_LIB"]
     except KeyError:
-        ISELib = None
-
+        defaultISELib = None
     try:
-        EDKLib = os.environ["EDK_LIB"]
+        defaultEDKLib = os.environ["EDK_LIB"]
     except KeyError:
-        EDKLib = None
+        defaultEDKLib = None
 
-    # set other defaults
-    userLogicName = None
-    PLBVersion = '46'
-    verbose = False
-    
+
+    # parse command line arguments
+    opts, args = slop.parse([
+        ("e", "user_logic_entity", "Name of thread entity to simulate", True, {"optional" : False}),
+        ("X", "ise_simlib_dir", "Location of ISE simulation libraries "
+                                "(default: $ISE_LIB)",                  True, {"default" : defaultISELib}),
+        ("E", "edk_simlib_dir", "Location of EDK simulation libraries "
+                                "(default: $EDK_LIB)",                  True, {"default" : defaultEDKLib}),
+        ("V", "plb_version",    "Version of PLB to use for simulation. "
+                                "Possible values: " + str(supportedPLBVersions),
+                                                                        True, {"default" : '46'}),
+        ("v", None,             "Verbose output")],
+        banner = "%prog -e entity [options] vhdl_files ...") 
+
     # retrieve options from parsed arguments
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            exitUsage()
-        if opt == '-e':
-            userLogicName = arg
-        if opt == '-X':
-            ISELib = arg
-        if opt == '-E':
-            EDKLib = arg
-        if opt == '-V':
-            PLBVersion = arg
-        if opt == '-v':
-            verbose = True
+    userLogicName = opts["user_logic_entity"]
+    PLBVersion = opts["plb_version"]
+    verbose = opts["v"]
+    ISELib = opts["ise_simlib_dir"]
+    EDKLib = opts["edk_simlib_dir"]
     
     # remaining arguments are task VHDL files
     taskVhdFiles = args
@@ -132,16 +106,13 @@ if __name__ == "__main__":
     # check options for plausibility
     if not os.path.isdir(ISELib):
         sys.stderr.write("ISELib dir '%s' is not a directory (argument -X).\n" % ISELib)
-        sys.exit(1)
+        sys.exit(2)
     if not os.path.isdir(EDKLib):
         sys.stderr.write("EDKLib dir '%s' is not a directory (argument 3).\n" % EDKLib)
-        sys.exit(1)
-    if userLogicName == None:
-        sys.stderr.write("No user logic entity name given.\n")
-        exitUsage()
+        sys.exit(2)
     if len(taskVhdFiles) == 0:
         sys.stderr.write("No user thread VHDL files given.\n")
-        exitUsage()
+        sys.exit(2)
     if PLBVersion not in supportedPLBVersions:
         sys.stderr.write("PLB version " + PLBVersion + " not supported. Possible Values:\n")
         sys.stderr.write("    " + str(supportedPLBVersions) + "\n")

@@ -33,45 +33,24 @@
 #---------------------------------------------------------------------------
 # 
 
-import sys, getopt, os
+import sys, slop, os
 import reconos.mhs
 
-def exit_usage():
-    sys.stderr.write("Usage: %s [-o osif_clk] [-c thread_clk] [ -n task_num ] <mhs_file>\n" % os.path.basename(sys.argv[0]))
-    sys.stderr.write("       -o     use a separate OSIF clock\n" +
-                     "              If -c is not specified, this is also used as the thread clock.\n")
-    sys.stderr.write("       -c     use a thread clock different from the OSIF's sys_clk.\n")
-    # sys.stderr.write("       -n     specifiy task num (starting at 1)\n")
-    # sys.stderr.write("       Use the optional task_num argument to point all slots to the same pcore\n")
-    sys.exit(1)
-    
     
 def main(argv): 
 
-    args = None
-    try:
-        opts, args = getopt.getopt(argv, "o:c:h")
-        # opts, args = getopt.getopt(argv, "o:c:n:h")
-    except getopt.GetoptError:
-        exit_usage()
+    opts, args = slop.parse([
+        ("o", "osif_clk", "use a separate OSIF clock. " 
+                          "If -c is not specified, this is also used as the thread clock.", True),
+        ("c", "thread_clk", "use a thread clock different from the OSIF's sys_clk.", True)], 
+        args=argv, banner="%prog [options] mhs_file")
 
-    thread_clk = None
-    osif_clk = None
-    current_task_num = -1
+    thread_clk = opts["thread_clk"]
+    osif_clk = opts["osif_clk"]
 
-    for opt, arg in opts:
-        if opt == "-c":
-            thread_clk = arg
-        if opt == "-o":
-            osif_clk = arg
-        # if opt == "-n":
-        #     current_task_num = int(arg)
-        #     if current_task_num < 0:
-        #         raise "error: task_num must be >= 0"
-        if opt == "-h":
-            exit_usage()
-
-    if len(args) != 1: exit_usage()
+    if len(args) != 1:
+        opts.help()
+        sys.exit(2)
     
     mhs_orig = args[0]
     
@@ -86,28 +65,26 @@ def main(argv):
     
     # we need at least one slot
     if num_slots == 0:
-        raise "error: no reconos slot in file '%s'" % mhs_orig
+		print "error: no reconos slot in file '%s'" % mhs_orig
+		sys.exit(2)
     
     # abort if there are already hw_tasks in the design
     if len(a.getPcores("hw_task")) > 0:
-        raise "error: file '%s' already contains %i hw_task instances" % (mhs_orig,len(a.getPcores("hw_task")))
+		print "error: file '%s' already contains %i hw_task instances" % (mhs_orig,len(a.getPcores("hw_task")))
+		sys.exit(3)
     
     # add tasks
     # if current_task_num < 0:
     for i in range(num_slots):
         task = reconos.mhs.createReconosTask(i,i + 1,task_clk = thread_clk, osif_clk = osif_clk)
         a.pcores.append(task)
-    # else:
-    #     for i in range(num_slots):
-    #         task = reconos.mhs.createReconosTask(i,current_task_num,task_clk = thread_clk, osif_clk = osif_clk)
-    #         a.pcores.append(task)
         
     # ouput resulting mhs file
     print a
         
         
 if __name__ == "__main__":
-    main(sys.argv[1:])
+	main(sys.argv[1:])
     
     
     

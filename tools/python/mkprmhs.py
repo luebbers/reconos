@@ -31,29 +31,42 @@
 #---------------------------------------------------------------------------
 #
 
-import sys
+import sys, slop
 
-def exitUsage():
-	sys.stderr.write("Usage: %s num_thread num_osifs [first_task_num]\n" % sys.argv[0])
-	sys.exit(1)
+def main(arguments):
 
+    opts, args = slop.parse([
+        ("p", "parameter", "parameter to set in hw thread wrapper", True,
+            {"as" : "list", "default" : []})], 
+        banner = "%prog [options] num_thread num_osifs [first_task_num]",
+        args=arguments)
+
+    parameters = opts["parameter"]
+
+    if len(args) < 2:
+        opts.help()
+        sys.exit(2)
+	
+    first_task = 0
+    if len(args) == 3:
+        first_task = int(args[2])
+    
+    num_thread = int(args[0])
+    num_osifs = int(args[1])
+    
+    print "PARAMETER VERSION = 2.1.0"
+    print
+    print
+    for i in range(num_osifs):
+	print "BEGIN hw_task"
+        print "\tPARAMETER INSTANCE = hw_task_%d" % (i + first_task)
+        print "\tPARAMETER HW_VER = 1.%02d.b" % num_thread
+        for p in parameters:
+            print "\tPARAMETER %s" % p
+        print "END"
+        print
+    
+    
 if __name__ == "__main__":
-	if len(sys.argv) < 3: exitUsage()
-	
-	first_task = 0
-	if len(sys.argv) == 4:
-		first_task = int(sys.argv[3])
-	
-	num_thread = int(sys.argv[1])
-	num_osifs = int(sys.argv[2])
-	
-	print "PARAMETER VERSION = 2.1.0"
-	print
-	print
-	for i in range(num_osifs):
-		print "BEGIN hw_task"
-		print "\tPARAMETER INSTANCE = hw_task_%d" % (i + first_task)
-		print "\tPARAMETER HW_VER = 1.%02d.b" % num_thread
-		print "END"
-		print
+    main(sys.argv[1:])
 
