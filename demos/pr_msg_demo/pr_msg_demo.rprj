@@ -1,5 +1,5 @@
 # ReconOS project file (format v1.00.a)
-EDK_BASE_DIR = $(RECONOS)/support/refdesigns/12.3/ml605/ml605_light_pr
+EDK_BASE_DIR = $(RECONOS)/support/refdesigns/12.3/ml605/ml605_light_pr_slowicap
 HW_DIR = hw
 SW_DIR = sw
 LAYOUT = hw/pr_msg_demo.lyt
