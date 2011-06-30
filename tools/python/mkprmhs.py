@@ -31,30 +31,21 @@
 #---------------------------------------------------------------------------
 #
 
-import sys, getopt
-
-def exitUsage():
-    sys.stderr.write("Usage: %s [-p parameter] num_thread num_osifs [first_task_num]\n" % sys.argv[0])
-    sys.exit(1)
-
+import sys, slop
 
 def main(arguments):
 
-    try:
-        opts, args = getopt.getopt(arguments, "p:", ["parameter="])
-    except getopt.GetoptError, err:
-        print str(err)
-        exitUsage()
+    opts, args = slop.parse([
+        ("p", "parameter", "parameter to set in hw thread wrapper", True,
+            {"as" : "list", "default" : []})], 
+        banner = "%prog [options] num_thread num_osifs [first_task_num]",
+        args=arguments)
 
-    parameters = []
+    parameters = opts["parameter"]
 
-    for o, a in opts:
-        if o in ("-p", "--parameter"):
-            parameters.append(a)
-        else:
-            assert False, "unhandled option"
-  
-    if len(args) < 2: exitUsage()
+    if len(args) < 2:
+        opts.help()
+        sys.exit(2)
 	
     first_task = 0
     if len(args) == 3:

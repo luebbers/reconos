@@ -38,9 +38,9 @@
 #---------------------------------------------------------------------------
 #
 
-import getopt
 import sys, os
 import re
+import slop
 
 def replace_token_with_text( lines, pattern, text ):
     '''In "lines", replace the token "pattern" with the text "text". Returns
@@ -84,33 +84,6 @@ def replace_between_with_text( lines, start_pattern, end_pattern, text,
     return retval
 
 
-def usage():
-    print '''
-USAGE: %s [-i infile] [-o outfile] <-t token | -s start -e end> 
-          [-r text | -f file] [-h]
-
-    -i infile       input file (stdin if not specified)
-    -o outfile      output file (stdout if not specified)
-                        infile and outfile can be the same
-    -t token        token to replace (token will vanish)
-    -s start
-    -e end          tokens to replace between (tokens will remain in output)
-    -r text         text to replace tokens with
-    -f file         file to replace tokens with
-                        If neither text nor file are specified, replacement
-                        text is read from stdin
-    -k              keep "start" and "end" tokens in the output
-    -P              when replacing between "start" and "end" tokens, do not
-                    retain the prefix in the line before "start"
-                        This is useful for C-style commented start/end tokens
-                        e.g. 
-                            /* START_BLOCK
-                            END_BLOCK */
-                        Ignored when using "-t"
-    -h              print this help
-''' % ( os.path.basename( sys.argv[ 0 ] ) )
-
-
 #-----------------------------------------------------------------------------
 # main program
 #-----------------------------------------------------------------------------
@@ -118,51 +91,43 @@ USAGE: %s [-i infile] [-o outfile] <-t token | -s start -e end>
 if __name__ == '__main__':
 
     # parse options
-    repl = 0
-    print_usage = True      # will be set to false if options are valid
-    inplace = False
     mode = None
-    token = None
-    start_token = None
-    end_token = None
-    text = None
-    textfilename = None
-    infilename = None
-    outfilename = None
-    keep_tokens = False
-    with_prefix = True
 
+    optlist, rem_args = slop.parse([
+        ("i", "infile", "input file (stdin if not specified)", True),
+        ("o", "outfile", "output file (stdout if not specified). "
+                         "'infile' and 'outfile' can be the same.", True),
+        ("t", "token", "token to replace (token will vanish)", True),
+        ("s", "start", "replace between this and end token"
+            "(tokens may remain in output with -k)", True),
+        ("e", "end", "replace between start token and this"
+            "(tokens may remain in output with -k)", True),
+        ("r", "text", "text to replace tokens with", True),
+        ("f", "file", "file to replace tokens with. "
+            "If neither text nor file are specified, replacement text "
+            "is read from stdin.", True),
+        ("k", "keep", "keep 'start' and 'end' tokens in output"),
+        ("P", "prefix", "when replacing between 'start' and 'end' tokens, "
+            "do not retain the prefix in the line before 'start'. "
+            "This is useful for C-style commented start/end tokens. "
+            "Ignored when using '-t'."),
+        ], banner="%prog [options] <-t token | -s start -e end> ")
 
-    optlist, rem_args = getopt.getopt(sys.argv[1:], 'i:o:t:s:e:r:f:hkP')
-
-    for opt, arg in optlist:
-        if opt == '-h':
-            usage()
-            sys.exit(0)
-        elif opt == '-i':
-            infilename = arg
-        elif opt == '-o':
-            outfilename = arg
-        elif opt == '-t':
-            token = arg
-            mode = "token"
-        elif opt == '-s':
-            start_token = arg
-            mode = "between"
-        elif opt == '-e':
-            end_token = arg
-            mode = "between"
-        elif opt == '-r':
-            text = arg
-        elif opt == '-f':
-            textfilename = arg
-        elif opt == '-k':
-            keep_tokens = True
-        elif opt == '-P':
-            with_prefix = False
-        else:
-            usage()
-            sys.exit( 1 )
+    infilename = optlist["infile"]
+    outfilename = optlist["outfile"]
+    keep_tokens = optlist["keep"]
+    with_prefix = not optlist["prefix"]
+    textfilename = optlist["file"]
+    text = optlist["text"]
+    start_token = optlist["start"]
+    end_token = optlist["end"]
+    token = optlist["token"]
+    if optlist.start:
+        mode = "between"
+    if optlist.end:
+        mode = "between"
+    if optlist.token:
+        mode = "token"
 
     # check options for plausability
     if ( 
@@ -172,8 +137,8 @@ if __name__ == '__main__':
          ( text and textfilename ) or
          ( not infilename and ( not text and not textfilename ) ) 
        ):
-           usage()
-           sys.exit( 1 )
+           optlist.help()
+           sys.exit( 2 )
 
     try:
         # read input files

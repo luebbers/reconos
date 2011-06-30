@@ -34,7 +34,7 @@
 #---------------------------------------------------------------------------
 #
 
-import socket, sys, subprocess, getopt
+import socket, sys, subprocess, slop
 import atexit, signal
 
 ### GLOBAL VARIABLES ###
@@ -72,25 +72,15 @@ signal.signal(signal.SIGTERM, lambda signum, stack_frame: sys.exit(1))
 
 
 # parse command line arguments
-try:
-	opts, args = getopt.getopt(sys.argv[1:], "p:c:h")
-except getopt.GetoptError, err:
-	print str(err)
-	usage()
-	sys.exit(2)
-	
-port = 42424	# standard port
-chainpos = 2	# standard chain position
-	
-for o, a in opts:
-	if o == "-p":
-		port = int(a)
-	if o == "-c":
-		chainpos = int(a)
-	if o == "-h":
-		usage()
-		sys.exit(0)
+opts, args = slop.parse([
+    ("p", "port", "port to listen on (default: 42424)", True, {"default" :
+        42424}),
+    ("c", "chainpos", "JTAG chain position (default: 2)", True, {"default" :
+        2})])
 
+port = int(opts["port"])
+chainpos = int(opts["chainpos"])
+	
 print "using JTAG chain position", chainpos
 
 # create socket

@@ -33,50 +33,31 @@ Creates a new hardware thread inside a ReconOS project
 #
 # \file reconos_addhwthread.py
 
-import reconos.tools, sys, os, string, shutil, getopt
+import reconos.tools, sys, os, string, shutil, slop
 
-def usage():
-    sys.stderr.write('USAGE: ' + os.path.basename(sys.argv[0]) + ' [-g "GENERIC=>1"] [-l] <hwthread_name> <user_logic_entity> [<first_file> <second_file> ...]\n')
-    sys.stderr.write('   -g "GENERIC => 1"   set generic of hw thread\n')
-    sys.stderr.write('   -p "PARAMETER = 2"  set parameter for hw thread WRAPPER\n')
-    sys.stderr.write('                       NOTE: use "=" instead of "=>"\n')
-    sys.stderr.write('   -l                  link files instead of copying\n')
-    sys.stderr.write('If you don\'t specify any files, you\'ll have to manually copy them\ninto the created directory and add them to the top of the Makefile.\n')
-    sys.stderr.write('Actually, that is what you have to do if you want to add netlists (.ngc/.edn) to your hardware thread.\n')
-	
 
 def main(arguments):
 	
-    try:
-        opts, args = getopt.getopt(arguments, "lg:p:a:", ["link", "generic=", "parameter=", "architecture="])
-    except getopt.GetoptError, err:
-        print str(err)
-        usage()
-        sys.exit(2)
+    opts, args = slop.parse([
+        ("l", "link", "link files instead of copying"),
+        ("g", "generic", "set generic of hw thread", True, 
+            {"as" : "array", "default" : []}),
+        ("p", "parameter", "set parameter for hw thread WRAPPER. "
+            "NOTE: use '=' instead of '=>'.", True,
+            {"as" : "array", "default" : []}),
+        ("a", "architecture", "target FPGA architecture (default:"
+            "virtex6)", True, {"default" : "virtex6"})],
+        banner = "%prog [options] <hwthread_name> <user_logic_entity> "
+        "[<first file> <second_file> ...]")
 
-    generics = []
-    parameters = []
-    link = False
-    arch = "virtex6"
+    generics = opts["generic"]
+    parameters = opts["parameter"]
+    link = opts["link"]
+    arch = opts["architecture"]
 
-    for o, a in opts:
-        if o in ("-g", "--generic"):
-            # parse generic statement, e.g.
-            # addthread -g "C_THREAD_NUM : integer := 2" ...
-            # TODO: catch invalid generics?
-            generics.append(a)
-        elif o in ("-p", "--parameter"):
-            parameters.append(a)
-        elif o in ("-l", "--link"):
-            link = True
-        elif o in ("-a", "--architecture"):
-            arch = a;
-        else:
-            assert False, "unhandled option"
-			
     if len(args) < 2:
         print "not enough arguments"
-        usage()
+        opts.help()
         sys.exit(2)
 
     # unpack cmd line arguments

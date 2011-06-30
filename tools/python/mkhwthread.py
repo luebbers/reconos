@@ -36,39 +36,27 @@ import os
 import os.path
 import reconos.pcore
 import datetime
-import getopt
+import slop
 
 
 task_name = "hw_task"
 
-def exitUsage():
-    sys.stderr.write("Usage: %s user_logic_entity [ -g \"SOME_GENERIC => 42\" ] thread_num [ vhdl_files... ] [ netlist_files... ]\n" % os.path.basename(sys.argv[0]))
-    sys.stderr.write("\nNOTE: thread numbers start at 1!\n")
-    sys.stderr.write("        If your generic's value includes quotes (e.g. X\"DEADBEEF\"),\n")
-    sys.stderr.write("        you need to escape it twice: '-g SOME_GENERIC => X\\\\\\\"DEADBEEF\\\\\\\"'\n")
-    sys.exit(1)
-
 def main(arguments):
     
-    try:
-        opts, args = getopt.getopt(arguments, "g:", ["generic="])
-    except getopt.GetoptError, err:
-        print str(err)
-        usage()
+    opts, args = slop.parse([
+        ("g", "generic", "generics to set. "
+                         "If your generic's value includes quotes (e.g. X\"DEADBEEF\"), "
+                         "you need to escape it twice: '-g SOME_GENERIC => X\\\\\\\"DEADBEEF\\\\\\\"'.", True,
+            {"as" : "list", "default" : []})],
+        banner = "%prog [options] user_logic_entity thread_num [ vhdl_files ... ] [ netlist_files ... ]", 
+        args = arguments)
+
+    # TODO: catch invalid generics?
+    generics = opts["generic"]
+
+    if len(args) < 2:
+        opts.help()
         sys.exit(2)
-
-    generics = []
-
-    for o, a in opts:
-        if o in ("-g", "--generic"):
-            # parse generic statement, e.g.
-            # addthread -g "C_THREAD_NUM : integer := 2" ...
-            # TODO: catch invalid generics?
-            generics.append(a)
-        else:
-            assert False, "unhandled option"
-        
-    if len(args) < 2: exitUsage()
     
     if os.environ["RECONOS"] == "":
         sys.stderr.write("RECONOS environment variable not set.\n")

@@ -33,25 +33,7 @@ Creates a new hardware thread inside a ReconOS project
 #
 
 import reconos.tools, sys, os, string, shutil
-import getopt
-
-
-
-def exitUsage():
-    sys.stderr.write('USAGE: ' + os.path.basename(sys.argv[0]) + ' -n hwthread_name -t CPUTYPE [-i include dir] [-a address -s size] [-e ecos_size] <source_file(s)> \n')
-    sys.stderr.write("          -n hwthread_name        the name of the hw-task dir in HWTHREADS\n")
-    sys.stderr.write("          -t cpu_type             which kind of CPU (PPC405|MICROBLAZE) \n")
-    sys.stderr.write("          -i include dir          if there is another include dir except of the sw-dir use this option\n")
-    sys.stderr.write("          -a address -s size      With these args you can specifiy the location in RAM and the size reserved in RAM \n")
-    sys.stderr.write("                                  for the CPU_HWTHREAD program(HEX-VALS: e.g. 0x02000000). By default the first 32MB are\n")
-    sys.stderr.write("                                  for ecos and 4MB for each CPU_HWTHREAD program are reserved. If you add\n") 
-    sys.stderr.write("                                  these args, you have to check manually for overlapping regions with other programs!!!\n")
-    sys.stderr.write("          -e ecos_size          if eCos should be greater than 32MB define the size in HEX\n")
-    sys.stderr.write("          -p platform           Which FPGA: virtex4 \n")
-    sys.stderr.write("                                This Parameter is for the PPC405. If virtex4 is used then use \"-p virtex4\"\n")
-    sys.stderr.write("                                In case of virtex2 no parameter has to be set, this is used as standard\n")
-    sys.stderr.write("          source_file(s)         the sourcefile(s)(only the c file(s)) which are used by the cpu-hwt\n")
-    sys.exit(1)
+import slop
 
 def main(args):
             
@@ -60,60 +42,56 @@ def main(args):
         sys.exit(1)
     
     #parsing args
-    try:
-        opts, args = getopt.getopt(args, "n:t:i:a:s:e:p:")
-    except getopt.GetoptError, err:
-        # print help information and exit:
-        print str(err) # will print something like "option -a not recognized"
-        exitUsage()
+    opts, args = slop.parse([
+        ("n", "name",        "the name of the hw-task dir in HWTHREADS",                             True , {"optional" : False}),
+        ("t", "cpu_type",    "which kind of CPU (PPC405|MICROBLAZE)",                                True , {"optional" : False}),
+        ("i", "include_dir", "if there is another include dir except of the sw-dir use this option", True ),
+        ("a", "address",     "address for CPU_HWTHREAD program",                                     True ),
+        ("s", "size",        "size for CPU_HWTHREAD program. "
+        "With these args you can specifiy the location in RAM and the size reserved in RAM "
+        "for the CPU_HWTHREAD program(HEX-VALS: e.g. 0x02000000). By default the first 32MB are "
+        "for ecos and 4MB for each CPU_HWTHREAD program are reserved. If you add "
+        "these args, you have to check manually for overlapping regions with other programs!!!",     True ),
+        ("e", "ecos_size",   "if eCos should be greater than 32MB define the size in HEX",           True ),
+        ("p", "platform",    "which FPGA. "
+        "This Parameter is for the PPC405. If virtex4 is used then use \"-p virtex4\" "
+        "In case of virtex2 no parameter has to be set, this is used as standard.",                  True )],
+        banner="%prog [options] -n <name> -t <cpu_type> <source_file(s)>", args=args)
 
-    hwthread_name = None
-    cpu_type = None
+    hwthread_name = opts["name"]
+    cpu_type = opts["cpu_type"]
     files = args
     #optional args
-    include_dir = None
-    thread_addr = None
-    thread_size = None
-    ecos_size = None
-    platform = None
-    for o, a in opts:
-        if o == "-n":
-            hwthread_name = a
-        elif o in ("-h", "--help"):
-            exitUsage()
-        elif o == "-t":
-            cpu_type = a
-        elif o == "-i":
-            include_dir = a
-        elif o == "-a":
-            thread_addr = a
-        elif o == "-s":
-            thread_size = a
-        elif o == "-e":
-            ecos_size = a
-        elif o == "-p":
-            platform = a
-            
+    include_dir = opts["include_dir"]
+    thread_addr = opts["address"]
+    thread_size = opts["size"]
+    ecos_size = opts["ecos_size"]
+    platform = opts["platform"]
             
     #check if needed args are set
     if hwthread_name == None:
         sys.stderr.write("No hwthread name!\n")
-        exitUsage()
+        opts.help()
+	sys.exit(2)
     if cpu_type == None:
         sys.stderr.write("No CPU_TYPE!\n")
-        exitUsage()
+        opts.help()
+	sys.exit(2)
     if (files == None) or (len(files) == 0):
         sys.stderr.write("No Sourcefile!\n")
-        exitUsage()
+        opts.help()
+	sys.exit(2)
     #check if size AND addr arg are set
     if ( (thread_addr == None) ^ (thread_size == None) ):
-       sys.stderr.write("Arguments for thread_size and address are not set correctly\n")
-       exitUsage() 
+        sys.stderr.write("Arguments for thread_size and address are not set correctly\n")
+        opts.help() 
+	sys.exit(2)
     #check platform argument
     if(platform != None):
         if (platform != "virtex4"):
             sys.stderr.write("Unknown platform\n")
-            exitUsage() 
+            opts.help() 
+	    sys.exit(2)
     else:
         platform = "virtex2"
 

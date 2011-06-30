@@ -36,7 +36,6 @@ import os
 import os.path
 import reconos.pcore_user_ports
 import datetime
-import getopt
 
 
 task_name = "hw_task"
