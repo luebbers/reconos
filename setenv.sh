@@ -84,6 +84,9 @@ if [ ! -f "$RECONOS/current_version" ]; then
     return
 fi
 read RECONOS_VER < "$RECONOS/current_version"
+if [ -z $OSIF_VER ]; then
+    OSIF_VER=$RECONOS_VER
+fi
 ECOS_REPOSITORY="$RECONOS/core/ecos/ecos-patched/ecos/packages"
 ECOS_EXTRA="$RECONOS/core/ecos/include"
 MODELSIM="$RECONOS/support/modelsim.ini"
@@ -104,7 +107,7 @@ ISE_LIB="/Xilinx/ISE_Lib"
 # add ReconOS python scripts to PYTHONPATH
 PYTHONPATH="$RECONOS/tools/python:$PYTHONPATH"
 
-export RECONOS RECONOS_VER ECOS_REPOSITORY ECOS_EXTRA MODELSIM PATH EDK_LIB ISE_LIB PYTHONPATH
+export RECONOS RECONOS_VER OSIF_VER ECOS_REPOSITORY ECOS_EXTRA MODELSIM PATH EDK_LIB ISE_LIB PYTHONPATH
 
 # print environment, if requested
 if [ "$1" = '-v' ]; then
