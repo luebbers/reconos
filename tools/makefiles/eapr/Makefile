@@ -185,7 +185,6 @@ edk-static: edk-base
 	#     - add OSIF drivers
 	#     - link/create pcores (OSIF, reconos, dummy threads)
 	#
-	$(Q)test -f $(PROJECT_ROOT)/$(LAYOUT)
 	$(Q)cp -r edk-base/ edk-static
 	$(Q)$($(QQ)ADDOSIF) edk-static/system.mhs $(NUM_OSIFS) $(ADDOSIF_OPTS) > system.mhs.osif
 	$(Q)$($(QQ)ADDTHREAD) $(ADDTHREAD_OPTS) system.mhs.osif > edk-static/system.mhs
