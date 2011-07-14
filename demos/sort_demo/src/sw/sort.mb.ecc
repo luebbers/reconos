@@ -55,6 +55,7 @@ cdl_configuration eCos {
     package -hardware CYGPKG_IO_SERIAL_GENERIC_16X5X current ;
     package -hardware CYGPKG_IO_SERIAL_MICROBLAZE_UART16550 v2_0 ;
     package UPBPKG_RECONOS current ;
+    package CYGPKG_POSIX current ;
 };
 
 # ---- conflicts -------------------------------------------------------
@@ -1890,6 +1891,7 @@ cdl_option CYGHWR_MEMORY_LAYOUT_H {
 # <
 # Xilinx ML605 Light
 # Xilinx ml605 HAL package
+# Supports all ReconOS ml605_light* reference designs.
 #
 cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
     # Packages cannot be added or removed, nor can their version be changed,
@@ -1907,6 +1909,47 @@ cdl_package CYGPKG_HAL_MICROBLAZE_XILINX_ML605_LIGHT {
     #   --> 1
 };
 
+# >
+# ICAP hardware support
+# Enables functions for easy partial reconfiguration
+#
+cdl_component UPBHWR_VIRTEX4_ICAP {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+
+    # The following properties are affected by this value
+    # option UPBSEM_INIT_ICAP
+    #     Requires: UPBHWR_VIRTEX4_ICAP
+    # option UPBSEM_INIT_ICAP
+    #     ActiveIf: UPBHWR_VIRTEX4_ICAP
+    # component UPBFUN_RECONOS_PARTIAL
+    #     Requires: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
+    # component UPBFUN_RECONOS_PARTIAL
+    #     ActiveIf: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
+    # component UPBFUN_RECONOS_ECAP_NET
+    #     Requires: ! UPBHWR_VIRTEX4_ICAP
+};
+
+# >
+# Xilinx ICAP drivers
+# Uses Xilinx XPS_HWICAP core
+#
+cdl_option UPBHWR_VIRTEX4_ICAP_XILINX {
+    # This option is not active
+    # The parent UPBHWR_VIRTEX4_ICAP is disabled
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+};
+
+# <
+# <
 # <
 # <
 # I/O sub-system
@@ -2583,9 +2626,8 @@ cdl_option CYGSEM_IO_SERIAL_TERMIOS_USE_SIGNALS {
     # The parent CYGPKG_IO_SERIAL_TERMIOS is disabled
 
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value:  CYGINT_ISO_SIGNAL_NUMBERS != 0 &&  CYGINT_ISO_SIGNAL_IMPL != 0 
     #     CYGINT_ISO_SIGNAL_NUMBERS == 1
     #     CYGINT_ISO_SIGNAL_IMPL == 1
@@ -3617,7 +3659,7 @@ cdl_option UPBSEM_INIT_RECONOS_SLOTS {
 cdl_option UPBSEM_INIT_ICAP {
     # This option is not active
     # ActiveIf constraint: UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 0
 
     # Flavor: bool
@@ -3626,7 +3668,7 @@ cdl_option UPBSEM_INIT_ICAP {
     # value_source default
     # Default value: 0
     # Requires: UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 0
 };
 
@@ -3956,6 +3998,14 @@ cdl_package CYGPKG_KERNEL {
     #     DefaultValue:  !CYGPKG_KERNEL && 0 == CYGINT_WALLCLOCK_HW_IMPLEMENTATIONS 
     # option CYGPKG_IO_WALLCLOCK_TESTS
     #     Calculated:  CYGPKG_KERNEL ? "tests/wallclock tests/wallclock2" : "" 
+    # package CYGPKG_POSIX
+    #     Requires: CYGPKG_KERNEL
+    # option CYGPKG_POSIX_CLOCKS
+    #     Requires: CYGPKG_KERNEL
+    # option CYGPKG_POSIX_TIMERS
+    #     Requires: CYGPKG_KERNEL
+    # component CYGPKG_POSIX_MQUEUES
+    #     Requires: CYGPKG_KERNEL
 };
 
 # >
@@ -4115,6 +4165,8 @@ cdl_component CYGPKG_KERNEL_EXCEPTIONS {
     #     Requires: CYGPKG_KERNEL_EXCEPTIONS
     # option CYGPKG_HAL_EXCEPTIONS
     #     DefaultValue: CYGPKG_KERNEL_EXCEPTIONS
+    # component CYGPKG_POSIX_SIGNALS
+    #     Requires: CYGPKG_KERNEL_EXCEPTIONS
 };
 
 # >
@@ -4231,6 +4283,10 @@ cdl_component CYGSEM_KERNEL_SCHED_MLQUEUE {
     #     Calculated:   CYGSEM_KERNEL_SCHED_BITMAP  ? "<cyg/kernel/bitmap.hxx>"  : CYGSEM_KERNEL_SCHED_MLQUEUE ? "<cyg/kernel/mlqueue.hxx>" : CYGSEM_KERNEL_SCHED_LOTTERY ? "<cyg/kernel/lottery.hxx>" : "!!!-- Configuration broken - no scheduler selected --!!!"
     # component CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL
     #     ActiveIf:  CYGSEM_KERNEL_SCHED_MLQUEUE 
+    # option _POSIX_PRIORITY_SCHEDULING
+    #     Requires: CYGSEM_KERNEL_SCHED_MLQUEUE
+    # option _POSIX_THREAD_PRIORITY_SCHEDULING
+    #     Requires: CYGSEM_KERNEL_SCHED_MLQUEUE
 };
 
 # >
@@ -4346,10 +4402,13 @@ cdl_option CYGNUM_KERNEL_SCHED_BITMAP_SIZE {
 #
 cdl_option CYGIMP_KERNEL_SCHED_SORTED_QUEUES {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: 0
+
+    # The following properties are affected by this value
+    # package CYGPKG_POSIX
+    #     Requires: CYGIMP_KERNEL_SCHED_SORTED_QUEUES
 };
 
 # <
@@ -4376,6 +4435,10 @@ cdl_component CYGSEM_KERNEL_SCHED_TIMESLICE {
     # Requires: CYGVAR_KERNEL_COUNTERS_CLOCK
     #     CYGVAR_KERNEL_COUNTERS_CLOCK == 1
     #   --> 1
+
+    # The following properties are affected by this value
+    # option _POSIX_THREADS
+    #     Requires: CYGSEM_KERNEL_SCHED_TIMESLICE
 };
 
 # >
@@ -4404,12 +4467,15 @@ cdl_option CYGNUM_KERNEL_SCHED_TIMESLICE_TICKS {
 #
 cdl_option CYGSEM_KERNEL_SCHED_TIMESLICE_ENABLE {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: false
     #     false (unknown) == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_PTHREAD_REQUIREMENTS
+    #     Requires: CYGSEM_KERNEL_SCHED_TIMESLICE_ENABLE
 };
 
 # <
@@ -4421,12 +4487,15 @@ cdl_option CYGSEM_KERNEL_SCHED_TIMESLICE_ENABLE {
 #
 cdl_component CYGSEM_KERNEL_SCHED_ASR_SUPPORT {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: false
     #     false (unknown) == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_PTHREAD_REQUIREMENTS
+    #     Requires: CYGSEM_KERNEL_SCHED_ASR_SUPPORT
 };
 
 # >
@@ -4436,16 +4505,16 @@ cdl_component CYGSEM_KERNEL_SCHED_ASR_SUPPORT {
 # function.
 #
 cdl_option CYGSEM_KERNEL_SCHED_ASR_GLOBAL {
-    # This option is not active
-    # The parent CYGSEM_KERNEL_SCHED_ASR_SUPPORT is disabled
-
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: true
     #     true (unknown) == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_PTHREAD_REQUIREMENTS
+    #     Requires: CYGSEM_KERNEL_SCHED_ASR_GLOBAL
 };
 
 # Make ASR data global
@@ -4456,9 +4525,6 @@ cdl_option CYGSEM_KERNEL_SCHED_ASR_GLOBAL {
 # function.
 #
 cdl_option CYGSEM_KERNEL_SCHED_ASR_DATA_GLOBAL {
-    # This option is not active
-    # The parent CYGSEM_KERNEL_SCHED_ASR_SUPPORT is disabled
-
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 0
@@ -4466,6 +4532,10 @@ cdl_option CYGSEM_KERNEL_SCHED_ASR_DATA_GLOBAL {
     # Default value: true
     #     true (unknown) == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_PTHREAD_REQUIREMENTS
+    #     Requires: !CYGSEM_KERNEL_SCHED_ASR_DATA_GLOBAL
 };
 
 # <
@@ -4550,6 +4620,10 @@ cdl_option CYGVAR_KERNEL_COUNTERS_CLOCK {
     #                           . ((CYGPKG_HAL_BUILD_COMPILER_TESTS) ? " tests/cpp1 tests/vaargs" : "")
     #                           . ((!CYGVAR_KERNEL_COUNTERS_CLOCK) ?   " tests/intr" : "") 
     # option CYGSEM_LIBC_TIME_CLOCK_WORKING
+    #     Requires: CYGVAR_KERNEL_COUNTERS_CLOCK
+    # option CYGPKG_POSIX_CLOCKS
+    #     Requires: CYGVAR_KERNEL_COUNTERS_CLOCK
+    # option CYGPKG_POSIX_TIMERS
     #     Requires: CYGVAR_KERNEL_COUNTERS_CLOCK
 };
 
@@ -4824,6 +4898,8 @@ cdl_option CYGFUN_KERNEL_THREADS_STACK_LIMIT {
     # The following properties are affected by this value
     # component CYGVAR_KERNEL_THREADS_DATA
     #     Requires: CYGFUN_KERNEL_THREADS_STACK_LIMIT
+    # option CYGPKG_POSIX_PTHREAD_REQUIREMENTS
+    #     Requires: CYGFUN_KERNEL_THREADS_STACK_LIMIT
 };
 
 # Check thread stacks for overflows
@@ -4963,6 +5039,8 @@ cdl_component CYGVAR_KERNEL_THREADS_DATA {
     # option CYGSEM_LIBM_THREAD_SAFE_GAMMA_FUNCTIONS
     #     Requires: CYGVAR_KERNEL_THREADS_DATA
     # option CYGSEM_ERROR_PER_THREAD_ERRNO
+    #     Requires: CYGVAR_KERNEL_THREADS_DATA
+    # option _POSIX_THREADS
     #     Requires: CYGVAR_KERNEL_THREADS_DATA
 };
 
@@ -5236,6 +5314,8 @@ cdl_option CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_INHERIT {
     #                             "INHERIT" :
     #                             CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_CEILING ?
     #                             "CEILING" : "NONE" 
+    # option _POSIX_THREAD_PRIO_INHERIT
+    #     Requires: CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_INHERIT
 };
 
 # Enable priority ceiling protocol
@@ -5258,6 +5338,8 @@ cdl_component CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_CEILING {
     #                             "INHERIT" :
     #                             CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_CEILING ?
     #                             "CEILING" : "NONE" 
+    # option _POSIX_THREAD_PRIO_PROTECT
+    #     Requires: CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_CEILING
 };
 
 # >
@@ -6492,6 +6574,8 @@ cdl_package CYGPKG_ISOINFRA {
     #     Requires: CYGPKG_ISOINFRA
     # package CYGPKG_LIBC_TIME
     #     Requires: CYGPKG_ISOINFRA
+    # package CYGPKG_POSIX
+    #     Requires: CYGPKG_ISOINFRA
 };
 
 # >
@@ -6616,6 +6700,8 @@ cdl_interface CYGINT_ISO_ERRNO_CODES {
     #     Requires: CYGINT_ISO_ERRNO_CODES
     # package CYGPKG_LIBC_STDIO
     #     Requires: CYGINT_ISO_ERRNO_CODES
+    # package CYGPKG_POSIX
+    #     Requires: CYGINT_ISO_ERRNO_CODES
 };
 
 # Error codes implementation header
@@ -6657,6 +6743,10 @@ cdl_interface CYGINT_ISO_ERRNO {
     # option CYGSEM_LIBC_SIGNALS_SIGNAL_SETS_ERRNO
     #     Requires: CYGINT_ISO_ERRNO
     # package CYGPKG_LIBC_STDIO
+    #     Requires: CYGINT_ISO_ERRNO
+    # package CYGPKG_POSIX
+    #     Requires: CYGINT_ISO_ERRNO
+    # component CYGPKG_POSIX_MQUEUES
     #     Requires: CYGINT_ISO_ERRNO
 };
 
@@ -7171,6 +7261,8 @@ cdl_interface CYGINT_ISO_MALLOC {
     #     DefaultValue:  0 != CYGINT_ISO_MALLOC 
     # option CYGFUN_LIBC_STRING_STRDUP
     #     ActiveIf: CYGINT_ISO_MALLOC
+    # component CYGPKG_POSIX_MQUEUES
+    #     Requires: CYGINT_ISO_MALLOC
 };
 
 # Malloc implementation header
@@ -7666,6 +7758,8 @@ cdl_interface CYGINT_ISO_STRING_STRFUNCS {
     #     Requires: CYGINT_ISO_STRING_STRFUNCS
     # package CYGPKG_LIBC_STDLIB
     #     Requires: CYGINT_ISO_STRING_STRFUNCS
+    # component CYGPKG_POSIX_MQUEUES
+    #     Requires: CYGINT_ISO_STRING_STRFUNCS
 };
 
 # Other ISO C str*() functions' implementation  header
@@ -7717,16 +7811,19 @@ cdl_option CYGBLD_ISO_CLOCK_T_HEADER {
 #
 cdl_option CYGBLD_ISO_STRUCTTIMEVAL_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/sys/time.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_CLOCKS
+    #     Requires:  CYGBLD_ISO_STRUCTTIMEVAL_HEADER ==  "<cyg/posix/sys/time.h>" 
 };
 
 # Number of implementations of POSIX timer types
 #
 cdl_interface CYGINT_ISO_POSIX_TIMER_TYPES {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_TIMERS, active, disabled
     # This value cannot be modified here.
     # Flavor: booldata
     # Current value: 0 0
@@ -7743,21 +7840,24 @@ cdl_interface CYGINT_ISO_POSIX_TIMER_TYPES {
 #
 cdl_option CYGBLD_ISO_POSIX_TIMER_TYPES_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/time.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_TIMERS
+    #     Requires:  CYGBLD_ISO_POSIX_TIMER_TYPES_HEADER ==  "<cyg/posix/time.h>" 
 };
 
 # Number of implementations of POSIX clock types
 #
 cdl_interface CYGINT_ISO_POSIX_CLOCK_TYPES {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_CLOCKS, active, enabled
     # This value cannot be modified here.
     # Flavor: booldata
-    # Current value: 0 0
+    # Current value: 1 1
     # Requires:  1 >= CYGINT_ISO_POSIX_CLOCK_TYPES 
-    #     CYGINT_ISO_POSIX_CLOCK_TYPES == 0
+    #     CYGINT_ISO_POSIX_CLOCK_TYPES == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -7769,10 +7869,13 @@ cdl_interface CYGINT_ISO_POSIX_CLOCK_TYPES {
 #
 cdl_option CYGBLD_ISO_POSIX_CLOCK_TYPES_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/time.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_CLOCKS
+    #     Requires:  CYGBLD_ISO_POSIX_CLOCK_TYPES_HEADER ==  "<cyg/posix/time.h>" 
 };
 
 # Number of implementations of ISO C types
@@ -7810,7 +7913,7 @@ cdl_option CYGBLD_ISO_C_TIME_TYPES_HEADER {
 # Number of implementations of POSIX timers
 #
 cdl_interface CYGINT_ISO_POSIX_TIMERS {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_TIMERS, active, disabled
     # This value cannot be modified here.
     # Flavor: booldata
     # Current value: 0 0
@@ -7827,36 +7930,44 @@ cdl_interface CYGINT_ISO_POSIX_TIMERS {
 #
 cdl_option CYGBLD_ISO_POSIX_TIMERS_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/time.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_TIMERS
+    #     Requires:  CYGBLD_ISO_POSIX_TIMERS_HEADER ==  "<cyg/posix/time.h>" 
 };
 
 # Number of implementations of POSIX clocks
 #
 cdl_interface CYGINT_ISO_POSIX_CLOCKS {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_CLOCKS, active, enabled
     # This value cannot be modified here.
     # Flavor: booldata
-    # Current value: 0 0
+    # Current value: 1 1
     # Requires:  1 >= CYGINT_ISO_POSIX_CLOCKS 
-    #     CYGINT_ISO_POSIX_CLOCKS == 0
+    #     CYGINT_ISO_POSIX_CLOCKS == 1
     #   --> 1
 
     # The following properties are affected by this value
     # interface CYGINT_ISO_POSIX_CLOCKS
     #     Requires:  1 >= CYGINT_ISO_POSIX_CLOCKS 
+    # option CYGPKG_POSIX_TIMERS
+    #     Requires: CYGINT_ISO_POSIX_CLOCKS
 };
 
 # POSIX clocks implementation header
 #
 cdl_option CYGBLD_ISO_POSIX_CLOCKS_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/time.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_CLOCKS
+    #     Requires:  CYGBLD_ISO_POSIX_CLOCKS_HEADER ==  "<cyg/posix/time.h>" 
 };
 
 # Number of implementations of ISO C clock functions
@@ -7929,6 +8040,7 @@ cdl_component CYGPKG_ISO_SIGNAL {
 #
 cdl_interface CYGINT_ISO_SIGNAL_NUMBERS {
     # Implemented by CYGPKG_LIBC_SIGNALS, active, enabled
+    # Implemented by CYGPKG_POSIX_SIGNALS, active, disabled
     # This value cannot be modified here.
     # Flavor: data
     # Current_value: 1
@@ -7961,12 +8073,15 @@ cdl_option CYGBLD_ISO_SIGNAL_NUMBERS_HEADER {
     # The following properties are affected by this value
     # package CYGPKG_LIBC_SIGNALS
     #     Requires:  CYGBLD_ISO_SIGNAL_NUMBERS_HEADER ==  "<cyg/libc/signals/signal.h>" 
+    # component CYGPKG_POSIX_SIGNALS
+    #     Requires:  CYGBLD_ISO_SIGNAL_NUMBERS_HEADER ==  "<cyg/posix/signal.h>" 
 };
 
 # Number of signal implementations
 #
 cdl_interface CYGINT_ISO_SIGNAL_IMPL {
     # Implemented by CYGPKG_LIBC_SIGNALS, active, enabled
+    # Implemented by CYGPKG_POSIX_SIGNALS, active, disabled
     # This value cannot be modified here.
     # Flavor: data
     # Current_value: 1
@@ -7997,6 +8112,8 @@ cdl_option CYGBLD_ISO_SIGNAL_IMPL_HEADER {
     # The following properties are affected by this value
     # package CYGPKG_LIBC_SIGNALS
     #     Requires:  CYGBLD_ISO_SIGNAL_IMPL_HEADER ==  "<cyg/libc/signals/signal.h>" 
+    # component CYGPKG_POSIX_SIGNALS
+    #     Requires:  CYGBLD_ISO_SIGNAL_IMPL_HEADER ==  "<cyg/posix/signal.h>" 
 };
 
 # POSIX real time signals feature test macro
@@ -8005,7 +8122,7 @@ cdl_option CYGBLD_ISO_SIGNAL_IMPL_HEADER {
 # are present.
 #
 cdl_interface CYGINT_POSIX_REALTIME_SIGNALS {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_SIGNALS, active, disabled
     # This value cannot be modified here.
     # Flavor: data
     # Current_value: 0
@@ -8061,7 +8178,7 @@ cdl_option CYGBLD_ISO_SETJMP_HEADER {
 # sigsetjmp() / siglongjmp() implementations
 #
 cdl_interface CYGINT_ISO_SIGSETJMP {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_SIGNALS, active, disabled
     # This value cannot be modified here.
     # Flavor: data
     # Current_value: 0
@@ -8078,10 +8195,13 @@ cdl_interface CYGINT_ISO_SIGSETJMP {
 #
 cdl_option CYGBLD_ISO_SIGSETJMP_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/sigsetjmp.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # component CYGPKG_POSIX_SIGNALS
+    #     Requires:  CYGBLD_ISO_SIGSETJMP_HEADER ==  "<cyg/posix/sigsetjmp.h>" 
 };
 
 # <
@@ -8215,12 +8335,12 @@ cdl_component CYGPKG_ISO_POSIX_TYPES {
 # POSIX thread types implementations
 #
 cdl_interface CYGINT_ISO_PTHREADTYPES {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_PTHREAD_REQUIREMENTS, active, enabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 0
+    # Current_value: 1
     # Requires:  1 >= CYGINT_ISO_PTHREADTYPES 
-    #     CYGINT_ISO_PTHREADTYPES == 0
+    #     CYGINT_ISO_PTHREADTYPES == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -8234,32 +8354,40 @@ cdl_interface CYGINT_ISO_PTHREADTYPES {
 #
 cdl_option CYGBLD_ISO_PTHREADTYPES_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/types.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_PTHREAD_REQUIREMENTS
+    #     Requires:  CYGBLD_ISO_PTHREADTYPES_HEADER ==  "<cyg/posix/types.h>" 
 };
 
 # POSIX mutex types implementations
 #
 cdl_interface CYGINT_ISO_PMUTEXTYPES {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_PTHREAD_MUTEX, active, enabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 0
+    # Current_value: 1
     # Requires:  1 >= CYGINT_ISO_PTHREADTYPES 
-    #     CYGINT_ISO_PTHREADTYPES == 0
+    #     CYGINT_ISO_PTHREADTYPES == 1
     #   --> 1
+
+    # The following properties are affected by this value
 };
 
 # POSIX mutex types implementation header
 #
 cdl_option CYGBLD_ISO_PMUTEXTYPES_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/muttypes.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # package CYGPKG_POSIX
+    #     Requires:  CYGBLD_ISO_PMUTEXTYPES_HEADER ==  "<cyg/posix/muttypes.h>" 
 };
 
 # ssize_t implementation header
@@ -8341,10 +8469,13 @@ cdl_component CYGPKG_ISO_UTSNAME {
 #
 cdl_option CYGBLD_ISO_UTSNAME_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/utsname.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # component CYGPKG_POSIX_UTSNAME
+    #     Requires:  CYGBLD_ISO_UTSNAME_HEADER ==  "<cyg/posix/utsname.h>" 
 };
 
 # <
@@ -8358,12 +8489,12 @@ cdl_component CYGPKG_ISO_SCHED {
 # POSIX scheduler implementations
 #
 cdl_interface CYGINT_ISO_SCHED_IMPL {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_SCHED, active, enabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 0
+    # Current_value: 1
     # Requires:  1 >= CYGINT_ISO_SCHED_IMPL 
-    #     CYGINT_ISO_SCHED_IMPL == 0
+    #     CYGINT_ISO_SCHED_IMPL == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -8392,12 +8523,12 @@ cdl_component CYGPKG_ISO_SEMAPHORES {
 # POSIX semaphore implementations
 #
 cdl_interface CYGINT_ISO_SEMAPHORES {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_SEMAPHORES, active, enabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 0
+    # Current_value: 1
     # Requires:  1 >= CYGINT_ISO_SEMAPHORES 
-    #     CYGINT_ISO_SEMAPHORES == 0
+    #     CYGINT_ISO_SEMAPHORES == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -8409,10 +8540,13 @@ cdl_interface CYGINT_ISO_SEMAPHORES {
 #
 cdl_option CYGBLD_ISO_SEMAPHORES_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/semaphore.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_SEMAPHORES
+    #     Requires:  CYGBLD_ISO_SEMAPHORES_HEADER ==  "<cyg/posix/semaphore.h>" 
 };
 
 # <
@@ -8426,12 +8560,12 @@ cdl_component CYGPKG_ISO_MQUEUE {
 # Implementations
 #
 cdl_interface CYGINT_ISO_MQUEUE {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_MQUEUES, active, enabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 0
+    # Current_value: 1
     # Requires:  1 >= CYGINT_ISO_MQUEUE 
-    #     CYGINT_ISO_MQUEUE == 0
+    #     CYGINT_ISO_MQUEUE == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -8456,28 +8590,26 @@ cdl_option CYGBLD_ISO_MQUEUE_HEADER {
 # Maximum number of open message queues
 #
 cdl_option CYGNUM_ISO_MQUEUE_OPEN_MAX {
-    # This option is not active
     # ActiveIf constraint: CYGINT_ISO_MQUEUE
-    #     CYGINT_ISO_MQUEUE == 0
-    #   --> 0
+    #     CYGINT_ISO_MQUEUE == 1
+    #   --> 1
 
     # Flavor: booldata
     # No user value, uncomment the following line to provide one.
-    # user_value 0 0
+    # user_value 1 8
     # value_source default
     # Default value:  CYGNUM_POSIX_MQUEUE_OPEN_MAX > 0 ? CYGNUM_POSIX_MQUEUE_OPEN_MAX : 0 
-    #     CYGNUM_POSIX_MQUEUE_OPEN_MAX (unknown) == 0
-    #     CYGNUM_POSIX_MQUEUE_OPEN_MAX (unknown) == 0
-    #   --> 0 0
+    #     CYGNUM_POSIX_MQUEUE_OPEN_MAX == 8
+    #     CYGNUM_POSIX_MQUEUE_OPEN_MAX == 8
+    #   --> 1 8
 };
 
 # Maximum number of message priorities
 #
 cdl_option CYGNUM_ISO_MQUEUE_PRIO_MAX {
-    # This option is not active
     # ActiveIf constraint: CYGINT_ISO_MQUEUE
-    #     CYGINT_ISO_MQUEUE == 0
-    #   --> 0
+    #     CYGINT_ISO_MQUEUE == 1
+    #   --> 1
 
     # Flavor: booldata
     # No user value, uncomment the following line to provide one.
@@ -8497,12 +8629,12 @@ cdl_component CYGPKG_ISO_PTHREAD {
 # POSIX pthread implementations
 #
 cdl_interface CYGINT_ISO_PTHREAD_IMPL {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_PTHREAD_REQUIREMENTS, active, enabled
     # This value cannot be modified here.
     # Flavor: booldata
-    # Current value: 0 0
+    # Current value: 1 1
     # Requires:  1 >= CYGINT_ISO_PTHREAD_IMPL 
-    #     CYGINT_ISO_PTHREAD_IMPL == 0
+    #     CYGINT_ISO_PTHREAD_IMPL == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -8514,36 +8646,44 @@ cdl_interface CYGINT_ISO_PTHREAD_IMPL {
 #
 cdl_option CYGBLD_ISO_PTHREAD_IMPL_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/pthread.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_PTHREAD_REQUIREMENTS
+    #     Requires:  CYGBLD_ISO_PTHREAD_IMPL_HEADER ==  "<cyg/posix/pthread.h>" 
 };
 
 # POSIX mutex/cond var implementations
 #
 cdl_interface CYGINT_ISO_PTHREAD_MUTEX {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_PTHREAD_MUTEX, active, enabled
     # This value cannot be modified here.
     # Flavor: booldata
-    # Current value: 0 0
+    # Current value: 1 1
     # Requires:  1 >= CYGINT_ISO_PTHREAD_MUTEX 
-    #     CYGINT_ISO_PTHREAD_MUTEX == 0
+    #     CYGINT_ISO_PTHREAD_MUTEX == 1
     #   --> 1
 
     # The following properties are affected by this value
     # interface CYGINT_ISO_PTHREAD_MUTEX
     #     Requires:  1 >= CYGINT_ISO_PTHREAD_MUTEX 
+    # component CYGPKG_POSIX_MQUEUES
+    #     Requires: CYGINT_ISO_PTHREAD_MUTEX
 };
 
 # POSIX mutex/cond var implementation header
 #
 cdl_option CYGBLD_ISO_PTHREAD_MUTEX_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/mutex.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # package CYGPKG_POSIX
+    #     Requires:  CYGBLD_ISO_PTHREAD_MUTEX_HEADER ==  "<cyg/posix/mutex.h>" 
 };
 
 # <
@@ -8557,12 +8697,12 @@ cdl_component CYGPKG_ISO_LIMITS {
 # POSIX pthread limits implementations
 #
 cdl_interface CYGINT_ISO_POSIX_LIMITS {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX, active, enabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 0
+    # Current_value: 1
     # Requires:  1 >= CYGINT_ISO_POSIX_LIMITS 
-    #     CYGINT_ISO_POSIX_LIMITS == 0
+    #     CYGINT_ISO_POSIX_LIMITS == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -8574,10 +8714,13 @@ cdl_interface CYGINT_ISO_POSIX_LIMITS {
 #
 cdl_option CYGBLD_ISO_POSIX_LIMITS_HEADER {
     # Flavor: booldata
-    # No user value, uncomment the following line to provide one.
-    # user_value 0 0
-    # value_source default
+    user_value 1 <cyg/posix/limits.h>
+    # value_source user
     # Default value: 0 0
+
+    # The following properties are affected by this value
+    # package CYGPKG_POSIX
+    #     Requires:  CYGBLD_ISO_POSIX_LIMITS_HEADER ==  "<cyg/posix/limits.h>" 
 };
 
 # OPEN_MAX implementation header
@@ -8699,7 +8842,7 @@ cdl_component CYGPKG_ISO_UNISTD {
 # POSIX timer operations implementations
 #
 cdl_interface CYGINT_ISO_POSIX_TIMER_OPS {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_TIMERS, active, disabled
     # This value cannot be modified here.
     # Flavor: booldata
     # Current value: 0 0
@@ -8725,12 +8868,12 @@ cdl_option CYGBLD_ISO_POSIX_TIMER_OPS_HEADER {
 # POSIX sleep() implementations
 #
 cdl_interface CYGINT_ISO_POSIX_SLEEP {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_CLOCKS, active, enabled
     # This value cannot be modified here.
     # Flavor: booldata
-    # Current value: 0 0
+    # Current value: 1 1
     # Requires:  1 >= CYGINT_ISO_POSIX_SLEEP 
-    #     CYGINT_ISO_POSIX_SLEEP == 0
+    #     CYGINT_ISO_POSIX_SLEEP == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -9616,6 +9759,10 @@ cdl_package CYGPKG_LIBC_STARTUP {
     # Requires:  CYGINT_LIBC_STARTUP_CONTEXT == 1 
     #     CYGINT_LIBC_STARTUP_CONTEXT == 1
     #   --> 1
+
+    # The following properties are affected by this value
+    # component CYGPKG_POSIX_MAIN_THREAD
+    #     Requires:  0 != CYGPKG_LIBC_STARTUP 
 };
 
 # >
@@ -9624,10 +9771,10 @@ cdl_package CYGPKG_LIBC_STARTUP {
 # allow main() to be invoked elsewhere.
 #
 cdl_interface CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE {
-    # No options implement this inferface
+    # Implemented by CYGPKG_POSIX_MAIN_THREAD, active, enabled
     # This value cannot be modified here.
     # Flavor: bool
-    # Current value: 0
+    # Current value: 1
 
     # The following properties are affected by this value
     # option CYGSEM_LIBC_STARTUP_MAIN_INITCONTEXT
@@ -9675,8 +9822,8 @@ cdl_component CYGPKG_LIBC_STARTUP_CONTEXT {
 #
 cdl_interface CYGINT_LIBC_STARTUP_CONTEXT {
     # Implemented by CYGSEM_LIBC_STARTUP_MAIN_INITCONTEXT, active, disabled
-    # Implemented by CYGSEM_LIBC_STARTUP_MAIN_THREAD, active, enabled
-    # Implemented by CYGSEM_LIBC_STARTUP_MAIN_OTHER, active, disabled
+    # Implemented by CYGSEM_LIBC_STARTUP_MAIN_THREAD, active, disabled
+    # Implemented by CYGSEM_LIBC_STARTUP_MAIN_OTHER, active, enabled
     # This value cannot be modified here.
     # Flavor: data
     # Current_value: 1
@@ -9709,7 +9856,7 @@ cdl_option CYGSEM_LIBC_STARTUP_MAIN_INITCONTEXT {
     # Default value:  0 == CYGPKG_KERNEL && 0 == 
     #                                 CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE 
     #     CYGPKG_KERNEL == current
-    #     CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE == 0
+    #     CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE == 1
     #   --> 0
 };
 
@@ -9720,12 +9867,12 @@ cdl_option CYGSEM_LIBC_STARTUP_MAIN_INITCONTEXT {
 cdl_component CYGSEM_LIBC_STARTUP_MAIN_THREAD {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 1
+    # user_value 0
     # value_source default
     # Default value:  0 != CYGPKG_KERNEL && 0 ==  CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE 
     #     CYGPKG_KERNEL == current
-    #     CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE == 0
-    #   --> 1
+    #     CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE == 1
+    #   --> 0
     # Requires: CYGPKG_KERNEL
     #     CYGPKG_KERNEL == current
     #   --> 1
@@ -9749,6 +9896,9 @@ cdl_component CYGSEM_LIBC_STARTUP_MAIN_THREAD {
 # This must be a multiple of 8.
 #
 cdl_option CYGSEM_LIBC_MAIN_STACK_FROM_SYSTEM {
+    # This option is not active
+    # The parent CYGSEM_LIBC_STARTUP_MAIN_THREAD is disabled
+
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
     # user_value 1
@@ -9765,6 +9915,9 @@ cdl_option CYGSEM_LIBC_MAIN_STACK_FROM_SYSTEM {
 # on the usable priorities.
 #
 cdl_option CYGNUM_LIBC_MAIN_THREAD_PRIORITY {
+    # This option is not active
+    # The parent CYGSEM_LIBC_STARTUP_MAIN_THREAD is disabled
+
     # Flavor: data
     # No user value, uncomment the following line to provide one.
     # user_value 10
@@ -9781,18 +9934,20 @@ cdl_option CYGNUM_LIBC_MAIN_THREAD_PRIORITY {
 cdl_option CYGSEM_LIBC_STARTUP_MAIN_OTHER {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
     # Default value:  0 !=  CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE 
-    #     CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE == 0
-    #   --> 0
+    #     CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE == 1
+    #   --> 1
     # Requires: CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE
-    #     CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE == 0
-    #   --> 0
+    #     CYGINT_LIBC_STARTUP_EXTERNAL_INVOKE_MAIN_POSSIBLE == 1
+    #   --> 1
 
     # The following properties are affected by this value
     # option CYGSEM_LIBC_INVOKE_DEFAULT_STATIC_CONSTRUCTORS
     #     Requires:  CYGSEM_LIBC_STARTUP_MAIN_THREAD ||  (CYGSEM_LIBC_STARTUP_MAIN_OTHER && CYGPKG_POSIX_PTHREAD) 
+    # component CYGPKG_POSIX_MAIN_THREAD
+    #     Requires: CYGSEM_LIBC_STARTUP_MAIN_OTHER
 };
 
 # <
@@ -9954,9 +10109,9 @@ cdl_option CYGSEM_LIBC_INVOKE_DEFAULT_STATIC_CONSTRUCTORS {
     #     CYGSEM_HAL_STOP_CONSTRUCTORS_ON_FLAG == 0
     #   --> 0
     # Requires:  CYGSEM_LIBC_STARTUP_MAIN_THREAD ||  (CYGSEM_LIBC_STARTUP_MAIN_OTHER && CYGPKG_POSIX_PTHREAD) 
-    #     CYGSEM_LIBC_STARTUP_MAIN_THREAD == 1
-    #     CYGSEM_LIBC_STARTUP_MAIN_OTHER == 0
-    #     CYGPKG_POSIX_PTHREAD (unknown) == 0
+    #     CYGSEM_LIBC_STARTUP_MAIN_THREAD == 0
+    #     CYGSEM_LIBC_STARTUP_MAIN_OTHER == 1
+    #     CYGPKG_POSIX_PTHREAD == 1
     #   --> 1
 
     # The following properties are affected by this value
@@ -12047,6 +12202,8 @@ cdl_package CYGPKG_ERROR {
     #     Requires: CYGPKG_ERROR
     # package CYGPKG_IO_SERIAL_MICROBLAZE_UART16550
     #     Requires: CYGPKG_ERROR
+    # package CYGPKG_POSIX
+    #     Requires: CYGPKG_ERROR
 };
 
 # >
@@ -12241,13 +12398,12 @@ cdl_option UPBDBG_RECONOS_DEBUG {
 #
 cdl_option UPBFUN_RECONOS_POSIX {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: 0
     # Requires: CYGPKG_POSIX
-    #     CYGPKG_POSIX (unknown) == 0
-    #   --> 0
+    #     CYGPKG_POSIX == current
+    #   --> 1
 };
 
 # Enable cache-aware operations on Burst RAM
@@ -12271,7 +12427,7 @@ cdl_option UPBFUN_RECONOS_CACHE_BURST_RAM {
 cdl_component UPBFUN_RECONOS_PARTIAL {
     # This option is not active
     # ActiveIf constraint: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #     UPBFUN_RECONOS_ECAP_NET == 0
     #   --> 0
 
@@ -12281,7 +12437,7 @@ cdl_component UPBFUN_RECONOS_PARTIAL {
     # value_source default
     # Default value: 0
     # Requires: UPBHWR_VIRTEX4_ICAP || UPBFUN_RECONOS_ECAP_NET
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #     UPBFUN_RECONOS_ECAP_NET == 0
     #   --> 0
 
@@ -12327,7 +12483,7 @@ cdl_component UPBFUN_RECONOS_ECAP_NET {
     # value_source default
     # Default value: 0
     # Requires: ! UPBHWR_VIRTEX4_ICAP
-    #     UPBHWR_VIRTEX4_ICAP (unknown) == 0
+    #     UPBHWR_VIRTEX4_ICAP == 0
     #   --> 1
     # Requires: UPBFUN_RECONOS_PARTIAL
     #     UPBFUN_RECONOS_PARTIAL == 0
@@ -12411,6 +12567,810 @@ cdl_option UPBPKG_RECONOS_CFLAGS_REMOVE {
 };
 
 # <
+# <
+# POSIX compatibility layer
+# doc: ref/posix-compatibility.html
+# This package enables the POSIX compatibility
+# layer that implements IEEE 1003.1.
+#
+cdl_package CYGPKG_POSIX {
+    # Packages cannot be added or removed, nor can their version be changed,
+    # simply by editing their value. Instead the appropriate configuration
+    # should be used to perform these actions.
+
+    # This value cannot be modified here.
+    # Flavor: booldata
+    # Current value: 1 current
+    # Requires: CYGPKG_KERNEL
+    #     CYGPKG_KERNEL == current
+    #   --> 1
+    # Requires: CYGPKG_ISOINFRA
+    #     CYGPKG_ISOINFRA == current
+    #   --> 1
+    # Requires: CYGPKG_ERROR
+    #     CYGPKG_ERROR == current
+    #   --> 1
+    # Requires: CYGINT_ISO_ERRNO
+    #     CYGINT_ISO_ERRNO == 1
+    #   --> 1
+    # Requires: CYGINT_ISO_ERRNO_CODES
+    #     CYGINT_ISO_ERRNO_CODES == 1
+    #   --> 1
+    # Requires: CYGIMP_KERNEL_SCHED_SORTED_QUEUES
+    #     CYGIMP_KERNEL_SCHED_SORTED_QUEUES == 1
+    #   --> 1
+    # Requires:  CYGBLD_ISO_POSIX_LIMITS_HEADER ==  "<cyg/posix/limits.h>" 
+    #     CYGBLD_ISO_POSIX_LIMITS_HEADER == <cyg/posix/limits.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_PMUTEXTYPES_HEADER ==  "<cyg/posix/muttypes.h>" 
+    #     CYGBLD_ISO_PMUTEXTYPES_HEADER == <cyg/posix/muttypes.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_PTHREAD_MUTEX_HEADER ==  "<cyg/posix/mutex.h>" 
+    #     CYGBLD_ISO_PTHREAD_MUTEX_HEADER == <cyg/posix/mutex.h>
+    #   --> 1
+
+    # The following properties are affected by this value
+    # option UPBFUN_RECONOS_POSIX
+    #     Requires: CYGPKG_POSIX
+};
+
+# >
+# POSIX pthread mutexes
+# This component provides support for POSIX pthreads
+# mutexes.
+#
+cdl_component CYGPKG_POSIX_PTHREAD_MUTEX {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+};
+
+# >
+# POSIX mutex priority inheritance feature test macro
+# This option defines the POSIX feature test macro for
+# supporting priority inheritance protocol in mutexes.
+#
+cdl_option _POSIX_THREAD_PRIO_INHERIT {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+    # Requires: CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_INHERIT
+    #     CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_INHERIT == 1
+    #   --> 1
+};
+
+# POSIX mutex priority ceiling feature test macro
+# This option defines the POSIX feature test macro for 
+# supporting priority ceiling protocol in mutexes.
+#
+cdl_option _POSIX_THREAD_PRIO_PROTECT {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+    # Requires: CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_CEILING
+    #     CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL_CEILING == 1
+    #   --> 1
+};
+
+# <
+# POSIX scheduling configuration
+# This component provides controls over scheduling in POSIX.
+#
+cdl_component CYGPKG_POSIX_SCHED {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+    # Requires: CYGPKG_POSIX_CLOCKS
+    #     CYGPKG_POSIX_CLOCKS == 1
+    #   --> 1
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_PTHREAD_REQUIREMENTS
+    #     Requires: CYGPKG_POSIX_SCHED
+};
+
+# >
+# POSIX priority scheduling feature test macro
+# This option defines the POSIX feature test macro that 
+# indicates that priority scheduling is present. This 
+# should not be undefined.
+#
+cdl_option _POSIX_PRIORITY_SCHEDULING {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+    # Requires: CYGSEM_KERNEL_SCHED_MLQUEUE
+    #     CYGSEM_KERNEL_SCHED_MLQUEUE == 1
+    #   --> 1
+};
+
+# <
+# POSIX pthread configuration
+# This component provides configuration controls for the 
+# POSIX pthreads package.
+#
+cdl_component CYGPKG_POSIX_PTHREAD {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_TIMERS
+    #     Requires: CYGPKG_POSIX_PTHREAD
+    # component CYGPKG_POSIX_SIGNALS
+    #     Requires: CYGPKG_POSIX_PTHREAD
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+    # option CYGSEM_LIBC_INVOKE_DEFAULT_STATIC_CONSTRUCTORS
+    #     Requires:  CYGSEM_LIBC_STARTUP_MAIN_THREAD ||  (CYGSEM_LIBC_STARTUP_MAIN_OTHER && CYGPKG_POSIX_PTHREAD) 
+};
+
+# >
+# Generic requirements of pthread package
+# This option exists merely to carry the pthread
+# package requirements.
+#
+cdl_option CYGPKG_POSIX_PTHREAD_REQUIREMENTS {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+    # Requires: CYGPKG_POSIX_SCHED
+    #     CYGPKG_POSIX_SCHED == 1
+    #   --> 1
+    # Requires: CYGSEM_KERNEL_SCHED_TIMESLICE_ENABLE
+    #     CYGSEM_KERNEL_SCHED_TIMESLICE_ENABLE == 1
+    #   --> 1
+    # Requires: CYGSEM_KERNEL_SCHED_ASR_SUPPORT
+    #     CYGSEM_KERNEL_SCHED_ASR_SUPPORT == 1
+    #   --> 1
+    # Requires: CYGSEM_KERNEL_SCHED_ASR_GLOBAL
+    #     CYGSEM_KERNEL_SCHED_ASR_GLOBAL == 1
+    #   --> 1
+    # Requires: !CYGSEM_KERNEL_SCHED_ASR_DATA_GLOBAL
+    #     CYGSEM_KERNEL_SCHED_ASR_DATA_GLOBAL == 0
+    #   --> 1
+    # Requires: CYGFUN_KERNEL_THREADS_STACK_LIMIT
+    #     CYGFUN_KERNEL_THREADS_STACK_LIMIT == 1
+    #   --> 1
+    # Requires:  CYGBLD_ISO_PTHREADTYPES_HEADER ==  "<cyg/posix/types.h>" 
+    #     CYGBLD_ISO_PTHREADTYPES_HEADER == <cyg/posix/types.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_PTHREAD_IMPL_HEADER ==  "<cyg/posix/pthread.h>" 
+    #     CYGBLD_ISO_PTHREAD_IMPL_HEADER == <cyg/posix/pthread.h>
+    #   --> 1
+};
+
+# Constant values used in pthread package
+# These are values that are either configurable, or derived
+# from system parameters.
+#
+cdl_component CYGPKG_POSIX_PTHREAD_VALUES {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+};
+
+# >
+# Maximum number of iterations of key destructors
+# Maximum number of iterations of key destructors allowed.
+#
+cdl_option CYGNUM_POSIX_PTHREAD_DESTRUCTOR_ITERATIONS {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 4
+    # value_source default
+    # Default value: 4
+    # Legal values: 4 to 100
+};
+
+# Maximum number of per-thread data keys allowed
+# Number of per-thread data keys supported.
+#
+cdl_option CYGNUM_POSIX_PTHREAD_KEYS_MAX {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 128
+    # value_source default
+    # Default value: 128
+    # Legal values: 128 to 65535
+};
+
+# Maximum number of threads allowed
+# Maximum number of threads supported.
+#
+cdl_option CYGNUM_POSIX_PTHREAD_THREADS_MAX {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 64
+    # value_source default
+    # Default value: 64
+    # Legal values: 64 to 1024
+};
+
+# <
+# Fixed Feature test macros for POSIX
+# These options define POSIX feature test macros that
+# describe the eCos implementation of pthreads. These
+# are not changeable configuration options.
+#
+cdl_component CYGPKG_POSIX_PTHREAD_FEATURES {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+};
+
+# >
+# POSIX thread support feature test macro
+# This option defines the POSIX feature test macro
+# for thread support.
+#
+cdl_option _POSIX_THREADS {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+    # Requires: CYGSEM_KERNEL_SCHED_TIMESLICE
+    #     CYGSEM_KERNEL_SCHED_TIMESLICE == 1
+    #   --> 1
+    # Requires: CYGVAR_KERNEL_THREADS_DATA
+    #     CYGVAR_KERNEL_THREADS_DATA == 1
+    #   --> 1
+
+    # The following properties are affected by this value
+    # option _POSIX_THREAD_PRIORITY_SCHEDULING
+    #     Requires: _POSIX_THREADS
+};
+
+# POSIX thread priority scheduling feature test macro
+# This option defines the POSIX feature test macro
+# for thread priority scheduling support.
+#
+cdl_option _POSIX_THREAD_PRIORITY_SCHEDULING {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+    # Requires: CYGSEM_KERNEL_SCHED_MLQUEUE
+    #     CYGSEM_KERNEL_SCHED_MLQUEUE == 1
+    #   --> 1
+    # Requires: _POSIX_THREADS
+    #     _POSIX_THREADS == 1
+    #   --> 1
+};
+
+# POSIX stack address attribute feature test macro
+# This option defines the POSIX feature test macro
+# for supporting the thread stack address in the thread
+# attribute object.
+#
+cdl_option _POSIX_THREAD_ATTR_STACKADDR {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+};
+
+# POSIX stack size attribute feature test macro
+# This option defines the POSIX feature test macro
+# for supporting the thread stack size in the thread
+# attribute object.
+#
+cdl_option _POSIX_THREAD_ATTR_STACKSIZE {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+};
+
+# POSIX process shared attribute feature test macro
+# This option defines the POSIX feature test macro
+# for supporting process shared mutexes. Since eCos
+# does not have processes, this attribute is undefined.
+#
+cdl_option _POSIX_THREAD_PROCESS_SHARED {
+    # Calculated value: 0
+    # Flavor: bool
+    # Current value: 0
+};
+
+# <
+# Main thread configuration
+# These options control the thread used to
+# run the main() application entry routine.
+#
+cdl_component CYGPKG_POSIX_MAIN_THREAD {
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+    # Requires:  0 != CYGPKG_LIBC_STARTUP 
+    #     CYGPKG_LIBC_STARTUP == current
+    #   --> 1
+    # Requires: CYGSEM_LIBC_STARTUP_MAIN_OTHER
+    #     CYGSEM_LIBC_STARTUP_MAIN_OTHER == 1
+    #   --> 1
+};
+
+# >
+# main()'s default thread priority
+# POSIX compatibility requires that the application's
+# main() function be invoked in a thread.
+# This option controls the priority of that thread. This
+# priority is the POSIX priority and is NOT the same as
+# an eCos thread priority. With POSIX thread priorities,
+# lower numbers are lower priority, and higher numbers are
+# higher priority.
+#
+cdl_option CYGNUM_POSIX_MAIN_DEFAULT_PRIORITY {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 16
+    # value_source default
+    # Default value: 16
+    # Legal values: 0 to 31
+};
+
+# <
+# <
+# POSIX clocks
+# This component provides configuration controls for
+# the POSIX clocks and the sleep(), nanosleep() and 
+# gettimeofday() functions.
+#
+cdl_option CYGPKG_POSIX_CLOCKS {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_POSIX_CLOCK_TYPES_HEADER ==  "<cyg/posix/time.h>" 
+    #     CYGBLD_ISO_POSIX_CLOCK_TYPES_HEADER == <cyg/posix/time.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_POSIX_CLOCKS_HEADER ==  "<cyg/posix/time.h>" 
+    #     CYGBLD_ISO_POSIX_CLOCKS_HEADER == <cyg/posix/time.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_STRUCTTIMEVAL_HEADER ==  "<cyg/posix/sys/time.h>" 
+    #     CYGBLD_ISO_STRUCTTIMEVAL_HEADER == <cyg/posix/sys/time.h>
+    #   --> 1
+    # Requires: CYGPKG_KERNEL
+    #     CYGPKG_KERNEL == current
+    #   --> 1
+    # Requires: CYGVAR_KERNEL_COUNTERS_CLOCK
+    #     CYGVAR_KERNEL_COUNTERS_CLOCK == 1
+    #   --> 1
+
+    # The following properties are affected by this value
+    # component CYGPKG_POSIX_SCHED
+    #     Requires: CYGPKG_POSIX_CLOCKS
+    # component CYGPKG_POSIX_MQUEUES
+    #     Requires: CYGPKG_POSIX_CLOCKS
+};
+
+# POSIX timers
+# This component provides configuration controls for
+# the POSIX timers.
+#
+cdl_option CYGPKG_POSIX_TIMERS {
+    # Flavor: bool
+    user_value 0
+    # value_source user
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_POSIX_TIMER_TYPES_HEADER ==  "<cyg/posix/time.h>" 
+    #     CYGBLD_ISO_POSIX_TIMER_TYPES_HEADER == <cyg/posix/time.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_POSIX_TIMERS_HEADER ==  "<cyg/posix/time.h>" 
+    #     CYGBLD_ISO_POSIX_TIMERS_HEADER == <cyg/posix/time.h>
+    #   --> 1
+    # Requires: CYGPKG_KERNEL
+    #     CYGPKG_KERNEL == current
+    #   --> 1
+    # Requires: CYGVAR_KERNEL_COUNTERS_CLOCK
+    #     CYGVAR_KERNEL_COUNTERS_CLOCK == 1
+    #   --> 1
+    # Requires: CYGPKG_POSIX_PTHREAD
+    #     CYGPKG_POSIX_PTHREAD == 1
+    #   --> 1
+    # Requires: CYGPKG_POSIX_SIGNALS
+    #     CYGPKG_POSIX_SIGNALS == 0
+    #   --> 0
+    # Requires: CYGINT_ISO_POSIX_CLOCKS
+    #     CYGINT_ISO_POSIX_CLOCKS == 1
+    #   --> 1
+
+    # The following properties are affected by this value
+    # component CYGPKG_POSIX_SIGNALS
+    #     Requires: CYGPKG_POSIX_TIMERS
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+};
+
+# POSIX semaphores
+# This component provides configuration controls for
+# POSIX semaphores.
+#
+cdl_option CYGPKG_POSIX_SEMAPHORES {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_SEMAPHORES_HEADER ==  "<cyg/posix/semaphore.h>" 
+    #     CYGBLD_ISO_SEMAPHORES_HEADER == <cyg/posix/semaphore.h>
+    #   --> 1
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+};
+
+# POSIX message queues
+# This component provides configuration controls for
+# POSIX message queues.
+#
+cdl_component CYGPKG_POSIX_MQUEUES {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+    # Requires: CYGPKG_KERNEL
+    #     CYGPKG_KERNEL == current
+    #   --> 1
+    # Requires: CYGINT_ISO_MALLOC
+    #     CYGINT_ISO_MALLOC == 1
+    #   --> 1
+    # Requires: CYGINT_ISO_ERRNO
+    #     CYGINT_ISO_ERRNO == 1
+    #   --> 1
+    # Requires: CYGINT_ISO_STRING_STRFUNCS
+    #     CYGINT_ISO_STRING_STRFUNCS == 1
+    #   --> 1
+    # Requires: CYGINT_ISO_PTHREAD_MUTEX
+    #     CYGINT_ISO_PTHREAD_MUTEX == 1
+    #   --> 1
+    # Requires: CYGPKG_POSIX_CLOCKS
+    #     CYGPKG_POSIX_CLOCKS == 1
+    #   --> 1
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+};
+
+# >
+# Maximum number of message queues
+#
+cdl_option CYGNUM_POSIX_MQUEUE_OPEN_MAX {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 8
+    # value_source default
+    # Default value: 8
+    # Legal values: 1 to 999999
+
+    # The following properties are affected by this value
+    # option CYGNUM_ISO_MQUEUE_OPEN_MAX
+    #     DefaultValue:  CYGNUM_POSIX_MQUEUE_OPEN_MAX > 0 ? CYGNUM_POSIX_MQUEUE_OPEN_MAX : 0 
+    # option CYGNUM_ISO_MQUEUE_OPEN_MAX
+    #     DefaultValue:  CYGNUM_POSIX_MQUEUE_OPEN_MAX > 0 ? CYGNUM_POSIX_MQUEUE_OPEN_MAX : 0 
+};
+
+# Validate queue descriptors
+# This option turns on checking that message queue descriptors
+# (of type mqd_t) passed into mq_* functions are valid. If so,
+# the functions will fail with EBADF, as POSIX 1003.1 mandates.
+# If this option is disabled, if an invalid descriptor is used,
+# random corruption may occur, or the system may crash. If
+# you are confident invalid descriptors will not be used,
+# you may wish to be disable this to save some per-instance
+# memory and execution time.
+#
+cdl_option CYGIMP_POSIX_MQUEUE_VALIDATE_DESCRIPTOR {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
+# Allow empty queue notification
+# Enabling this option adds the function mq_notify() to the
+# API. Without it, some code and per-message queue descriptor
+# space is saved, as well as no longer requiring POSIX realtime
+# signal support.
+#
+cdl_option CYGFUN_POSIX_MQUEUE_NOTIFY {
+    # Flavor: bool
+    user_value 0
+    # value_source user
+    # Default value: CYGPKG_POSIX_SIGNALS
+    #     CYGPKG_POSIX_SIGNALS == 0
+    #   --> 0
+    # Requires: CYGPKG_POSIX_SIGNALS
+    #     CYGPKG_POSIX_SIGNALS == 0
+    #   --> 0
+};
+
+# <
+# POSIX signals configuration
+# This component provides configuration controls for
+# the POSIX signals.
+#
+cdl_component CYGPKG_POSIX_SIGNALS {
+    # Flavor: bool
+    user_value 0
+    # value_source user
+    # Default value: 1
+    # Requires: CYGPKG_KERNEL_EXCEPTIONS
+    #     CYGPKG_KERNEL_EXCEPTIONS == 1
+    #   --> 1
+    # Requires: CYGPKG_POSIX_PTHREAD
+    #     CYGPKG_POSIX_PTHREAD == 1
+    #   --> 1
+    # Requires: CYGPKG_POSIX_TIMERS
+    #     CYGPKG_POSIX_TIMERS == 0
+    #   --> 0
+    # Requires:  CYGBLD_ISO_SIGSETJMP_HEADER ==  "<cyg/posix/sigsetjmp.h>" 
+    #     CYGBLD_ISO_SIGSETJMP_HEADER == <cyg/posix/sigsetjmp.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_SIGNAL_NUMBERS_HEADER ==  "<cyg/posix/signal.h>" 
+    #     CYGBLD_ISO_SIGNAL_NUMBERS_HEADER == <cyg/libc/signals/signal.h>
+    #   --> 0
+    # Requires:  CYGBLD_ISO_SIGNAL_IMPL_HEADER ==  "<cyg/posix/signal.h>" 
+    #     CYGBLD_ISO_SIGNAL_IMPL_HEADER == <cyg/libc/signals/signal.h>
+    #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGPKG_POSIX_TIMERS
+    #     Requires: CYGPKG_POSIX_SIGNALS
+    # option CYGFUN_POSIX_MQUEUE_NOTIFY
+    #     Requires: CYGPKG_POSIX_SIGNALS
+    # option CYGFUN_POSIX_MQUEUE_NOTIFY
+    #     DefaultValue: CYGPKG_POSIX_SIGNALS
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+    # option CYGPKG_POSIX_TESTS
+    #     Calculated:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+};
+
+# POSIX utsname configuration
+# This component provides configuration controls for
+# the POSIX utsname structure and the uname() function.
+#
+cdl_component CYGPKG_POSIX_UTSNAME {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_UTSNAME_HEADER ==  "<cyg/posix/utsname.h>" 
+    #     CYGBLD_ISO_UTSNAME_HEADER == <cyg/posix/utsname.h>
+    #   --> 1
+};
+
+# >
+# Length of name strings in utsname structure
+#
+cdl_option CYG_POSIX_UTSNAME_LENGTH {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 65
+    # value_source default
+    # Default value: 65
+    # Legal values: 1 to 99999999
+
+    # The following properties are affected by this value
+    # option CYG_POSIX_UTSNAME_NODENAME_LENGTH
+    #     DefaultValue:  CYG_POSIX_UTSNAME_LENGTH 
+};
+
+# Length of nodename string in utsname structure
+#
+cdl_option CYG_POSIX_UTSNAME_NODENAME_LENGTH {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 65
+    # value_source default
+    # Default value:  CYG_POSIX_UTSNAME_LENGTH 
+    #     CYG_POSIX_UTSNAME_LENGTH == 65
+    #   --> 65
+    # Legal values: 1 to 99999999
+};
+
+# <
+# POSIX tests
+# This option specifies the set of tests for the POSIX package.
+#
+cdl_option CYGPKG_POSIX_TESTS {
+    # Calculated value:  
+    #                 (CYGPKG_POSIX_PTHREAD ? "tests/pthread1 tests/pthread2 tests/pthread3 " 
+    #                                       : "") .
+    #                 (CYGPKG_POSIX_PTHREAD_MUTEX ? "tests/mutex3 " : "") .
+    #                 (CYGPKG_POSIX_MQUEUES ? "tests/mqueue1 tests/mqueue2 " : "") .
+    #                 (CYGPKG_POSIX_SIGNALS ? "tests/signal1 tests/signal2 tests/signal3  tests/sigsetjmp " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS && 
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/timer1 " : "") .
+    #                 ((CYGPKG_POSIX_SIGNALS && 
+    #                   CYGPKG_POSIX_TIMERS &&     
+    #                   CYGPKG_POSIX_PTHREAD &&
+    #                   CYGPKG_POSIX_SEMAPHORES) ? "tests/tm_basic " : "")
+    #                 
+    #     CYGPKG_POSIX_PTHREAD == 1
+    #     CYGPKG_POSIX_PTHREAD_MUTEX == 1
+    #     CYGPKG_POSIX_MQUEUES == 1
+    #     CYGPKG_POSIX_SIGNALS == 0
+    #     CYGPKG_POSIX_SIGNALS == 0
+    #     CYGPKG_POSIX_TIMERS == 0
+    #     CYGPKG_POSIX_SEMAPHORES == 1
+    #     CYGPKG_POSIX_SIGNALS == 0
+    #     CYGPKG_POSIX_TIMERS == 0
+    #     CYGPKG_POSIX_PTHREAD == 1
+    #     CYGPKG_POSIX_SEMAPHORES == 1
+    # Flavor: data
+    # Current_value: tests/pthread1 tests/pthread2 tests/pthread3 tests/mutex3 tests/mqueue1 tests/mqueue2 
+};
+
 # <
 # <
 
