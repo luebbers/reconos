@@ -81,10 +81,17 @@ def main(arguments):
     subst = [ 
         ('\$template:vhdl_files\$', string.join([ os.path.basename(f) for f in files ], ' ')),
         ('\$template:user_logic_entity\$', user_logic_entity),
-        ('\$template:architecture\$', arch),
-        ('\$template:generics\$', "\"" + ",".join(generics) + "\""),
-        ('\$template:wrapper_parameters\$', "\"" + ",".join(parameters) + "\"")
+        ('\$template:architecture\$', arch)
     ]
+    if len(generics) > 0:
+        subst.append(('\$template:generics\$', "\"" + ",".join(generics) + "\""))
+    else:
+        subst.append(('\$template:generics\$', ""))
+    if len(parameters) > 0:
+        subst.append(('\$template:wrapper_parameters\$', "\"" + ",".join(parameters) + "\""))
+    else:
+        subst.append(('\$template:wrapper_parameters\$', ""))
+
     templ_name = os.environ['RECONOS'] + '/tools/makefiles/templates/Makefile_hw_hwthreads_thread.template'
     makefile_name = os.path.join(hwthread_name, 'Makefile')
     reconos.tools.make_file_from_template(templ_name, makefile_name, subst)
