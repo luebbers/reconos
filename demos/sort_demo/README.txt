@@ -24,7 +24,7 @@ To build software (after building hardware):
     cd sort_demo_generated
     . settings.sh
     cd sw
-    make setup deps ecos posix
+    make setup.mb deps ecos.mb posix
 
 Executables will be in the same directory (*.elf).
 
