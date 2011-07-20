@@ -1,0 +1,255 @@
+#!/usr/bin/env python
+"""
+Compiles hardware thread sources into a hw_task_wrapper wrapped netlist
+"""
+#
+# \file hwtc
+#
+# \author     Enno Luebbers <luebbers@reconos.de>
+# \date       20.07.2011
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2011 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+# NOTE: the vhdl files specified on the command line need to be given
+#       in REVERSE evaluation order - that is, the actual top level thread
+#       file comes first, and all files which come lower in the thread's
+#       module hierarchy come later
+
+import sys, os, slop, tempfile, shutil
+import re, reconos.pcore, datetime, subprocess
+
+# Common pcores for all hw threads
+cores = ["reconos_" + os.environ["RECONOS_VER"],
+         "burst_ram_v2_01_a"]
+
+def error(msg):
+    print >> sys.stderr, "hwtc: " + msg
+    sys.exit(1)
+
+def info(msg):
+    if beVerbose:
+        print >> sys.stderr, "hwtc: " + msg
+
+def warning(msg):
+    print >> sys.stderr, "hwtc: " + msg
+
+def createMinimalEDKProject(parameters):
+    try:
+        f = open("system.mhs", 'w')
+        print >> f, """
+PARAMETER VERSION = 2.1.0
+
+BEGIN hw_task
+    PARAMETER INSTANCE = hw_task_0
+    PARAMETER HW_VER = 1.01.b"""
+        for p in parameters:
+            print >> f, "    PARAMETER %s" % p
+        print >> f, "END"
+        f.close()
+    except IOError, err:
+        error("unable to write file: %s" % str(err))
+    os.mkdir("pcores")
+    for c in cores:
+        os.symlink(os.path.abspath(os.environ["RECONOS"] + "/core/pcores/" + c), "pcores/" + c)
+
+
+def runPlatGen(tmpDir, targetArchitecture):
+    try:
+        platgenLogFile = open(tmpDir + "/platgen.log", 'w')
+        p = subprocess.Popen(["platgen", "-lp", tmpDir, "-p", targetArchitecture, "system.mhs"], stderr=platgenLogFile, stdout=platgenLogFile)
+        retval = p.wait()
+        platgenLogFile.close()
+    except Exception, e:
+        platgenLogFile.close()
+        error("unable to synthesize: %s" % str(e))
+
+    # check for successful run of platgen
+    if retval != 0:
+        print >> sys.stderr, "hwtc: platgen failed with following errors:"
+        try:
+            platgenLogFile = open(tmpDir + "/platgen.log")
+            lines = platgenLogFile.readlines()
+            platgenLogFile.close()
+        except IOError, err:
+            error("unable to read platgen log file: %s" % str(err))
+        inError = False
+        addFileName = None
+        for l in lines:
+            if l[:5] == "ERROR":
+                inError = True
+            if l == "\n":
+                inError = False
+            if inError:
+                m = re.search("^INFO.*Refer to (\S+)", l)
+                if m:
+                    addFileName = m.group(1)
+                print >> sys.stderr, l,
+        # if an additional file was referenced in previous output
+        # print that as well
+        if addFileName != None:
+            print >> sys.stderr, "\nhwtc: errors in '%s' follow:" % addFileName
+            try:
+                addFile = open(addFileName)
+                lines = addFile.readlines()
+                addFile.close()
+            except IOError, err:
+                warning("unable to read additional file: %s" % str(err))
+            inError = False
+            for l in lines:
+                if l[:5] == "ERROR":
+                    inError = True
+                if l == "\n":
+                    inError = False
+                if inError:
+                    print >> sys.stderr, l,
+
+        sys.exit(1)
+
+#------------------------------------------------------------------------
+# MAIN
+#------------------------------------------------------------------------
+
+def main(arguments):
+
+    global beVerbose
+
+    # parse command line args
+    opts, args = slop.parse([
+        ('c', "core", "only create pcore for use in EDK as task number CORE, do not synthesize", True, {"default" : '1'}),
+        ('g', "generic", "generics to set for hw thread", True,
+            {"as" : "list", "default" : []}),
+        ('p', "parameter", "parameter to set for hw thread wrapper", True,
+            {"as" : "list", "default" : []}),
+        ('t', "target", "target part (default: virtex6)", True,
+            {"default" : "virtex6"}),
+        ('o', "output", "output netlist file", True),
+        ('e', "entity", "user logic entity name", True),
+        ('k', "keep_tmp", "keep temporary build directory"),
+        ('v', "verbose", "print helpful messages")
+    ], args=arguments, banner="%prog [options] input_file input_file ...")
+
+    beVerbose = opts.verbose
+
+    # create temporary build directory
+    tmpDir = tempfile.mkdtemp(prefix="hwtc_")
+
+    # identify sources and netlists
+    # FIXME: this replicates functionality already present in mkhwthread.py
+    vhdlFiles = []
+    netlistFiles = []
+    for a in args:
+        # identify files by suffix
+        if a[-4:] == ".vhd":
+            vhdlFiles.append(os.path.abspath(a))
+        elif a[-4:] in (".ngc", ".edf"):
+            netlistFiles.append(os.path.abspath(a))
+        else:
+            error("unsupported file suffix: %s" %a)
+
+    if len(vhdlFiles) + len(netlistFiles) == 0:
+        error("no input files")
+
+    if len(vhdlFiles) == 0:
+        error("need at least one VHDL file")
+
+
+    # output file name
+    if opts.output:
+        outputFileName = opts["output"]
+    else:
+        if opts.core:
+            # we will create a hardware task
+            outputFileName = "hw_task_v1_%02d_b" % int(opts["core"])
+        else:
+            # we will build a netlist
+            outputFileName = re.sub("\.vhd$", ".ngc", vhdlFiles[0])
+
+    # generics and parameters
+    generics = opts["generic"]
+    parameters = opts["parameter"]
+
+    # infer user logic entity name
+    if opts.entity:
+        userLogicEntityName = opts["entity"]
+    else:
+        info("assuming '%s' to be the top level thread source" % vhdlFiles[0])
+        try:
+            f = open(vhdlFiles[0])
+            text = f.read()
+            f.close()
+        except IOError, err:
+            error("failed to open file: %s" % str(err))
+
+        m = re.search("entity\s+(\w+)\s+is", text, re.IGNORECASE | re.MULTILINE)
+        if m:
+            userLogicEntityName = m.group(1)
+        else:
+            error("no entity found in '%s'" % vhdlFiles[0])
+    info("using '%s' as the thread's entity name" % userLogicEntityName)
+
+    # create minimal EDK project
+    curdir = os.getcwd()
+    os.chdir(tmpDir)
+    createMinimalEDKProject(parameters)
+        
+    # reverse vhdlFiles order to get proper build order
+    vhdlFiles.reverse()
+
+    # create pcore for hw thread
+    os.chdir("pcores")
+    reconos.pcore.createPCore(
+            userLogicEntityName,
+            int(opts["core"]),
+            vhdlFiles,
+            "hw_task",
+            netlistFiles,
+            "generated at " + datetime.datetime.today().isoformat(" ") + " by '%s %s" % (os.path.basename(sys.argv[0]), " ".join(sys.argv[1:])),
+            generics
+    )
+
+    # run platgen
+    os.chdir("..")
+    targetArchitecture = opts["target"]
+    if not opts.core:
+        info("synthesising for target part '%s'" % targetArchitecture)
+        runPlatGen(tmpDir, targetArchitecture)
+
+    # copy resulting thread netlist back
+    os.chdir(curdir)
+    if opts.core:
+        info("output pcore %s" % outputFileName)
+        shutil.copytree(tmpDir + "/pcores/hw_task_v1_%02d_b" % int(opts["core"]), outputFileName)
+    else:
+        info("output netlist: %s" % outputFileName)
+        shutil.copy2(tmpDir + "/implementation/hw_task_0_wrapper.ngc", outputFileName)
+
+    # remove temporary build directory
+    if opts.keep_tmp:
+        print >> sys.stderr, "hwtc: keeping temporary build directory: %s" % tmpDir
+    else:
+        shutil.rmtree(tmpDir)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

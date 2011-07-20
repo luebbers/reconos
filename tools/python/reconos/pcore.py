@@ -42,6 +42,10 @@ def createPCore(user_logic_name,task_number,vhdl_files,task_name,netlist_files,h
         ram_version     = reconos_version
         generics.append("C_BURST_AWIDTH => C_TASK_BURST_AWIDTH")
         generics.append("C_BURST_DWIDTH => C_TASK_BURST_DWIDTH")
+        if netlist_files == None or len(netlist_files) == 0:
+            style = "HDL"
+        else:
+            style = "MIX"
 
         #################
 
@@ -82,7 +86,7 @@ BEGIN %s
 OPTION IPTYPE = PERIPHERAL
 OPTION IMP_NETLIST = TRUE
 OPTION HDL = VHDL
-OPTION STYLE = MIX
+OPTION STYLE = %s
 OPTION IP_GROUP = PPC:USER
 OPTION CORE_STATE = DEVELOPMENT
 
@@ -113,7 +117,7 @@ PORT i_burstWE = "burstWE", DIR = I, BUS = OSIF
 PORT i_burstBE = "burstBE", DIR = I, VEC = [0:C_BUS_BURST_DWIDTH/8-1], BUS = OSIF
 
 END
-""" % (header,task_name)
+""" % (header,task_name, style)
 
         #################
         
