@@ -312,7 +312,7 @@ planahead-base: remove-dummy-netlists dynamic-threads-netlists
 	$(Q)touch planahead-base
 
 
-planahead-threads: planahead-base
+planahead-threads: 
 	#
 	####################################################################
 	#
