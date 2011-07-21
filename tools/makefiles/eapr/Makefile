@@ -139,6 +139,7 @@ QUIET_ADDTHREAD=   echo "    ADDTHREAD   $@"; $(ADDTHREAD)
 QUIET_MKHWTHREAD=  echo "    MKHWTHREAD  $@"; $(MKHWTHREAD)
 QUIET_MAKETOP=     echo "    MAKETOP     $@"; $(MAKETOP)
 QUIET_MAKEUCF=     echo "    MAKEUCF     $@"; $(MAKEUCF)
+QUIET_MAKE_PA_TCL_PARTIAL= echo "    MAKE_PA_TCL_PARTIAL $@"; $(MAKE_PA_TCL_PARTIAL)
 QUIET_XPS    =     echo "    XPS         $@"; $(XPS)
 QUIET_XST    =     echo "    XST         $@"; $(XST)
 QUIET_NGDBUILD=    echo "    NGDBUILD    $@"; $(NGDBUILD)
@@ -146,6 +147,7 @@ QUIET_MAP    =     echo "    MAP         $@"; $(MAP)
 QUIET_PAR    =         echo "    PAR         $@"; $(PAR)
 QUIET_PR_VERIFYDESIGN= echo "    PR_VERIFY   $@"; $(PR_VERIFYDESIGN)
 QUIET_PR_ASSEMBLE=     echo "    PR_ASSEMBLE $@"; $(PR_ASSEMBLE)
+QUIET_PLANAHEAD =      echo "    PLANAHEAD   $@"; $(PLANAHEAD)
 
 export Q QQ NUM_OSIFS NUM_DYNAMIC_OSIFS RECONOS_VER DYNAMIC_THREADS
 
@@ -153,16 +155,30 @@ export Q QQ NUM_OSIFS NUM_DYNAMIC_OSIFS RECONOS_VER DYNAMIC_THREADS
 
 all: planahead-all
 
+# pseudo-targets to match mkpatcl_partial.py's recipe names
+complete: planahead-all
+
+extensible-base: planahead-base
+
+extensible-threads: planahead-threads
+
 help:
 	@echo "Targets:"
 	@echo "    all:"
 	@echo "        create bitstreams for the complete reconfigurable hwdesign"
+	@echo "    complete:"
+	@echo "        like 'all'"
+	@echo "    extensible-base:"
+	@echo "        build base (initial) bitstreams for extensible hwdesign"
+	@echo "    extensible-threads:"
+	@echo "        build partial (dynamic) bitstreams for extensible hwdesign"
+	@echo "    bits-static:"
+	@echo "        create bitstream for a static design (using static threads)"
 	@echo "    edk-static:"
 	@echo "        just set up the static edk design (do not create netlists)"
 	@echo "    netlist-static:"
 	@echo "        generate all netlists for the static design"
-	@echo "    bits-static:"
-	@echo "        create bitstream for a static design (using static threads)"
+	
 
 	
 
@@ -175,7 +191,9 @@ edk-base:
 	#
 	$(Q)ln -s $(EDK_BASE_DIR) edk-base
 
-edk-static: edk-base
+edk-static: edk-static/system.mhs
+
+edk-static/system.mhs: edk-base
 	#
 	####################################################################
 	#
@@ -197,7 +215,7 @@ edk-static: edk-base
 	    $($(QQ)MKHWTHREAD) dummy_ul $$i $(DUMMY_THREAD_VHDL) >> $(MAKE_LOG);\
 	done
 
-static-threads: edk-static
+static-threads: edk-static/system.mhs
 	#
 	######################################################################
 	#
@@ -214,7 +232,9 @@ static-threads: edk-static
 	$(Q)touch static-threads
 
 
-netlist-static: static-threads
+netlist-static: edk-static/synthesis/system.ngc
+
+edk-static/synthesis/system.ngc: static-threads
 	#
 	####################################################################
 	#
@@ -224,7 +244,6 @@ netlist-static: static-threads
 	#
 	$(Q)cp -f $(MAKE_NETLIST) edk-static
 	$(Q)cd edk-static && $($(QQ)XPS) -nw -scr $(MAKE_NETLIST) | tee -a $(MAKE_LOG) | grep -s ERROR; [ $$? -ne 0 ] 
-	$(Q)touch netlist-static
 
 
 bits-static: static-threads
@@ -240,7 +259,7 @@ bits-static: static-threads
 	$(Q)cd edk-static && $($(QQ)XPS) -nw -scr $(MAKE_BITS) | tee -a $(MAKE_LOG) | grep -s ERROR; [ $$? -ne 0 ]
 
 
-remove-dummy-netlists: netlist-static
+remove-dummy-netlists: edk-static/synthesis/system.ngc
 	#
 	######################################################################
 	#
@@ -261,6 +280,7 @@ dynamic-threads-netlists:
 	#     - build netlists for dynamic threads
 	#
 	$(Q)make -C $(PROJECT_ROOT)/$(HW_THREAD_DIR) all >> $(MAKE_LOG)
+	$(Q)touch dynamic-threads-netlists
 
 
 planahead-all: remove-dummy-netlists dynamic-threads-netlists
@@ -269,14 +289,43 @@ planahead-all: remove-dummy-netlists dynamic-threads-netlists
 	#
 	# planahead-all:
 	#     - run PlanAhead to generate all bitstreams
-	#	TODO: split into several steps
+	#	This creates all static and dynamic bitstreams in a
+	#       single run
 	#
-	$(Q)$(MAKE_PA_TCL_PARTIAL) -p $(PROJECT_FILE) -o $(PA_SCRIPT) >> $(MAKE_LOG)
-	$(Q)$(PLANAHEAD) -mode batch -source $(PA_SCRIPT) >> $(MAKE_LOG)
+	$(Q)$($(QQ)MAKE_PA_TCL_PARTIAL) -p $(PROJECT_FILE) -o $(PA_SCRIPT) -r complete >> $(MAKE_LOG)
+	$(Q)$($(QQ)PLANAHEAD) -mode batch -source $(PA_SCRIPT) >> $(MAKE_LOG)
 	$(Q)touch planahead-all
 
 
-.PHONY:	clean hwclean 
+planahead-base: remove-dummy-netlists dynamic-threads-netlists
+	#
+	####################################################################
+	#
+	# planahead-base:
+	#     - prepare base design and implement static part and first
+	#       configuration (config_1). 
+	#       This forms the base (static part) for incrementally
+	#       built ReconOS systems.
+	#
+	$(Q)$($(QQ)MAKE_PA_TCL_PARTIAL) -p $(PROJECT_FILE) -o $(PA_SCRIPT) -r extensible-base >> $(MAKE_LOG)
+	$(Q)$($(QQ)PLANAHEAD) -mode batch -source $(PA_SCRIPT) >> $(MAKE_LOG)
+	$(Q)touch planahead-base
+
+
+planahead-threads: planahead-base
+	#
+	####################################################################
+	#
+	# planahead-threads:
+	#     - build partial bitstreams of an extensible ReconOS project
+	#       Requires a completed planahead-base design
+	#
+	$(Q)$($(QQ)MAKE_PA_TCL_PARTIAL) -p $(PROJECT_FILE) -o $(PA_SCRIPT) -r extensible-threads >> $(MAKE_LOG)
+	$(Q)$($(QQ)PLANAHEAD) -mode batch -source $(PA_SCRIPT) >> $(MAKE_LOG)
+
+
+
+.PHONY:	clean hwclean planahead-threads
 
 clean: hwclean
 
@@ -284,7 +333,7 @@ eapr-clean:
 	
 
 hwclean:
-	rm -f  edk-base eapr-modules eapr-setup netlist-static static-threads
+	rm -f  edk-base eapr-modules eapr-setup static-threads planahead-all planahead-base planahead-threads dynamic-threads-netlists
 	rm -rf edk-static
 	rm -rf project_reconos_1
 	rm -rf base
