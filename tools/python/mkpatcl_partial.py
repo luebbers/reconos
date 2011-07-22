@@ -124,7 +124,7 @@ def addOtherReconfigModules():
     output = ""
     for slotNum in range(layout.getNumSlots()):
         for threadNum in range(1, len(dynamicThreads)):
-            output += "add_reconfig_module -name {%s} -cell {%s} -file {%s}\n" % (
+            output += "add_reconfig_module -name {%s} -cell {%s} -file {%s}\nsave_design\n" % (
                     dynamicThreads[threadNum], "hw_task_" + str(slotNum),
                     dynamicThreadsNetlistFileNames[threadNum])
     return output
