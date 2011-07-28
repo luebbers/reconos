@@ -1,0 +1,191 @@
+#!/usr/bin/env python
+"""
+Prepares an EDK-design for ReconOS
+"""
+#
+# \file prepedk
+#
+# \author     Enno Luebbers <luebbers@reconos.de>
+# \date       26.07.2011
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2011 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+# NOTE: the vhdl files specified on the command line need to be given
+#       in REVERSE evaluation order - that is, the actual top level thread
+#       file comes first, and all files which come lower in the thread's
+#       module hierarchy come later
+
+import sys, os, slop, tempfile, shutil
+import re, datetime, subprocess
+import reconos.message as msg
+import reconos.pcore, reconos.mhs, reconos.config, reconos.layout
+import mhsaddosif, mhsaddthread, mssadddriver
+
+dummyVHDLFile = os.environ["RECONOS"] + "/support/threads/dummy_ul.vhd"
+
+#------------------------------------------------------------------------
+# MAIN
+#------------------------------------------------------------------------
+
+def main(arguments):
+
+    global beVerbose
+
+    # parse command line args
+    opts, args = slop.parse([
+        ('p', "project", "ReconOS project file", True, {"optional":False}),
+        ('o', "output", "output EDK directory name [edk-static]", True,
+            {"default":"edk-static"}),
+        ('v', "verbose", "print helpful messages"),
+        ('d', "dummy", "create dummies also for static threads ")
+    ], args=arguments, banner="%prog [options]")
+
+    msg.setVerbose(opts.verbose)
+    targetDir = opts["output"]
+    # eat trailing slashes
+    while targetDir[-1] == os.sep:
+        targetDir = targetDir[:-1]
+    projectFileName = opts["project"]
+    mhsFileName = targetDir + "/system.mhs"
+    mssFileName = targetDir + "/system.mss"
+    
+
+    # parse project file
+    try:
+        p = reconos.config.ProjectConfig(projectFileName)
+    except IOError, err:
+        msg.error(str(err))
+
+    # retrieve base design
+    if not "EDK_BASE_DIR" in p.data.keys():
+        msg.error("no base design found in project '%s'" % projectFile)
+    else:
+        baseDesign = p["EDK_BASE_DIR"]
+
+
+    # retrieve number of slots
+    # static
+    numStaticSlots = p.getNumSlots("static")
+    numDynamicSlots = p.getNumSlots("dynamic")
+    numSlots = numDynamicSlots + numStaticSlots
+
+    if numSlots == 0:
+        msg.error("no slots to add - check your project configuration")
+
+    # copy base design to target
+    msg.info("copying base design '%s' -> '%s'" % (baseDesign,
+        targetDir))
+    try:
+        # to support python 2.4, create intermediate directories
+        targetParent = os.path.dirname(targetDir)
+        if not os.path.exists(targetParent):
+            msg.info("creating '%s'" % targetParent)
+            os.makedirs(targetParent)
+
+        shutil.copytree(baseDesign, targetDir)
+    except OSError, err:
+        msg.error(str(err))
+
+    # open MHS file
+    m = reconos.mhs.MHS(mhsFileName)
+
+    # add OSIFs to MHS (for static and dynamic threads)
+    msg.info("adding %i slots (%i static and %i dynamic)" % (numSlots,
+        numStaticSlots, numDynamicSlots))
+    m = mhsaddosif.addOSIFs(m, numSlots)
+    m = mhsaddthread.addThreads(m, numSlots)
+
+    # write MHS file
+    try:
+        msg.info("writing MHS file")
+        mhsFile = open(mhsFileName, 'w')
+        print >> mhsFile, str(m)
+        mhsFile.close()
+    except IOError, err:
+        msg.error(str(err))
+
+    # add drivers and write MSS file
+    # FIXME: someday, we won't do this purely string based...
+    try:
+        msg.info("writing MSS file")
+        s = mssadddriver.addDrivers(mssFileName, numSlots)
+        mssFile = open(mssFileName, 'w')
+        print >> mssFile, s
+        mssFile.close()
+    except IOError, err:
+        msg.error(str(err))
+        
+    # add ReconOS dir to module search path
+    msg.info("adding ReconOS dir to module search path")
+    try:
+        xmp = open(targetDir + "/system.xmp")
+        lines = xmp.readlines()
+        xmp.close()
+    except IOError, err:
+        msg.error(str(err))
+    modulePaths = []
+    for l in lines:
+        m = re.match("ModuleSearchPath:\s*(\w*)", l)
+        if m:
+            for p in m.group(1).split(';'):
+                modulePaths.append(p)
+    if os.environ["RECONOS"] not in modulePaths:
+        modulePaths.append(os.environ["RECONOS"])
+
+    try:
+        xmp = open(targetDir + "/system.xmp", 'w')
+        for l in lines:
+            if not re.match("ModuleSearchPath:\s*(\w*)", l):
+                print >> xmp, l,
+            if re.match("IntStyle", l):
+                print >> xmp, "ModuleSearchPath: %s" % ' '.join(modulePaths)
+        xmp.close()
+    except IOError, err:
+        msg.error(str(err))
+
+    # add dummy threads
+    if opts.dummy:
+        slots = numSlots
+    else:
+        slots = numDynamicSlots
+    curdir = os.getcwd()
+    os.chdir(targetDir + "/pcores")
+    msg.info("adding dummy threads for %i slots" % numSlots)
+    for i in range(1, slots+1):
+        reconos.pcore.createPCore(
+                "dummy_ul",
+                i,
+                [dummyVHDLFile],
+                "hw_task",
+                [],
+                "generated at " + datetime.datetime.today().isoformat(" ") + " by '%s %s" % (os.path.basename(sys.argv[0]), " ".join(sys.argv[1:])),
+                []
+        )
+    os.chdir(curdir)
+
+
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

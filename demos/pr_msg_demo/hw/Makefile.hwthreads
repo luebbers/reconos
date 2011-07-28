@@ -1,0 +1,13 @@
+
+build/thread_1.ngc: src/thread.vhd
+	hwtc -o $@ -g "C_THREAD_NUM => 1" $<
+
+build/thread_2.ngc: src/thread.vhd
+	hwtc -o $@ -g "C_THREAD_NUM => 2" $<
+
+build/thread_3.ngc: src/thread.vhd
+	hwtc -o $@ -g "C_THREAD_NUM => 3" $<
+
+build/thread_4.ngc: src/thread.vhd
+	hwtc -o $@ -g "C_THREAD_NUM => 4" $<
+

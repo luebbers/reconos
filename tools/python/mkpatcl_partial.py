@@ -344,7 +344,7 @@ hardware threads even after creating an initial set of bitstreams.""",
     # parse command line arguments
     opts, args = slop.parse([
         ("p", "reconos_project", "ReconOS project file (*.rprj)", True, {"optional" : False}),
-        ("P", "pa_project", "PlanAhead project name (directory)", True, {"default" : "project_reconos_1"}),
+        ("P", "pa_project", "PlanAhead project name (may include subdirectories, no extension. E.g., \"build/planahead\")", True, {"default" : "project_reconos_1"}),
         ("o", "output", "Output TCL script (omit for stdout)", True),
         ("l", "list", "List all available steps and recipes and exit"),
         ("r", "recipe", "Recipe (aka workflow) to execute", True, {"default" : "complete"}),
@@ -356,7 +356,7 @@ hardware threads even after creating an initial set of bitstreams.""",
     outputFileName = opts["output"]
     firstStep = opts["begin"]
     lastStep = opts["end"]
-    paProjectName = opts["pa_project"]
+    paProjectDir = opts["pa_project"]
     recipeName = opts["recipe"]
 
     if opts.list:
@@ -406,19 +406,21 @@ hardware threads even after creating an initial set of bitstreams.""",
     hwDir = projectRoot + '/' + pc["HW_DIR"]
     swDir = projectRoot + '/' + pc["SW_DIR"]
     layoutFileName = projectRoot + '/' + pc["LAYOUT"]
-    hwThreadDir = projectRoot + '/' + pc["HW_THREAD_DIR"]
+    hwBuildDir = projectRoot + '/' + pc["HW_BUILD_DIR"]
+    hwBuildEDKDir = projectRoot + '/' + pc["HW_BUILD_EDK_DIR"]
     staticThreads = pc["STATIC_THREADS"].split()
     dynamicThreads = pc["DYNAMIC_THREADS"].split()
-    dynamicThreadsNetlistFileNames = [ hwThreadDir + "/" + t + ".ngc" for t in
+    dynamicThreadsNetlistFileNames = [ hwBuildDir + "/" + t + ".ngc" for t in
             dynamicThreads ]
     if "NUM_JOBS" in pc.data.keys():
         numJobs = int(pc["NUM_JOBS"])
     else:
         numJobs = 2
-    paProjectDir = hwDir + "/" + paProjectName
-    paTopLevelNetlistFileName = hwDir + "/edk-static/synthesis/system.ngc"
-    paNetlistDir = hwDir + "/edk-static/implementation"
-    paConstraintsFileName = hwDir + "/edk-static/data/system.ucf"
+    paProjectDir = hwDir + '/' + paProjectDir
+    paProjectName = os.path.basename(paProjectDir)
+    paTopLevelNetlistFileName = hwBuildEDKDir + "/synthesis/system.ngc"
+    paNetlistDir = hwBuildEDKDir + "/implementation"
+    paConstraintsFileName = hwBuildEDKDir + "/data/system.ucf"
     paConfigNamePrefix = "config_"
 
     # read layout file

@@ -34,15 +34,39 @@ Contains tools for reading configuration files.
 #---------------------------------------------------------------------------
 #
 
-import os, sys
+import os, sys, re
+import reconos.layout
+
+def replEnv(m):
+        if m.group(2) != None:
+            var = m.group(2)
+        elif m.group(3) != None:
+            var = m.group(3)
+        else:
+            assert False, "weird match"
+
+        if var in os.environ:
+            return os.environ[var]
+        else:
+            error("environment variable not found: %s" % var)
+
+
+def expandEnv(s):
+    """Expands any environmental variable in s with their values and returns
+    the expanded string.
+    Recognizes variables either as $VAR or $(VAR)"""
+    return re.sub("\$(\((\w+)\)|(\w+))", replEnv, s)
+
 
 
 class ProjectConfig:
     '''Contains project configuration data as a dictionary.'''
 
     data = {}
+    parentDir = None
 
     def __init__(self, fileName):
+        self.parentDir = os.path.abspath(os.path.dirname(fileName))
         inFile = open(fileName, "r")
         lines = inFile.read().split(os.linesep)
         inFile.close()
@@ -54,7 +78,8 @@ class ProjectConfig:
             self.data[key.strip()] = value.strip()
 
     def __getitem__(self, key):
-        return self.data[key]
+        """Returns value for key (after expansion of environment variables)"""
+        return expandEnv(self.data[key])
 
     def __setitem__(self, key, value):
         self.data[key] = value
@@ -64,6 +89,47 @@ class ProjectConfig:
         for k in self.data.keys():
             s = s + (str(k + ' = ' + str(self.data[k])) + os.linesep)
         return s
+
+    def getNumSlots(self, type="all"):
+        """Return number of slots present in project
+
+        Optional argument: type
+            Can be "all" for all slots, "dynamic" for the number of
+            dynamic slots, and "static" for the number of static slots.
+            Returns -1 for any other type."""
+
+        # retrieve number of static slots (coming from the number of static
+        # threads)
+        if not "STATIC_THREADS" in self.data.keys():
+            numStaticSlots = 0
+        else:
+            numStaticSlots =  len(self.data["STATIC_THREADS"].split())
+
+        # if we want to know only the static slots, we're done here
+        if type == "static":
+            return numStaticSlots
+
+        # retrive the number of dynamic slots (from the layout file if there
+        # are any dynamic threads)
+        if not "DYNAMIC_THREADS" in self.data.keys():
+            numDynamicSlots = 0
+        else:
+            # retrieve layout file
+            assert "LAYOUT" in self.data.keys(), "no layout found in project '%s'" % projectFile
+            layoutFile = self.parentDir + "/" + self.data["LAYOUT"]
+            f = open(layoutFile)
+            l = reconos.layout.LayoutParser.read(f)
+            f.close()
+            numDynamicSlots = len(l.slots)
+
+        if type == "dynamic":
+            return numDynamicSlots
+
+        if type == "all":
+            return numDynamicSlots + numStaticSlots
+
+        return -1
+
 
 if __name__ == '__main__':
     p = ProjectConfig(sys.argv[1])

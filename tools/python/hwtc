@@ -38,21 +38,11 @@ Compiles hardware thread sources into a hw_task_wrapper wrapped netlist
 
 import sys, os, slop, tempfile, shutil
 import re, reconos.pcore, datetime, subprocess
+import reconos.message as msg
 
 # Common pcores for all hw threads
 cores = ["reconos_" + os.environ["RECONOS_VER"],
          "burst_ram_v2_01_a"]
-
-def error(msg):
-    print >> sys.stderr, "hwtc: " + msg
-    sys.exit(1)
-
-def info(msg):
-    if beVerbose:
-        print >> sys.stderr, "hwtc: " + msg
-
-def warning(msg):
-    print >> sys.stderr, "hwtc: " + msg
 
 def createMinimalEDKProject(parameters):
     try:
@@ -68,7 +58,7 @@ BEGIN hw_task
         print >> f, "END"
         f.close()
     except IOError, err:
-        error("unable to write file: %s" % str(err))
+        msg.error("unable to write file: %s" % str(err))
     os.mkdir("pcores")
     for c in cores:
         os.symlink(os.path.abspath(os.environ["RECONOS"] + "/core/pcores/" + c), "pcores/" + c)
@@ -82,7 +72,7 @@ def runPlatGen(tmpDir, targetArchitecture):
         platgenLogFile.close()
     except Exception, e:
         platgenLogFile.close()
-        error("unable to synthesize: %s" % str(e))
+        msg.error("unable to synthesize: %s" % str(e))
 
     # check for successful run of platgen
     if retval != 0:
@@ -92,7 +82,7 @@ def runPlatGen(tmpDir, targetArchitecture):
             lines = platgenLogFile.readlines()
             platgenLogFile.close()
         except IOError, err:
-            error("unable to read platgen log file: %s" % str(err))
+            msg.error("unable to read platgen log file: %s" % str(err))
         inError = False
         addFileName = None
         for l in lines:
@@ -114,7 +104,7 @@ def runPlatGen(tmpDir, targetArchitecture):
                 lines = addFile.readlines()
                 addFile.close()
             except IOError, err:
-                warning("unable to read additional file: %s" % str(err))
+                msg.warning("unable to read additional file: %s" % str(err))
             inError = False
             for l in lines:
                 if l[:5] == "ERROR":
@@ -132,8 +122,6 @@ def runPlatGen(tmpDir, targetArchitecture):
 
 def main(arguments):
 
-    global beVerbose
-
     # parse command line args
     opts, args = slop.parse([
         ('c', "core", "only create pcore for use in EDK as task number CORE, do not synthesize", True, {"default" : '1'}),
@@ -149,7 +137,7 @@ def main(arguments):
         ('v', "verbose", "print helpful messages")
     ], args=arguments, banner="%prog [options] input_file input_file ...")
 
-    beVerbose = opts.verbose
+    msg.setVerbose(opts.verbose)
 
     # create temporary build directory
     tmpDir = tempfile.mkdtemp(prefix="hwtc_")
@@ -165,18 +153,24 @@ def main(arguments):
         elif a[-4:] in (".ngc", ".edf"):
             netlistFiles.append(os.path.abspath(a))
         else:
-            error("unsupported file suffix: %s" %a)
+            msg.error("unsupported file suffix: %s" %a)
 
     if len(vhdlFiles) + len(netlistFiles) == 0:
-        error("no input files")
+        msg.error("no input files")
 
     if len(vhdlFiles) == 0:
-        error("need at least one VHDL file")
+        msg.error("need at least one VHDL file")
 
 
     # output file name
     if opts.output:
         outputFileName = opts["output"]
+        # eat trailing slashes
+        while outputFileName[-1] == os.sep:
+            outputFileName = outputFileName[:-1]
+        if opts.core:
+            if not re.search("hw_task_v1_\d\d_b/*", outputFileName):
+                msg.error("when creating pcore %i, name must end in 'hw_task_v1_%02d_b'" % (int(opts["core"]), int(opts["core"])))
     else:
         if opts.core:
             # we will create a hardware task
@@ -193,20 +187,20 @@ def main(arguments):
     if opts.entity:
         userLogicEntityName = opts["entity"]
     else:
-        info("assuming '%s' to be the top level thread source" % vhdlFiles[0])
+        msg.info("assuming '%s' to be the top level thread source" % vhdlFiles[0])
         try:
             f = open(vhdlFiles[0])
             text = f.read()
             f.close()
         except IOError, err:
-            error("failed to open file: %s" % str(err))
+            msg.error("failed to open file: %s" % str(err))
 
         m = re.search("entity\s+(\w+)\s+is", text, re.IGNORECASE | re.MULTILINE)
         if m:
             userLogicEntityName = m.group(1)
         else:
-            error("no entity found in '%s'" % vhdlFiles[0])
-    info("using '%s' as the thread's entity name" % userLogicEntityName)
+            msg.error("no entity found in '%s'" % vhdlFiles[0])
+    msg.info("using '%s' as the thread's entity name" % userLogicEntityName)
 
     # create minimal EDK project
     curdir = os.getcwd()
@@ -232,16 +226,22 @@ def main(arguments):
     os.chdir("..")
     targetArchitecture = opts["target"]
     if not opts.core:
-        info("synthesising for target part '%s'" % targetArchitecture)
+        msg.info("synthesising for target part '%s'" % targetArchitecture)
         runPlatGen(tmpDir, targetArchitecture)
 
     # copy resulting thread netlist back
     os.chdir(curdir)
+    # to support python 2.4, create intermediate directories
+    targetParent = os.path.dirname(outputFileName)
+    if not os.path.exists(targetParent): 
+        msg.info("creating '%s'" % targetParent)
+        os.makedirs(targetParent)
+
     if opts.core:
-        info("output pcore %s" % outputFileName)
+        msg.info("output pcore %s" % outputFileName)
         shutil.copytree(tmpDir + "/pcores/hw_task_v1_%02d_b" % int(opts["core"]), outputFileName)
     else:
-        info("output netlist: %s" % outputFileName)
+        msg.info("output netlist: %s" % outputFileName)
         shutil.copy2(tmpDir + "/implementation/hw_task_0_wrapper.ngc", outputFileName)
 
     # remove temporary build directory

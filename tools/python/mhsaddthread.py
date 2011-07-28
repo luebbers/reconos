@@ -36,7 +36,13 @@
 import sys, slop, os
 import reconos.mhs
 
-    
+def addThreads(m, num_slots, thread_clk = None, osif_clk = None):    
+    # add threads
+    for i in range(num_slots):
+        task = reconos.mhs.createReconosTask(i,i + 1,task_clk = thread_clk, osif_clk = osif_clk)
+        m.pcores.append(task)
+    return m
+
 def main(argv): 
 
     opts, args = slop.parse([
@@ -73,11 +79,8 @@ def main(argv):
 		print "error: file '%s' already contains %i hw_task instances" % (mhs_orig,len(a.getPcores("hw_task")))
 		sys.exit(3)
     
-    # add tasks
-    # if current_task_num < 0:
-    for i in range(num_slots):
-        task = reconos.mhs.createReconosTask(i,i + 1,task_clk = thread_clk, osif_clk = osif_clk)
-        a.pcores.append(task)
+    # add threads
+    a = addThreads(a, num_slots, thread_clk, osif_clk)
         
     # ouput resulting mhs file
     print a

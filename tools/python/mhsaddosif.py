@@ -43,23 +43,15 @@ def exitUsage():
     sys.stderr.write("Usage: %s <mhs_file> num_slots [ -f ]\n" % sys.argv[0])
     sys.exit(1)
     
-    
-if __name__ == "__main__":
-    
-    if len(sys.argv) < 3: exitUsage()
-        
-    mhs_orig = sys.argv[1]
-    num_slots = int(sys.argv[2])
-    
-    # parse mhs file
-    a = reconos.mhs.MHS(mhs_orig)
-    
+
+def addOSIFs(m, n, force=False, verbose=False):
+    """Adds n OSIFs to MHS file m. Returns an reconos.mhs.MHS object."""
     # get PLB bus name and derive clock and reset names
     # try all supported versions
     # if more than one bus found, use the one named 'plb' FIXME: good idea?
     plb = None
     for plb_ver in supported_plb_versions:
-        plb_buses = a.getPcores("plb_v" + plb_ver)
+        plb_buses = m.getPcores("plb_v" + plb_ver)
         if len(plb_buses) == 0:
             sys.stderr.write("NOTE: no PLB (v" + plb_ver + ") buses present in design.\n")
         elif len(plb_buses) > 1:
@@ -84,29 +76,29 @@ if __name__ == "__main__":
     # get interrupts
     # TODO: this should look for the interrupt controller connected to the
     # first PPC, instead of a hardcoded instance name!
-    intc = a.getPcore( intc_pcore_name + "_0")
+    intc = m.getPcore( intc_pcore_name + "_0")
     interrupts = intc.getValue("Intr")
 
     # get the number of reconos slots already present in the design
-    current_slots = len(a.getPcores(osif_pcore_name))
+    current_slots = len(m.getPcores(osif_pcore_name))
     
     # output a warning in case we found reconos slots
     if current_slots > 0:
-        sys.stderr.write("Warning: file '%s' already contains %i OSIF(s):\n" % (mhs_orig, current_slots))
-        for pcore in a.getPcores("osif_pcore_name"):
+        sys.stderr.write("Warning: file already contains %i OSIF(s):\n" % (current_slots))
+        for pcore in m.getPcores("osif_pcore_name"):
             sys.stderr.write(pcore.instance_name + " (version %s)" % pcore.getValue("HW_VER") + "\n")
-        if not "-f" in sys.argv[2:]:
+        if not force:
             sys.stderr.write("\nuse option -f to ignore\n")
             sys.exit(1)
 
     # get instance name as well as clock and reset names
     plb_name = plb.instance_name
-    sys.stderr.write("using " + plb_name + "\n")
+    if verbose: sys.stderr.write("using " + plb_name + "\n")
     clock = plb.getValue("PLB_Clk")
     reset = plb.getValue("SYS_Rst")
     
     # get DCR bus name
-    dcr_buses = a.getPcores("dcr_v29")
+    dcr_buses = m.getPcores("dcr_v29")
     if len(dcr_buses) == 0:
         sys.stderr.write("ERROR: no DCR (v29) buses present in design.\n")
         sys.exit(1)
@@ -118,17 +110,36 @@ if __name__ == "__main__":
     dcr_name = dcr_buses[0].instance_name
 
     # add slots one by one
-    for s in range(current_slots, current_slots + num_slots):
+    for s in range(current_slots, current_slots + n):
         pcore = reconos.mhs.createReconosSlot(s, plb_name, dcr_name, clock, reset, osif_pcore_name, plb_ver = plb_ver)
         interrupts += " & " + pcore.getValue("interrupt")
-        a.pcores.append(pcore)
+        m.pcores.append(pcore)
     
     # connect interrupts
     intc.setValue("Intr",interrupts)
     intc.setValue("C_NUM_INTR_INPUTS",len(interrupts.split("&")))
     
+    return m
+
+
+
+if __name__ == "__main__":
+    
+    if len(sys.argv) < 3: exitUsage()
+        
+    mhs_orig = sys.argv[1]
+    num_slots = int(sys.argv[2])
+
+    if "-f" in sys.argv[2:]:
+        force = True
+    else:
+        force = False
+    
+    # parse mhs file
+    a = reconos.mhs.MHS(mhs_orig)
+    
+    b = addOSIFs(a, num_slots, force)
+
     # output resulting mhs file to stdout
-    print a
-
-
+    print b
 

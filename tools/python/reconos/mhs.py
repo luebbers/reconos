@@ -236,10 +236,10 @@ fields: self.pcores   : list of MHSPCore objects
                 self.pcores.remove(pcore)
 
                                         
-def createReconosSlot(num, plb_name = "plb", dcr_name = "dcr", clock = "sys_clk_s", reset = "sys_bus_reset", ip_core = osif_ip_core, inst_name = osif_inst_name, ip_version = osif_ip_version, plb_ver = '34', connect = True):
+def createReconosSlot(num, plb_name = "plb", dcr_name = "dcr", clock = "sys_clk_s", reset = "sys_bus_reset", ip_core = osif_ip_core, inst_name = osif_inst_name, ip_version = osif_ip_version, plb_ver = '34', connect = True, verbose=False):
         """create a reconos slot instance"""
-        sys.stderr.write("reconos_ip_version = %s\n" % reconos_ip_version)
-	sys.stderr.write("osif_ip_version    = %s\n" % osif_ip_version)
+        if verbose: sys.stderr.write("reconos_ip_version = %s\n" % reconos_ip_version)
+        if verbose: sys.stderr.write("osif_ip_version    = %s\n" % osif_ip_version)
         pcore = MHSPCore(ip_core)
         pcore.instance_name = inst_name + "_%i" % num
         pcore.addEntry("PARAMETER","HW_VER",ip_version)

@@ -1,0 +1,100 @@
+#!/usr/bin/env python
+"""
+Provides various information about a ReconOS project
+"""
+#
+# \file hwtc
+#
+# \author     Enno Luebbers <luebbers@reconos.de>
+# \date       20.07.2011
+#
+#---------------------------------------------------------------------------
+# %%%RECONOS_COPYRIGHT_BEGIN%%%
+# 
+# This file is part of ReconOS (http://www.reconos.de).
+# Copyright (c) 2006-2011 The ReconOS Project and contributors (see AUTHORS).
+# All rights reserved.
+# 
+# ReconOS is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+# 
+# ReconOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with ReconOS.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# %%%RECONOS_COPYRIGHT_END%%%
+#---------------------------------------------------------------------------
+#
+import sys, os, slop, re
+import reconos.config
+import reconos.message as msg
+
+def findDynamicWrappersNetlists():
+    """Print paths netlists for wrappers of dynamic netlists."""
+
+    global projectFileName
+
+    # parse project file
+    try:
+        p = reconos.config.ProjectConfig(projectFileName)
+    except IOError, err:
+        msg.error(str(err))
+
+    # retrieve number of dynamic slots
+    slots = p.getNumSlots("dynamic")
+
+    if slots < 1:
+        msg.err("no dynamic slots present in design")
+    
+    # construct and print netlist names
+    for i in range(slots):
+        print p.parentDir + '/' + p["HW_BUILD_EDK_DIR"] + "/implementation/hw_task_%d_wrapper.ngc" % i,
+
+    return 0 
+
+
+def main(arguments):
+
+    commands = {
+        "find_dynamic_wrapper_netlists" : findDynamicWrappersNetlists,
+    }
+
+    global projectFileName
+
+    # parse command line args
+    opts, args = slop.parse([
+        ('p', "project", "ReconOS project file", True, {"optional":False}),
+        ('l', "list", "list all available commands"),
+        ('v', "verbose", "print helpful messages")
+    ], args=arguments, banner="%prog [options] command ...")
+
+    msg.setVerbose(opts.verbose)
+    projectFileName = opts["project"]
+
+    # print available commands
+    if opts.list:
+        for command in commands.keys():
+            print command
+            for l in commands[command].__doc__.split('\n'):
+                print "    " + l
+        sys.exit(0)
+
+    if len(args) < 1:
+        msg.error("no arguments")
+
+    # execute command, if it exists
+    if args[0] in commands.keys():
+        msg.info("executing '%s'" % args[0])
+        sys.exit(commands[args[0]]())
+    else:
+        msg.error("no such command: %s" % args[0])
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
+
