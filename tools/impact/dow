@@ -11,11 +11,11 @@ if [ -z $RECONOS_BOARD ]; then
 fi
 
 # select device to look for (XUP is default)
-if [ "$RECONOS_BOARD" == "ml403" ]; then
+if [ "$RECONOS_BOARD" = "ml403" ]; then
     POS=2
-elif [ "$RECONOS_BOARD" == "xup" ]; then
+elif [ "$RECONOS_BOARD" = "xup" ]; then
     POS=3
-elif [ "$RECONOS_BOARD" == "ml605" ]; then
+elif [ "$RECONOS_BOARD" = "ml605" ]; then
     POS=2
 else
     echo "Unsupported board or no board specified."
