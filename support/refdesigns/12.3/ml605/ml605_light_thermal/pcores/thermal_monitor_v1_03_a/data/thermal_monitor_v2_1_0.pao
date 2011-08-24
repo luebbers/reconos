@@ -1,0 +1,24 @@
+##############################################################################
+## Filename:          /home/andreas/v6/p1/pcores/thermal_monitor_v1_00_a/data/thermal_monitor_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Wed Feb  9 17:10:42 2011 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib proc_common_v3_00_a proc_common_pkg vhdl
+lib proc_common_v3_00_a ipif_pkg vhdl
+lib proc_common_v3_00_a or_muxcy vhdl
+lib proc_common_v3_00_a or_gate128 vhdl
+lib proc_common_v3_00_a family_support vhdl
+lib proc_common_v3_00_a pselect_f vhdl
+lib proc_common_v3_00_a counter_f vhdl
+lib plbv46_slave_single_v1_01_a plb_address_decoder vhdl
+lib plbv46_slave_single_v1_01_a plb_slave_attachment vhdl
+lib plbv46_slave_single_v1_01_a plbv46_slave_single vhdl
+lib thermal_monitor_v1_03_a user_logic vhdl
+lib thermal_monitor_v1_03_a thermal_monitor vhdl
+lib thermal_monitor_v1_03_a delay_comp vhdl
+lib thermal_monitor_v1_03_a inv_comp vhdl
+lib thermal_monitor_v1_03_a ring_oscillator vhdl
+lib thermal_monitor_v1_03_a thermal_monitor vhdl
+lib thermal_monitor_v1_03_a thermal_sensor vhdl
+lib thermal_monitor_v1_03_a user_logic vhdl

@@ -1,0 +1,29 @@
+ReconOS "sort_demo_thermal" example/case study
+Software part
+
+(c) 2011 Markus Happe <markus.happe@upb.de>
+This file is part of the ReconOS project <http://www.reconos.de>.
+University of Paderborn, Computer Engineering Group 
+
+----------------------
+
+This directory contains all necessary files to generate the software libraries
+and executables for the "sort" example application. Be sure to build the
+hardware part first. See ../hw/README for details on how to do that.
+
+When the hardware part is built, make sure your environment is set correctly,
+especially the HW_DESIGN variable (it needs to be set to the absolute path
+to the ../hw/edk-static directory). See ../settings.sh for the correct
+setting.
+See http://www.reconos.de/twiki/bin/view/ReconOS/SetupEnvironment for details.
+
+    - Run 'make mrproper setup.mb' to build the eCos library.
+    - Run 'make -f Makefile.ecos.mb.thermal clean all' to build the executable for the ReconOS/eCos system,
+      using the eCos API.
+    - Use the XMD to upload the executables to the XUP board.
+    
+There is one executable:
+
+    sort_ecos_thermal		eCos API, single-threaded hardware version, temperature measurement
+
+Use 'config.h' to set up the application parameters.

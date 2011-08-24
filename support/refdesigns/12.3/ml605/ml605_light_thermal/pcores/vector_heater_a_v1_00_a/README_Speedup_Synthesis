@@ -1,0 +1,44 @@
+The synthesis can be significantly accelerated when using a netlist for the big register.
+Therfore, you can create the netlist, i.e. using an Xilinx ISE project, and just 
+declare the component inside the user logic.
+
+In user_logic.vhd
+i) add lines to component declarations:
+  "component big_register is
+  generic
+  (
+       C_REGISTER_LENGTH : integer := 10000  
+  );
+  port
+  (
+       clk     : in std_logic;
+  		 rst     : in std_logic;
+  		 ce      : in std_logic; -- clock enable
+  		 xor_sig : out std_logic -- xor of all register bits	 
+  	);
+  end component;"
+
+ii) remove lines:
+ "library vector_heater_a_v1_00_a;
+  use vector_heater_a_v1_00_a.big_register;"
+
+iii) replace line:
+ "big_register_1 : entity vector_heater_a_v1_00_a.big_register"
+ with line:
+ "big_register_1 : component big_register"
+
+iv) 
+Additionally you need to update two files:
+vector_heater_a_v2_1_0.bdd
+ -> add "big_register.ngc" to Files list
+
+vector_heater_a_v2_1_0.pao:
+ -> remove line: "lib vector_heater_a_v1_00_a big_register vhdl"
+
+v)
+Copy the netlist into the /implementation directory of your design and into the /netlist
+directory of your pcore!  
+
+----------------------------
+
+Now the design does not need to synthesize the big_register multiple times, but only once.

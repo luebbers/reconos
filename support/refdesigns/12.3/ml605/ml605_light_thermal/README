@@ -1,0 +1,11 @@
+Please add the following lines to "xparameters.h":
+
+If 1 HW Slot is created
+
+"
+#define XPAR_OSIF_0_DCR_BASEADDR 0x80000000
+#define XPAR_OSIF_0_DCR_HIGHADDR 0x8000000F
+"
+
+
+

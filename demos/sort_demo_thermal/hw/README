@@ -1,0 +1,19 @@
+ReconOS "sort" example/case study
+Hardware part
+
+(c) 2007 Enno Luebbers <luebbers@reconos.de>
+This file is part of the ReconOS project <http://www.reconos.de>.
+University of Paderborn, Computer Engineering Group 
+
+----------------------
+
+This directory contains all necessary files to generate the static EDK design
+for the "sort" example application. 
+
+    - Run 'make bits-static' to generate the bitstream.
+    - Use 'dow' or iMPACT to download the bitstream to the FPGA, and continue
+      with the software part (see ../sw/README).
+
+Make sure that your environment for ReconOS is set correctly, especially
+the HW_DESIGN variable. See ../settings.sh for the correct setting.
+See http://www.reconos.de/twiki/bin/view/ReconOS/SetupEnvironment for details.

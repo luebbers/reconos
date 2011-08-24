@@ -95,6 +95,19 @@ cdl_package UPBPKG_RECONOS {
                 hardware threads."
         }
 
+        cdl_option UPBFUN_RECONOS_THERMAL {
+            display     "Enable temperature sensor grid support"
+            flavor      bool
+            compile     thermal.c
+            default_value 0
+            description "
+                This option enables the support to self-calibrate and access  
+                the temperature sensors of an regular sensor grid that  
+                covers the FPGA. This only works if the reference system 
+                contains the system monitor hard macro, the thermal monitor 
+                and the local heat-generating cores."
+        }
+
         cdl_option UPBFUN_RECONOS_POSIX {
             display     "Enable POSIX-like ReconOS API"
             flavor      bool
