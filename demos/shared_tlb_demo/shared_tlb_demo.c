@@ -3,7 +3,7 @@
 ///
 /// This program tests the operation of a shared TLB and the TLB arbiter.
 /// 
-/// The testing algorithm works a follows:
+/// The testing algorithm works as follows:
 /// 
 /// Software allocates and zeros 64 continuous pages of memory. Each hardware
 /// thread is given a word offset into a page, beginning with an offset of 0
