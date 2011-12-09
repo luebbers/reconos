@@ -17,10 +17,6 @@ fi
 if [ -z $RECONOS_BOARD ]; then
 	RECONOS_BOARD=xup
 fi
-if [ ! -z $2 ]; then
-	POS=$2
-fi
-
 if [ "$RECONOS_BOARD" = "ml403" ]; then
 	POS=2
 elif [ "$RECONOS_BOARD" = "xup" ]; then
@@ -30,6 +26,9 @@ elif [ "$RECONOS_BOARD" = "ml605" ]; then
 else
 	echo "Unsupported board or no board specified."
 	exit 1
+fi
+if [ ! -z $2 ]; then
+	POS=$2
 fi
 
 echo "Using JTAG chain position $POS."
